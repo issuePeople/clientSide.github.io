@@ -1,9 +1,15 @@
 <template>
-    <main>
-      <TheWelcome />
-    </main>
+    <div>
+        Create Issue
+    </div>
 </template>
 
 <script setup>
-    import TheWelcome from '../components/TheWelcome.vue'
+    //code here
 </script>
+
+<style scoped>
+    
+</style>
+
+

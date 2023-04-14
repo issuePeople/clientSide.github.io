@@ -1,43 +1,29 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-
-
-//Per cridar una api rest
-
-let credentials = "pduran:esculturapes";
-
-fetch('http://deploy-env.eba-6a6b2amf.us-west-2.elasticbeanstalk.com/esdeveniments/?latitud=41.389324&longitud=2.113703&limit=100', { 
-  method: "GET", 
-  mode: "no-cors",
-  headers: new Headers({
-    "Authorization": `Basic ${credentials}`
-  }),
-})
-  .then((response) => response.json())
-  .then((data) => console.log(data));
-
-
-</script>
-
 <template>
   <header>
     <img alt="Vue logo" class="logo" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <v-btn>AAA</v-btn>
-
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Issues</RouterLink>
+        <RouterLink to="/perfil">Perfil</RouterLink>
       </nav>
     </div>
   </header>
 
   <RouterView />
 </template>
+
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+
+
+//Per cridar una api rest
+
+let credentials = "pduran:esculturapes";
+
+</script>
+
+
 
 <style scoped>
 header {
