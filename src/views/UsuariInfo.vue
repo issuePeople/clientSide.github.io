@@ -1,6 +1,6 @@
 <template>
     <div>
-        Create Issue
+        user info
     </div>
 </template>
 

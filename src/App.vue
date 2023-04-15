@@ -1,26 +1,30 @@
 <template>
   <header>
-    <img alt="Vue logo" class="logo" width="125" height="125" />
 
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Issues</RouterLink>
-        <RouterLink to="/perfil">Perfil</RouterLink>
+    <v-card>
+      <nav style="display: flex; justify-content: space-between;">
+          <RouterLink to="/">
+            <img source="logo" width="40" height="40" />
+          </RouterLink>
+
+          <RouterLink to="/perfil">
+            <img source="foto_perfil" width="40" height="40" />
+          </RouterLink>
       </nav>
-    </div>
+    </v-card>
+
+    
+
   </header>
 
   <RouterView />
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+  import { RouterLink, RouterView } from 'vue-router'
 
 
-//Per cridar una api rest
-
-let credentials = "pduran:esculturapes";
-
+  //Per cridar una api rest
 </script>
 
 

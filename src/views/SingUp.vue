@@ -1,6 +1,6 @@
 <template>
     <div>
-        Create Issue
+        SingUp
     </div>
 </template>
 
