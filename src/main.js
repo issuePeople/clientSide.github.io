@@ -5,6 +5,8 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import './components/styles/theme-taiga.css';
+  
 
 const vuetify = createVuetify({
   components,
