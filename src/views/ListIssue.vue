@@ -4,13 +4,14 @@
 
         <div>
             <exempleComponent />
+            <llistaIssues></llistaIssues>
         </div>
 
-        <div
+        <!--<div
             v-for="item of arraOfContnet"
         >
             {{ item }}
-        </div>
+        </div>-->
 
         <div
             v-if="falseBoolean"
@@ -28,11 +29,12 @@
 
 <script setup>
     import exempleComponent from '../components/exempleComponent.vue'
+    import llistaIssues from '../components/llistaIssues.vue'
 
     let falseBoolean = false;
     let trueBoolean = true;
 
-    let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
+    //let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
 
 
 </script>
