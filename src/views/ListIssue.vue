@@ -41,29 +41,37 @@
 
     let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
 
-    function fetchUser() {
-        console.log("click");
-        fetch('http://deploy-env.eba-6a6b2amf.us-west-2.elasticbeanstalk.com/usuaris/sign_up/perfils/',  {   
-            method: "POST",
-            /*
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            */
+    async function fetchUser() {
+        console.log("fetch");
+        /*
+        const response = await fetch("http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/api/issues", {
+            method: "GET",
+            mode: 'no-cors',
             headers: {
-                'Accept': 'application/json',
                 "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
             },
-            
-            body: JSON.stringify({password: "string1234", password2: "string1234", username: "string", email: "a@gmail.com"}),
-        })
-            .then(res => res.json())
-            .then(data => {
-                setData(data);
-                console.log("login: ", data);
-            })
-            .catch(console.error)
+        });
+        console.log("response: ", response);
+        const jsonData = await response.json();
+        console.log("data: ",jsonData);
+        */
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/issues', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Accept': 'application/json',
+                },
+            });
+            const data = await response.json();
+            //const json = data === "" ? {} : JSON.parse(data);
+            console.log("data: ", data);
+            // Do something with the data
+        } catch (error) {
+            console.error('An error occurred during the fetch operation:', error);
+            // Display an error message to the user
+        }
     }
 
 </script>
