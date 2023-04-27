@@ -1,69 +1,76 @@
 <template>
 
+    <div>
+        <RouterLink to="/edit">
+            <img source="logo" width="40" height="40" />
+        </RouterLink>
 
-    <RouterLink to="/edit">
-        <img source="logo" width="40" height="40" />
-    </RouterLink>
+        <v-btn @click="fetchUser()">A</v-btn>
 
-    <v-btn @click="fetchUser()">A</v-btn>
+        <div style="margin-left: 20px;">
 
-    <div style="margin-left: 20px;">
+            <div>
+                <exempleComponent />
+            </div>
 
-        <div>
-            <exempleComponent />
-        </div>
+            <div
+                v-for="item of arraOfContnet"
+            >
+                {{ item }}
+            </div>
 
-        <div
-            v-for="item of arraOfContnet"
-        >
-            {{ item }}
-        </div>
-
-        <div
-            v-if="falseBoolean"
-        >
-            text conditional
-        </div>
-        <div
-            v-if="trueBoolean"
-        >
-            text conditional
+            <div
+                v-if="falseBoolean"
+            >
+                text conditional
+            </div>
+            <div
+                v-if="trueBoolean"
+            >
+                text conditional
+            </div>
         </div>
     </div>
 
 </template>
 
-<script setup>
-    import exempleComponent from '../components/exempleComponent.vue'
+<script>
+    import exempleComponent from '../components/exempleComponent.vue';
+    import {simpleFetch} from '../utils/utils';
 
-    let falseBoolean = false;
-    let trueBoolean = true;
 
-    let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
+    export default {
+        components: {
+            exempleComponent
+        },
+        name: "listIssue",
+        /*
+        Si es necesari l'estructura es aixi
+        props: {
+            title: String
+        },
+        setup(props) {
+        */
+        setup() {
 
-    function fetchUser() {
-        console.log("click");
-        fetch('http://deploy-env.eba-6a6b2amf.us-west-2.elasticbeanstalk.com/usuaris/sign_up/perfils/',  {   
-            method: "POST",
-            /*
-            mode: "cors",
-            cache: "no-cache",
-            credentials: "same-origin",
-            */
-            headers: {
-                'Accept': 'application/json',
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            
-            body: JSON.stringify({password: "string1234", password2: "string1234", username: "string", email: "a@gmail.com"}),
-        })
-            .then(res => res.json())
-            .then(data => {
-                setData(data);
-                console.log("login: ", data);
-            })
-            .catch(console.error)
+            let falseBoolean = false;
+            let trueBoolean = true;
+
+            let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
+
+            async function fetchUser() {
+                let issues;
+                simpleFetch("issues/", "GET", "").then((data) => issues = data);    
+                console.log("issues: ", issues);
+            }
+
+            return {
+                falseBoolean,
+                trueBoolean,
+                arraOfContnet,
+                fetchUser
+            }
+        }
     }
 
 </script>
