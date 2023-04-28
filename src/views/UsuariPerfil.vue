@@ -6,7 +6,29 @@
 </template>
 
 <script>
-  //code here
+  //imports
+
+  export default {
+    name: "UsuariPerfil",
+    /*
+    components: {
+      exempleComponent
+    },
+    Si es necesari l'estructura es aixi
+    props: {
+      title: String
+    },
+    setup(props) {
+    */
+    setup() {
+
+      return {
+
+      }
+    }
+  }
+
+
 </script>
 
 <style scoped>

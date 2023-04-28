@@ -7,7 +7,7 @@
             <img source="logo" width="40" height="40" />
           </RouterLink>
 
-          <RouterLink to="/perfil">
+          <RouterLink to="/usuari/1/edit">
             <img source="foto_perfil" width="40" height="40" />
           </RouterLink>
       </nav>

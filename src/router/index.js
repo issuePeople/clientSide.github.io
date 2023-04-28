@@ -10,12 +10,12 @@ const router = createRouter({
       component: ListIssue
     },
     {
-      path: '/perfil',
+      path: '/usuari/:user/edit',
       name: 'perfil',
       component: () => import('../views/UsuariPerfil.vue')
     },
     {
-      path: '/usuari/info',
+      path: '/usuari/:user/info',
       name: 'user_info',
       component: () => import('../views/UsuariInfo.vue')
     },
@@ -25,7 +25,7 @@ const router = createRouter({
       component: () => import('../views/CreateIssue.vue')
     },
     {
-      path: '/edit',
+      path: '/edit/:issue',
       name: 'edit_issue',
       component: () => import('../views/EditIssue.vue')
     },
