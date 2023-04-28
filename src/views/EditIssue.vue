@@ -10,40 +10,50 @@
     </div>
 </template>
 
-<script setup>
+<script>
     import { onMounted, ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
 
 
-    let endPoint = "/issues";
+    export default {
+        setup() {
+            let endPoint = "issues/";
     
-    //ref es fa saervir per tal que les variable s'actualitzin automaticament a l'hora de pintar-ho
-    let data = ref('data');
+            //ref es fa saervir per tal que les variable s'actualitzin automaticament a l'hora de pintar-ho
+            let data = ref('data');
 
+            function btnClik() {
+                console.log("btn click");
+                simpleFetch("issues/", "GET", "").then((data) => console.log(data));    
+            }
 
-    function btnClik() {
-        console.log("btn click");
+            async function changeData() {
+                console.log("before change data: ", data.value);
+                data.value = 'newvalue';
+                console.log("after change data: ", data.value);
+            }
+
+            /*
+                la funcio onMounted serveix pk s'executi tot just abans de que es pinti tot, 
+                aixo ens permet tindre les dades abans que fem el render sinos patara.
+
+                la funcio simpleFetch, fa un fetch i retorna les dades, nomes cal passarli els seguents parametres:
+                    endpoint: es tot allo despres del host/
+                    methoda: GET POST PUT..
+                    dataBody: nomes cal en cas de put o get, normalment cal passar un objecta
+            */
+            return {
+                btnClik,
+                changeData
+            }
+        },
+        mounted() {
+            simpleFetch("issues/", "GET", "").then((data) => console.log(data));  
+            console.log("mounted")
+        }
     }
 
-    function changeData() {
-        console.log("before change data: ", data.value);
-        data.value = 'newvalue';
-        console.log("after change data: ", data.value);
-    }
-
-
-    /*
-        la funcio onMounted serveix pk s'executi tot just abans de que es pinti tot, 
-        aixo ens permet tindre les dades abans que fem el render sinos patara.
-
-        la funcio simpleFetch, fa un fetch i retorna les dades, nomes cal passarli els seguents parametres:
-            endpoint: es tot allo despres del host/
-            methoda: GET POST PUT..
-            dataBody: nomes cal en cas de put o get, normalment cal passar un objecta
-    */
-    onMounted(() => {
-        simpleFetch(endPoint, "GET", "").then((data) => console.log(data))
-    })
+    
 
 </script>
 
