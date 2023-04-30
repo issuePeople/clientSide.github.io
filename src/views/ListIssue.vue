@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <RouterLink to="/edit">
+        <RouterLink to="/edit/1">
             <img source="logo" width="40" height="40" />
         </RouterLink>
 

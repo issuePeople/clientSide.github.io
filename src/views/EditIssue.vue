@@ -1,55 +1,83 @@
 <template>
-    <div>
-        Edit Issue
-        <v-btn @click="btnClik()"> Fa algo</v-btn>
-        <v-btn @click="changeData()"> Canvai data</v-btn>
+    <div class="master">
+        <div class="wrapper">
+            <div class="main detail">
+                <!-- issue info container  -->
+                <div class="detail-header-container">
 
-
-        <button class="btn-small">es la clase que toca</button>
-
+                    <div class="detail-header">
+                        <!-- Titol issue-->
+                        <div class="detail-title-wrapper">
+                            <span classe="issue-text" style="display: inline-flex;">
+                                <div class="detail-ref">
+                                    <span class="issue-ref">#{{ issue.id }}</span>
+                                </div>
+                                <input name="subject" style="margin-top: 3px; font-size: 25px;" class="detail-subject" value="{{issue.subject}}">
+                                <button style="background: none;" type="submit"  name="guardar_subject">
+                                    <i style="margin-top: 3px; font-size: 25px;" class="fa fa-floppy-o" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="detail-project">
+                            <div class="section-name">Issue</div>
+                        </div>
+                        <!--
+                            <div v-if="issue.dataLimit" class="detail-header-line block-desc-container">
+                                <span class="blocked-sign" style="color: white">
+                                    <i class="fa fa-clock-o" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                </span>
+                                <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                    {{issue.dataLimit}}
+                                </span>
+                            </div>
+                            <div v-if="issue.bloquejat" class="detail-header-line block-desc-container">
+                                <span class="blocked-sign" style="color: white">
+                                    <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                    Blocked
+                                </span>
+                                <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                        {{issue.motiuBloqueig}}
+                                </span>
+                            </div> 
+                        -->   
+                        <!-- Action buttons-->
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-    import { onMounted, ref } from 'vue';
+    import { ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
 
 
     export default {
         setup() {
-            let endPoint = "issues/";
-    
-            //ref es fa saervir per tal que les variable s'actualitzin automaticament a l'hora de pintar-ho
-            let data = ref('data');
+            let issue = ref();
 
-            function btnClik() {
-                console.log("btn click");
-                simpleFetch("issues/", "GET", "").then((data) => console.log(data));    
-            }
-
-            async function changeData() {
-                console.log("before change data: ", data.value);
-                data.value = 'newvalue';
-                console.log("after change data: ", data.value);
-            }
-
-            /*
-                la funcio onMounted serveix pk s'executi tot just abans de que es pinti tot, 
-                aixo ens permet tindre les dades abans que fem el render sinos patara.
-
-                la funcio simpleFetch, fa un fetch i retorna les dades, nomes cal passarli els seguents parametres:
-                    endpoint: es tot allo despres del host/
-                    methoda: GET POST PUT..
-                    dataBody: nomes cal en cas de put o get, normalment cal passar un objecta
-            */
+            
             return {
-                btnClik,
-                changeData
+                issue
             }
         },
         mounted() {
-            simpleFetch("issues/", "GET", "").then((data) => console.log(data));  
-            console.log("mounted")
+            //Per obtenir la url
+            let url = window.location.href;
+            //Separar la url per '/'
+            let directories = url.split("/");
+            //Agafar l'ultim element
+            let issueId = directories[(directories.length - 1)];
+
+
+            console.log("urlLocation: ", issueId);
+            let dataIssue;
+            simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => dataIssue = data);
+            issue.value = dataIssue;
+            console.log("dataIssue: ", dataIssue);
+            console.log("issueObject: ", issue.value.id);
         }
     }
 

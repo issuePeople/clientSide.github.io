@@ -20,7 +20,7 @@ export async function simpleFetch(endPoint, method, bodyData) {
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': 'application/json',
-                    'Authorization': 'Basic '+ token, 
+                    'Authorization': 'Token '+ token, 
                 },
             });
             data = await response.json();
@@ -35,7 +35,7 @@ export async function simpleFetch(endPoint, method, bodyData) {
                 headers: {
                     "Content-Type": "application/json",
                     'Accept': 'application/json',
-                    'Authorization': 'Basic '+ token, 
+                    'Authorization': 'Token '+ token, 
                 },
                 body: JSON.stringify(bodyData),
             });
