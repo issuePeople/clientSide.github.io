@@ -27,7 +27,7 @@
                     </header>
                 </div>
                 <div class="issue-container">
-                    <div class="filters-bar" v-if="showFiltres"  >
+                    <div class="filters-bar" v-show="showFiltres"  >
                         <div>
                             <div class="filters-step-cat">
                                 <div class="filters-cat">
@@ -291,6 +291,25 @@
                         </div>
                     
                     </div>
+                    <div class="issue-page" style="width: 100%;">
+                    <v-list  style=" ;" >
+                      <v-list-item v-for="issue in issues" :key="issue.id" >  
+                        <issueComp 
+                            :id=issue.id 
+                            :subject=issue.subject
+                            :tipus=issue.tipus
+                            :bloquejat=issue.bloquejat
+                            :gravetat=issue.gravetat
+                            :prioritat=issue.prioritat
+                            :estat=issue.estat
+                            :assignacio=issue.assignacio 
+                        ></issueComp>
+                    </v-list-item>
+                </v-list>  
+            </div>  
+                    
+                    
+                    
                 </div>
             </div>
         </div>
@@ -298,20 +317,7 @@
 </div>
 
 
-        <div v-for="issue in issues" :key="issue.id">
-            
-            <issueComp 
-                :id=issue.id 
-                :subject=issue.subject
-                :tipus=issue.tipus
-                :bloquejat=issue.bloquejat
-                :gravetat=issue.gravetat
-                :prioritat=issue.prioritat
-                :estat=issue.estat
-                :assignacio=issue.assignacio
-                
-            ></issueComp>
-        </div>
+        
         </div>
     
 
@@ -341,11 +347,10 @@
             let falseBoolean = false;
             let trueBoolean = true;
             let issues = ref();
-            let showFiltres = false;
+            let showFiltres = ref(false);
             
 
-            let arraOfContnet = ["issue1", "issue2", "issue3", "issue4"];
-
+          
             /*async function fetchUser() {
                let llistaIssue;
                 console.log("aaaaaaa")
@@ -358,22 +363,22 @@
                 
             }*/
             async function showfil(){
-                if(showFiltres == true) {
-                   showFiltres =false
+                if(this.showFiltres == true) {
+                   this.showFiltres =false
 
                 } else{
-                    showFiltres = true 
+                    this.showFiltres = true 
                 }
-                showFiltres=ref()
+                
             }
 
             return {
                 falseBoolean,
                 trueBoolean,
-                arraOfContnet,
+                
                 //fetchUser,
                 issues,
-                showFiltres:false,
+                showFiltres,
                 showfil
             }
         },

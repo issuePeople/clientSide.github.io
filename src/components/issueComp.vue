@@ -1,6 +1,6 @@
 <template>
-    <div class="issues-table" style="width: 100%;; border-spacing: 0 15px;">
-     <div  style="width: 100%;">
+   <div class="issues-table" style="width: 100%; border-spacing: 0 15px;">
+     <div >
        <div class = "row table-main " :class="{'is-blocked' : bloquejat }">
         
             <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle; width: 5%;">
