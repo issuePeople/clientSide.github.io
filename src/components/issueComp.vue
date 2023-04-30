@@ -3,20 +3,20 @@
      <div  style="width: 100%;">
        <div class = "row table-main " :class="{'is-blocked' : bloquejat }">
         
-            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle">
+            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle; width: 5%;">
                 <div v-if="tipus === 'Bug'" class="level" style="background: rgb(228, 64, 87)"></div>
                 <div v-else-if="tipus === 'Pregunta'" class="level" style="background-color: rgb(81, 120, 211);"></div>
                 <div v-else class="level" style="background-color: rgb(64, 228, 206);"></div>
             </td>
             
-            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle">
+            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle; width: 5%">
                 <div v-if="gravetat === 'Desitjada'" class="level" style="background: rgb(112, 114, 143)"></div>
                 <div v-else-if="gravetat === 'Menor'" class="level" style="background: rgb(64, 168, 228)"></div>
                 <div v-else-if="gravetat === 'Normal'" class="level" style="background:  rgb(64, 228, 124)"></div>
                 <div v-else-if="gravetat === 'Important'" class="level" style="background:  rgb(228, 162, 64)"></div>
                 <div v-else class="level" style="background:   rgb(211, 84, 80)"></div>
             </td>
-            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle">
+            <td class="level-field" style="padding-left: 20px;padding-right: 20px; text-align: center;vertical-align: middle; width: 5%">
                 <div v-if="prioritat === 'Baixa'" class="level" style="background: rgb(168, 228, 64)"></div>
                 <div v-else-if="prioritat === 'Mitja'" class="level" style="background: rgb(228, 206, 64)"></div>
                 <div v-else class="level" style="background:  rgb(228, 124, 64)"></div>
@@ -24,7 +24,7 @@
             
             
             
-            <td @clik="namefun()" class="subject" style="text-align: center; vertical-align: middle;">
+            <td @clik="namefun()" class="subject" style="text-align: left; vertical-align: middle; width: 55%">
                 <span classe="issue-text" style="display: inline-flex;">
                     <span class="issue-ref">#{{id}}</span>
                     <span class="issue-subject">{{ subject }}</span>
@@ -46,12 +46,14 @@
                 </span>
             </td>
         
-            <td  style="text-align: center; vertical-align: middle;">
-                    
+            <td  style="text-align: center; vertical-align: middle; width: 10%;">
+                    <span class="status-button"> {{ estat }}</span>
             </td>
-            <td class="modified-field" style="text-align: center; vertical-align: middle;">
-                              
-                                    
+            <td class="modified-field" style="text-align: center; vertical-align: middle; width: 10%;">
+                <span>12/10/2056</span>                          
+            </td>
+            <td class="assigned-field" style="text-align: right; vertical-align: middle;width: 10%; ">
+                 <span class="issue-assignedto">Assigned</span>
             </td>
         </div>
     </div>
@@ -98,7 +100,7 @@
             },
             mounted(){
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
-            console.log("issueObject: ",this.tags );
+
             
             
                 

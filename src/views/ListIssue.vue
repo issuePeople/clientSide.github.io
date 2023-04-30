@@ -307,6 +307,8 @@
                 :bloquejat=issue.bloquejat
                 :gravetat=issue.gravetat
                 :prioritat=issue.prioritat
+                :estat=issue.estat
+                :assignacio=issue.assignacio
                 
             ></issueComp>
         </div>
