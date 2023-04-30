@@ -27,7 +27,8 @@ const router = createRouter({
     {
       path: '/edit/:issue',
       name: 'edit_issue',
-      component: () => import('../views/EditIssue.vue')
+      component: () => import('../views/EditIssue.vue'),
+      props: true
     },
     {
       path: '/login',
