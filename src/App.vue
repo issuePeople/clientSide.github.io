@@ -1,6 +1,6 @@
 <template>
   <header>
-
+    <!--possar v-app-bar  i v-app-bar-title -->
     <v-card>
       <nav style="display: flex; justify-content: space-between;">
           <RouterLink to="/">
@@ -12,11 +12,7 @@
           </RouterLink>
       </nav>
     </v-card>
-
-    
-
   </header>
-
   <RouterView />
 </template>
 
