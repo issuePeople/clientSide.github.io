@@ -1,4 +1,5 @@
 <template>
+   
    <div class="issues-table" style="width: 100%; border-spacing: 0 15px;">
      <div >
        <div class = "row table-main " :class="{'is-blocked' : bloquejat }">
@@ -95,15 +96,12 @@
                      limit,
                      tags,
                      
-                     
                 }
             },
             mounted(){
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
 
-            
-            
-                
+
             }
     })
     
