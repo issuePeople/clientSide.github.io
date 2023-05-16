@@ -14,8 +14,15 @@
                                     <input name="subject" style="margin-top: 3px; margin-left: 5px; font-size: 25px;" class="detail-subject" :value=issue.subject>
                                     
                                     <button style="background: none;" @click="saveEdit()">
-                                        <!-- <i style="margin-top: 3px; font-size: 25px;" class="fa fa-floppy-o" aria-hidden="true"></i> -->
-                                        G
+                                        <font-awesome-icon icon="floppy-disk" />
+                                        <font-awesome-icon icon="clock" />
+                                        <font-awesome-icon icon="lock" />
+
+                                        <font-awesome-icon icon="arrow-left" />
+                                        <font-awesome-icon icon="arrow-right" />
+                                        <font-awesome-icon icon="arrow-up" />
+                                        <font-awesome-icon icon="arrow-down" />
+
                                     </button>
                                 </div>
                             </span>
@@ -144,7 +151,6 @@
                             </div>
                         </div>
                         <!-- attachment content-->
-
                         <div class="attachment-list sortable">
                             <ul
                                 v-for="attachment of issue.attachments"
@@ -163,10 +169,357 @@
                             </ul>
                         </div>
                     </section>
+                    <!-- Comments Activites header -->
+                    <section class="history">
+                        <nav class="history-tabs">
+                            <!-- si comentaris un style o altre -->
+                           <button class="history-tab active">
+                                Comentaris
+                           </button> 
+                           <button>
+                                Activites
+                           </button> 
+                        </nav>
+                    </section>
 
-                    
+                    <!-- sha de mirar pero va lo segunet-->
+                    <section class="comment" v-if="hihaComentaris">
+                        <div style="display: flex; justify-content: space-between;">
+                            <textarea name="text" placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
+                            <button type="submit" name="afegir_comentari" style="background: none;">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <ul>
+                                <ComentarisEdit
+                                    v-for="(comentari, index) of issue.comentaris"
+                                    :key="index"
+                                    :comentari="comentari"
+                                >
+                                </ComentarisEdit>
+                            </ul>
+                        </div>
+
+                    </section>
+                    <section class="activities" v-else>
+                        <div class="activities-wrapper">
+                            <ul>
+                                <ActivitiesEdit
+                                    v-for="(activity, index) of issue.logs"
+                                    :key="index"
+                                    :activity="activity"
+                                >
+                                </ActivitiesEdit>
+                            </ul>
+                        </div>
+                    </section>
                 </div>
             </div>
+                <sidebar class="sidebar ticket-data">
+                    <section class="ticket-header">
+                        <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
+                            <span>Open</span>
+                        </span>
+                        <!-- estat-->
+                        <v-select
+                            class="ml-3"
+                            label="Select"
+                            density="compact"
+                            :items=TEstats
+                            v-model=estat
+                        ></v-select>
+                        
+                        <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
+
+                    </section>
+                    <section class="ticket-section ticket-data-container">
+                        <div class="ticket-data-container">
+                            <!-- Type-->
+                            <div style="display: flex; justify-content: space-between;">
+                                <label>
+                                    type
+                                </label>
+                                <v-menu>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            v-bind="props"
+                                            variant="text"
+                                        >
+                                        {{tipus}}
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                        v-for="(item, index) in TTipus"
+                                        :key="index"
+                                        :value="index"
+                                        >
+                                        <v-list-item-title @click="setTipus(item)">{{ item }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </div>
+                            
+                            <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
+
+                            <!-- Severity-->
+                            <div style="display: flex; justify-content: space-between;">
+                                <label>
+                                    severity
+                                </label>
+                                <v-menu>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            v-bind="props"
+                                            variant="text"
+                                        >
+                                        {{gravetat}}
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                        v-for="(item, index) in TGravetat"
+                                        :key="index"
+                                        :value="index"
+                                        >
+                                        <v-list-item-title @click="setGravetat(item)">{{ item }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </div>
+
+                            <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
+                            
+                            <!-- Priority-->
+                            
+                            <div style="display: flex; justify-content: space-between;">
+                                <label>
+                                    priority
+                                </label>
+                                <v-menu>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            variant="text"
+                                            v-bind="props"
+                                        >
+                                        {{prioritat}}
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                        v-for="(item, index) in TPrioritat"
+                                        :key="index"
+                                        :value="index"
+                                        >
+                                        <v-list-item-title @click="setPrioritat(item)">{{ item }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </div>
+                            <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
+
+                        </div>
+                    </section>
+                    <!-- Assigned section-->
+                    <section class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty">
+                        <div class="ticket-section-label">
+                            <span>Assigned</span>
+                        </div>
+                        <div class="ticket-user-list-container">
+                            <div class="ticket-user-list-content">
+                                <div class="ticket-user-list"></div>
+                                <div>
+                                    <div 
+                                        v-if="issue.assignacio"
+                                        style="display: flex; 
+                                        justify-content: space-between; 
+                                        margin-left: 5px; 
+                                        margin-right: 5px;"
+                                        >
+                                        <img src="{{ issue.assignacio.avatar }}"
+                                            width="60px"
+                                            height="60px"
+                                        >
+                                        <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                        <a href="{% url 'esborrar_assignacio' issue.id %}">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    </div>  
+                                </div>
+                                <!-- selector d'assignacio -->
+                                
+                                <div class="ticket-users-actions">
+                                    <div>
+                                        <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                            <option>+ Add assigned</option>
+                                            <!--
+                                                Possibles assignats fetch on mouonted
+                                            {% for assig in possibles_assignats %}
+                                                <option value="{{assig.user.id}}">{{assig.user.username}}</option>
+                                            {% endfor %}
+                                            -->
+                                        </select>
+                                        <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
+                                    </div>
+                                    <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
+                                        + Add assigned
+                                    </button>
+                                    <button 
+                                        v-if="issue.assignacio.id == idUser"
+                                        type="submit" 
+                                        name="autoassignar" 
+                                        class="ticket-users-actions" 
+                                        style="margin-left: 5px;"
+                                    >
+                                        Dont assign to me
+                                    </button>
+                                    <button 
+                                        v-else
+                                        type="submit" 
+                                        name="autoassignar" 
+                                        class="ticket-users-actions" 
+                                        style="margin-left: 5px;"
+                                    >
+                                        Assign to me
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Watchers section-->
+                    <section class="ticket-section ticket-watchers">
+                        <div class="ticket-section-label">
+                            <span>Watchers</span>
+                        </div>
+                        <div class="ticket-user-list-container">
+                            <div class="ticket-user-list-content">
+                                <div class="ticket-user-list"></div>
+                                <div>
+                                    <ul>
+                                        <li
+                                            v-for="obs of issue.observadors"
+                                        >
+                                            <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+                                                <img src="{{ obs.avatar }}"
+                                                    width="60px"
+                                                    height="60px"
+                                                >
+                                                <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
+                                                <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="ticket-users-actions">
+                                    <div>
+                                        <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
+                                            <option>+ Add watchers</option>
+                                            <!--
+                                                fetch de possibles observadors
+                                            {% for obs in possibles_observadors %}
+                                                <option value="{{obs.user.id}}">{{obs.user.username}}</option>
+                                            {% endfor %}
+                                            -->
+                                        </select>
+                                        <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
+                                    </div>
+                                    <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
+                                        + Add watchers
+                                    </button>
+                                    <!--
+                                    <button 
+                                        v-if="obs.id == idUser" 
+                                        type="submit" 
+                                        name="autoobservar" 
+                                        class="ticket-users-actions" 
+                                        style="margin-left: 5px;"
+                                    >
+                                        Unwatch
+                                    </button>
+                                    <button
+                                        v-else 
+                                        type="submit" 
+                                        name="autoobservar" 
+                                        class="ticket-users-actions" 
+                                        style="margin-left: 5px;">
+                                        Watch
+                                    </button>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- setting Section-->
+                    <section class="ticket-section ticket-detail-settings">
+                        <div class="ticket-detail-settings" >
+                            <!-- Data limit -->
+                            <div>
+                                <button
+                                    v-if="issue.dataLimit"
+                                    style="background: red;"
+                                    @click="deleteTimeLine()"
+                                >
+                                    clock
+                                </button>
+                                <button
+                                    else
+                                    @click="showDatePickker = true" 
+                                >
+                                    clock
+                                </button>
+                            </div>
+
+                            <!-- Bloqueig  -->
+                            <div>
+                                <button
+                                    v-if="issue.bloquejat"
+                                    style="background: red; margin-left: 5px;"
+                                    @click="deleteBlock()"
+                                >
+                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                </button>
+                                <button
+                                    else
+                                    style="margin-left: 5px;"
+                                    @click="showBlock = true"
+                                >
+                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <div style="display: flex; justify-content: space-between;" v-show="showDatePickker">
+                        <input 
+                            type="date" 
+                            id="datePickerInput" 
+                            name="dataLimit"
+                            style="display: none;"
+                        >
+                        <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between;" v-show="showBlock">
+                        <input 
+                            type="text" 
+                            id="inputMotiuBloqueig" 
+                            name="motiuBloqueig"
+                            style="display: none;"
+                        >
+                        <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
+                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                
+                    <button id="btnSaveMotiuBloqueig" type="submit" name="guardar_bloquejat" style="display: none;"></button>
+
+                </sidebar>
         </div>
     </div>
 </template>
@@ -174,12 +527,33 @@
 <script>
     import { ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
-
+    import ActivitiesEdit from '../components/ActivitesEdit.vue';
+    import ComentarisEdit from '../components/ComentarisEdit.vue';
 
     export default {
+        name: "listIssue",
+        components: {
+            ActivitiesEdit,
+            ComentarisEdit,
+        },
         setup() {
+
+            const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
+            const TTipus = ["Bug", "Question", "Enhancement"];
+            const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
+            const TPrioritat = ["Low", "Normal", "High"];
+
+            let estat = ref("new");
+            let tipus = ref("Bug");
+            let gravetat = ref("Wishlist");
+            let prioritat = ref("Low");
+            
             let issue = ref();
+            let idUser = ref();
             let addTag = ref(true);
+            let hihaComentaris = ref(true);
+            let showDatePickker = ref(false);
+            let showBlock = ref(false);
 
             function saveEdit() {
                 console.log("save edit");
@@ -196,10 +570,47 @@
             function addAttachment() {
                 console.log("add attachment");
             }
+
+            function setTipus(item) {
+                tipus.value = item;
+            }   
+
+            function setGravetat(item) {
+                gravetat.value = item;
+            }
+
+            function setPrioritat(item) {
+                prioritat.value = item;
+            }
+
+            function deleteTimeLine() {
+                console.log("now ther arent time line");
+            }
+
+            function deleteBlock() {
+                console.log("block is delete");
+            }
             
             return {
                 issue,
+                hihaComentaris,
                 addTag,
+                TEstats,
+                TTipus,
+                TGravetat,
+                TPrioritat,
+                estat, 
+                tipus, 
+                gravetat, 
+                prioritat,
+                idUser,
+                showDatePickker,
+                showBlock,
+                deleteBlock,
+                deleteTimeLine,
+                setTipus,
+                setPrioritat,
+                setGravetat,
                 saveEdit
             }
         },
