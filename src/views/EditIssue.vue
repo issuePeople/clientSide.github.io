@@ -8,24 +8,17 @@
                     <div class="detail-header">
                         <!-- Titol issue-->
                         <div class="detail-title-wrapper">
-                            <span classe="issue-text" style="display: inline-flex;">
                                 <div class="detail-ref">
-                                    <span class="issue-ref">#{{issue.id}}</span>
-                                    <input name="subject" style="margin-top: 3px; margin-left: 5px; font-size: 25px;" class="detail-subject" :value=issue.subject>
-                                    
+                                    <span class="issue-text" style="display: inline-flex;">
+
+                                        <span class="issue-ref">#{{issue.id}}</span>
+                                        <input name="subject" style="margin-top: 3px; margin-left: 5px; font-size: 25px;" class="detail-subject" :value=issue.subject>
+
+                                    </span>
                                     <button style="background: none;" @click="saveEdit()">
                                         <font-awesome-icon icon="floppy-disk" />
-                                        <font-awesome-icon icon="clock" />
-                                        <font-awesome-icon icon="lock" />
-
-                                        <font-awesome-icon icon="arrow-left" />
-                                        <font-awesome-icon icon="arrow-right" />
-                                        <font-awesome-icon icon="arrow-up" />
-                                        <font-awesome-icon icon="arrow-down" />
-
                                     </button>
                                 </div>
-                            </span>
                         </div>
                         <div class="detail-project">
                             <div class="section-name">Issue</div>
@@ -34,7 +27,7 @@
                         <!-- Data limit -->
                         <div v-if="issue.dataLimit" class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
-                                <i class="fa fa-clock-o" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                <font-awesome-icon icon="clock" />
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
                                 {{issue.dataModificacio}}
@@ -43,8 +36,7 @@
                         <!-- Motiu Bloqueig-->
                         <div v-if="issue.bloquejat" class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
-                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
-                                Blocked
+                                <font-awesome-icon icon="lock" />
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
                                 {{issue.motiuBloqueig}}
@@ -57,11 +49,20 @@
                             
                                 <div style="display: flex; justify-content: space-between;">        
                                     
-                                    <div v-for="tag of issue.tags" class="tag" style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                    <div
+                                        v-for="tag of issue.tags"
+                                        :key="tag"
+                                        class="tag"
+                                        style="background-color: {{tag.color}};
+                                        display: flex;
+                                        justify-content: space-between;
+                                        margin-right: 5px;"
+                                    >
                                         <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
-                                        <a class="icon-close"  href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </a>
+                                        <!-- {% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %} -->
+                                        <button @click="esborrar_tag_issue()">
+                                            <font-awesome-icon icon="xmark" />
+                                        </button>
                                     </div>
                                     <button v-if="addTag" class="btn-filter ng-animate-disabled" @click="addTag = false">
                                         <span>Add tag</span>
@@ -72,8 +73,7 @@
                                         <input id="inputAddTag" name="nom" type="text" placeholder="Enter tag" >
                                         <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
                                         <button @click="addTag = true">
-                                            <!--<i class="fa fa-floppy-o" aria-hidden="true"></i>-->
-                                            G
+                                            <font-awesome-icon icon="floppy-disk" />
                                         </button>
                                     </div>
                                     
@@ -92,12 +92,11 @@
                                     <div class="created-date">{{issue.dataModificacio}}</div>
                                 </div>
                                 <div class="user-avatar">
-                                    <a href="{% url 'usuari' issue.creador.user.id %}"></a>
-                                        <!-- com possar be l'string 
+                                    <!-- com possar be l'string
                                     <RouterLink to="/usuari/"{{issue.creador.user.id}}>
                                         <img :src = issue.creador.avatar.url
-                                        width = "40px"
-                                        height = "40px"
+                                        width = "40"
+                                        height = "40"
                                     >
                                     </RouterLink>
                                     -->
@@ -117,12 +116,11 @@
                                 placeholder="Empty space is so boring... go on, be descriptive..." 
                                 name="descripcio" 
                                 class="description ng-pristine ng-untouched ng-valid ng-empty"
+                                v-model=issue.descripcio
                                 >
-                                {{issue.descripcio}}
                             </textarea>
                             <button style="max-height: 32px; background: none;" @click="guardarDesc()">
-                                G
-                                <i  class="fa fa-floppy-o" aria-hidden="true"></i>
+                                <font-awesome-icon icon="floppy-disk" />
                             </button>
                         </div>
                     </section>
@@ -131,9 +129,9 @@
                         <!-- attachment header-->
                         <div class="attachments-header">
                             <!-- num attachment -->
-                            <h3 class="attachment-title">
-                                <span class="attachments-num">{{issue.attachments.length}}</span>
-                                <span class="attachments-text">Attachments</span>
+                            <h3 class="attachment-title" style="margin-left: 5px">
+                                <span class="attachments-num" >{{issue.attachments.length}}</span>
+                                <span class="attachments-text" style="margin-left: 5px" >Attachments</span>
                             </h3>
                             
                             <!-- add attachment-->
@@ -141,11 +139,10 @@
                                 <div class="add-attach">
                                     <!-- input to add attach -->
 
-                                    <button id="addAttachment" style="display: flex;"
+                                    <button id="addAttachment" style="display: flex; margin-right: 5px"
                                         @click="addAttachment()"
                                     >
-                                        ADD
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        <font-awesome-icon icon="plus" />
                                     </button>
                                 </div>
                             </div>
@@ -153,43 +150,59 @@
                         <!-- attachment content-->
                         <div class="attachment-list sortable">
                             <ul
-                                v-for="attachment of issue.attachments"
+                                v-for="(attachment, index) of issue.attachments"
+                                :key="index"
                             >
                                 <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
                                     <div style="display: flex; justify-content: space-between;">
                                         <div>
                                             <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                            <span>({{ attachment.document.size|filesizeformat }})</span>
+                                            <span>({{ attachment.document.size }})</span>
+                                            nomDocumenthardcoded now
                                         </div>
-                                        <a href="{% url 'esborrar_attachment' attachment.id %}">
-                                            <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
-                                        </a>
+                                        <button
+                                            style="margin-right: 5px"
+                                            @click="esborrar_attachment()"
+                                        >
+                                            <font-awesome-icon icon="trash" />
+                                        </button>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </section>
                     <!-- Comments Activites header -->
-                    <section class="history">
-                        <nav class="history-tabs">
+                    <section class="history" >
+                        <nav class="history-tabs" style="padding: 5px">
                             <!-- si comentaris un style o altre -->
-                           <button class="history-tab active">
+                           <button
+                                :class="hihaComentaris ? 'history-tab active' : 'history-tab'"
+                                @click="hihaComentaris = true"
+                           >
                                 Comentaris
                            </button> 
-                           <button>
-                                Activites
+                           <button
+                               :class="hihaComentaris ? 'history-tab' : 'history-tab active'"
+                               style="margin-left: 15px"
+                               @click="hihaComentaris = false"
+                           >
+                                Activities
                            </button> 
                         </nav>
                     </section>
 
                     <!-- sha de mirar pero va lo segunet-->
-                    <section class="comment" v-if="hihaComentaris">
+                    <section
+                        class="comment"
+                        v-if="hihaComentaris"
+                    >
                         <div style="display: flex; justify-content: space-between;">
                             <textarea name="text" placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
-                            <button type="submit" name="afegir_comentari" style="background: none;">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            <button type="submit" name="afegir_comentari" style="margin-left: 5px;" >
+                                <font-awesome-icon icon="floppy-disk" />
                             </button>
                         </div>
+
                         <div>
                             <ul>
                                 <ComentarisEdit
@@ -202,7 +215,10 @@
                         </div>
 
                     </section>
-                    <section class="activities" v-else>
+                    <section
+                        class="activities"
+                        v-else
+                    >
                         <div class="activities-wrapper">
                             <ul>
                                 <ActivitiesEdit
@@ -216,7 +232,7 @@
                     </section>
                 </div>
             </div>
-                <sidebar class="sidebar ticket-data">
+            <div class="sidebar ticket-data">
                     <section class="ticket-header">
                         <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
                             <span>Open</span>
@@ -338,37 +354,57 @@
                                         margin-right: 5px;"
                                         >
                                         <img src="{{ issue.assignacio.avatar }}"
-                                            width="60px"
-                                            height="60px"
+                                            width="60"
+                                            height="60"
                                         >
                                         <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
-                                        <a href="{% url 'esborrar_assignacio' issue.id %}">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </a>
+                                        <!-- issue.id -->
+                                        <button @click="esborrar_assignacio()">
+                                            <font-awesome-icon icon="xmark" />
+                                        </button>
                                     </div>  
                                 </div>
                                 <!-- selector d'assignacio -->
                                 
                                 <div class="ticket-users-actions">
-                                    <div>
-                                        <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none; max-width: 170px;">
-                                            <option>+ Add assigned</option>
-                                            <!--
-                                                Possibles assignats fetch on mouonted
-                                            {% for assig in possibles_assignats %}
-                                                <option value="{{assig.user.id}}">{{assig.user.username}}</option>
-                                            {% endfor %}
-                                            -->
-                                        </select>
-                                        <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
-                                    </div>
-                                    <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
-                                        + Add assigned
-                                    </button>
+
+                                    <v-dialog
+                                        v-model="selectAssign"
+                                        width="auto"
+                                    >
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                color="primary"
+                                                v-bind="props"
+                                                style="margin-right: 10px;"
+                                                class="ticket-users-actions"
+                                            >
+                                                + Add assigned
+                                            </button>
+                                        </template>
+
+                                        <v-card
+                                            width="400px"
+                                        >
+                                            <v-card-title>
+                                                Add watchers
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-text-field placeholder="Search for users"></v-text-field>
+                                                <SelectUsers type="assign" :users=allUsers @userSelect="assignSelect"/>
+
+                                                <v-btn
+                                                    @click="selectAssign = false"
+                                                    color="red"
+                                                    class="mt-10 ml-16"
+                                                >
+                                                    close
+                                                </v-btn>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <button 
-                                        v-if="issue.assignacio.id == idUser"
-                                        type="submit" 
-                                        name="autoassignar" 
+                                        v-if="issue.assignacio.id === idUser"
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
                                     >
@@ -376,8 +412,6 @@
                                     </button>
                                     <button 
                                         v-else
-                                        type="submit" 
-                                        name="autoassignar" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
                                     >
@@ -398,43 +432,62 @@
                                 <div>
                                     <ul>
                                         <li
-                                            v-for="obs of issue.observadors"
+                                            v-for="(obs, index) of issue.observadors"
+                                            :key=index
                                         >
                                             <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                                <img src="{{ obs.avatar }}"
-                                                    width="60px"
-                                                    height="60px"
+                                                <img src={{obs.avatar}}
+                                                    width="60"
+                                                    height="60"
                                                 >
                                                 <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
-                                                <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </a>
+
+                                                <button @click="esborrar_observador()">
+                                                    <font-awesome-icon icon="xmark" />
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
                                 
                                 <div class="ticket-users-actions">
-                                    <div>
-                                        <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
-                                            <option>+ Add watchers</option>
-                                            <!--
-                                                fetch de possibles observadors
-                                            {% for obs in possibles_observadors %}
-                                                <option value="{{obs.user.id}}">{{obs.user.username}}</option>
-                                            {% endfor %}
-                                            -->
-                                        </select>
-                                        <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
-                                    </div>
-                                    <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
-                                        + Add watchers
-                                    </button>
-                                    <!--
+
+                                    <v-dialog
+                                        v-model="selectObs"
+                                        width="auto"
+                                    >
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                color="primary"
+                                                v-bind="props"
+                                                style="margin-right: 10px;"
+                                                class="ticket-users-actions"
+                                            >
+                                                + Add watchers
+                                            </button>
+                                        </template>
+
+                                        <v-card
+                                            width="400px"
+                                        >
+                                            <v-card-title>
+                                                Add watchers
+                                            </v-card-title>
+                                            <v-card-text>
+                                               <v-text-field placeholder="Search for users"></v-text-field>
+                                                <SelectUsers type="obs"  :users=allUsers @userSelect="obsSelected" />
+                                                <v-btn
+                                                    @click="selectObs = false"
+                                                    color="red"
+                                                    class="mt-10 ml-16"
+                                                >
+                                                    close
+                                                </v-btn>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <button 
-                                        v-if="obs.id == idUser" 
-                                        type="submit" 
-                                        name="autoobservar" 
+                                        v-if="autoObservador" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
                                     >
@@ -442,13 +495,10 @@
                                     </button>
                                     <button
                                         v-else 
-                                        type="submit" 
-                                        name="autoobservar" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;">
                                         Watch
                                     </button>
-                                    -->
                                 </div>
                             </div>
                         </div>
@@ -463,13 +513,13 @@
                                     style="background: red;"
                                     @click="deleteTimeLine()"
                                 >
-                                    clock
+                                    <font-awesome-icon icon="clock" />
                                 </button>
                                 <button
-                                    else
+                                    v-else
                                     @click="showDatePickker = true" 
                                 >
-                                    clock
+                                    <font-awesome-icon icon="clock" />
                                 </button>
                             </div>
 
@@ -480,14 +530,14 @@
                                     style="background: red; margin-left: 5px;"
                                     @click="deleteBlock()"
                                 >
-                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                    <font-awesome-icon icon="lock"/>
                                 </button>
                                 <button
-                                    else
+                                    v-else
                                     style="margin-left: 5px;"
                                     @click="showBlock = true"
                                 >
-                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                    <font-awesome-icon icon="lock"/>
                                 </button>
                             </div>
                         </div>
@@ -498,10 +548,9 @@
                             type="date" 
                             id="datePickerInput" 
                             name="dataLimit"
-                            style="display: none;"
                         >
-                        <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        <button @click="btnSaveDateDirect()"  style=" margin-left: 5px">
+                            <font-awesome-icon icon="floppy-disk" />
                         </button>
                     </div>
 
@@ -510,31 +559,29 @@
                             type="text" 
                             id="inputMotiuBloqueig" 
                             name="motiuBloqueig"
-                            style="display: none;"
                         >
-                        <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        <button @click="btnSaveMotiuBloqueig"  >
+                            <font-awesome-icon icon="floppy-disk" />
                         </button>
                     </div>
-                
-                    <button id="btnSaveMotiuBloqueig" type="submit" name="guardar_bloquejat" style="display: none;"></button>
-
-                </sidebar>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import { ref } from 'vue';
-    import {simpleFetch} from '../utils/utils';
+    import {simpleFetch} from '@/utils/utils';
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
+    import SelectUsers from '../components/SelectUsers.vue';
 
     export default {
         name: "listIssue",
         components: {
             ActivitiesEdit,
             ComentarisEdit,
+            SelectUsers,
         },
         setup() {
 
@@ -550,10 +597,15 @@
             
             let issue = ref();
             let idUser = ref();
+            let autoObservador = ref(false);
             let addTag = ref(true);
             let hihaComentaris = ref(true);
             let showDatePickker = ref(false);
             let showBlock = ref(false);
+
+            let selectAssign = ref(false);
+            let selectObs = ref(false);
+            let allUsers = ref(['user1', 'userHardCoded']);
 
             function saveEdit() {
                 console.log("save edit");
@@ -562,13 +614,25 @@
             function guardarDesc() {
                 console.log("guardar descripcio");
             }
-
-            function addTagAction() {
-                addTag = false;
-            }
-
             function addAttachment() {
                 console.log("add attachment");
+            }
+
+            function esborrar_attachment() {
+                console.log("esborrar attachment");
+            }
+
+            function esborrar_tag_issue() {
+                console.log("esborrar tag issue");
+            }
+
+            function esborrar_assignacio() {
+                console.log("esborrar assignacio");
+                simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => issue.value = data);
+            }
+
+            function esborrar_observador() {
+                console.log("esborrar observador");
             }
 
             function setTipus(item) {
@@ -583,6 +647,8 @@
                 prioritat.value = item;
             }
 
+           
+
             function deleteTimeLine() {
                 console.log("now ther arent time line");
             }
@@ -590,7 +656,26 @@
             function deleteBlock() {
                 console.log("block is delete");
             }
-            
+
+            function obsSelected(obsSelected) {
+                console.log("new obs: ", obsSelected);
+            }
+
+            function assignSelect(assignSelected) {
+                console.log("new assign: ", assignSelected);
+            }
+
+            function btnSaveDateDirect() {
+                console.log("info motiu bloquetg save");
+            }
+            function btnSaveMotiuBloqueig() {
+                console.log("info motiu bloquetg save");
+            }
+
+            function actualitzarInfo() {
+                simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => issue.value = data);
+            }
+
             return {
                 issue,
                 hihaComentaris,
@@ -606,12 +691,27 @@
                 idUser,
                 showDatePickker,
                 showBlock,
+                autoObservador,
+                selectAssign,
+                selectObs, 
+                allUsers,
+                esborrar_observador,
+                esborrar_assignacio,
+                esborrar_tag_issue,
+                esborrar_attachment,
+                addAttachment,
+                guardarDesc,
                 deleteBlock,
                 deleteTimeLine,
                 setTipus,
                 setPrioritat,
                 setGravetat,
-                saveEdit
+                saveEdit,
+                obsSelected,
+                assignSelect,
+                actualitzarInfo,
+                btnSaveMotiuBloqueig,
+                btnSaveDateDirect
             }
         },
         mounted() {
