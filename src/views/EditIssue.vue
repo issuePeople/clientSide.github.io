@@ -12,8 +12,7 @@
                                     <span class="issue-text" style="display: inline-flex;">
 
                                         <span class="issue-ref">#{{issue.id}}</span>
-                                        <input name="subject" style="margin-top: 3px; margin-left: 5px; font-size: 25px;" class="detail-subject" :value=issue.subject>
-
+                                        <v-text-field v-model=issueTitle style="margin-top: 3px; margin-left: 5px; font-size: 25px; width: 300px" class="detail-subject" ></v-text-field>
                                     </span>
                                     <button style="background: none;" @click="saveEdit()">
                                         <font-awesome-icon icon="floppy-disk" />
@@ -44,23 +43,19 @@
                         </div>
                         <!-- Action buttons-->
                         <div class="action-buttons"></div>
-                        <div class="subheader">
-                            <div class="tags-container">
+                        <div class="subheader" >
+                            <div class="tags-container" style="display: flex; justify-content: space-between">
                             
                                 <div style="display: flex; justify-content: space-between;">        
                                     
                                     <div
                                         v-for="tag of issue.tags"
                                         :key="tag"
-                                        class="tag"
-                                        style="background-color: {{tag.color}};
-                                        display: flex;
-                                        justify-content: space-between;
-                                        margin-right: 5px;"
+                                        class="tag my-tag"
+                                        :style="{'background-color': tag.color}"
                                     >
                                         <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
-                                        <!-- {% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %} -->
-                                        <button @click="esborrar_tag_issue()">
+                                        <button @click="esborrar_tag_issue(tag)">
                                             <font-awesome-icon icon="xmark" />
                                         </button>
                                     </div>
@@ -70,36 +65,41 @@
                                     </button> 
 
                                     <div v-show="!addTag" style="display: flex; justify-content: space-between;">
-                                        <input id="inputAddTag" name="nom" type="text" placeholder="Enter tag" >
-                                        <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
-                                        <button @click="addTag = true">
+                                        <input v-model=nomTag type="text" placeholder="Enter tag" >
+                                        <input v-model="colorTag" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                        <button @click="addTagFetch()">
                                             <font-awesome-icon icon="floppy-disk" />
                                         </button>
                                     </div>
                                     
                                 </div>
 
-                                
-                                <div class="created-by">
+                                <div style="display: flex; justify-content: space-between">
+                                    <div class="created-by">
                                     <span>
                                         Created by
-                                        <!-- com possar be l'string 
+                                        <span>{{ issue.creador.nom }}</span>
+
+                                        <!-- com possar be l'string
                                         <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-                                            <span>{{ issue.creador.user.first_name }}</span>
+                                            <span>{{ issue.creador.nom }}</span>
                                         </RouterLink>
                                         -->
                                     </span>
-                                    <div class="created-date">{{issue.dataModificacio}}</div>
-                                </div>
-                                <div class="user-avatar">
-                                    <!-- com possar be l'string
-                                    <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-                                        <img :src = issue.creador.avatar.url
-                                        width = "40"
-                                        height = "40"
-                                    >
-                                    </RouterLink>
-                                    -->
+                                        <div class="created-date">{{issue.dataModificacio}}</div>
+                                    </div>
+                                    <div class="user-avatar" style="margin-left: 5px">
+                                        <!-- com possar be l'string
+                                        <RouterLink to="/usuari/"{{issue.creador.user.id}}>
+
+                                        </RouterLink>
+                                        -->
+                                        <img
+                                            :src=issue.creador.avatar
+                                            width="40"
+                                            height="40"
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>    
@@ -116,7 +116,7 @@
                                 placeholder="Empty space is so boring... go on, be descriptive..." 
                                 name="descripcio" 
                                 class="description ng-pristine ng-untouched ng-valid ng-empty"
-                                v-model=issue.descripcio
+                                v-model=issueDesc
                                 >
                             </textarea>
                             <button style="max-height: 32px; background: none;" @click="guardarDesc()">
@@ -138,12 +138,14 @@
                             <div class="options ">
                                 <div class="add-attach">
                                     <!-- input to add attach -->
-
-                                    <button id="addAttachment" style="display: flex; margin-right: 5px"
-                                        @click="addAttachment()"
+                                    <v-file-input
+                                        label="+"
+                                        @change="addAttachment()"
+                                        v-model=attachment
                                     >
                                         <font-awesome-icon icon="plus" />
-                                    </button>
+                                    </v-file-input>
+
                                 </div>
                             </div>
                         </div>
@@ -162,7 +164,7 @@
                                         </div>
                                         <button
                                             style="margin-right: 5px"
-                                            @click="esborrar_attachment()"
+                                            @click="esborrar_attachment(attachment)"
                                         >
                                             <font-awesome-icon icon="trash" />
                                         </button>
@@ -197,8 +199,8 @@
                         v-if="hihaComentaris"
                     >
                         <div style="display: flex; justify-content: space-between;">
-                            <textarea name="text" placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
-                            <button type="submit" name="afegir_comentari" style="margin-left: 5px;" >
+                            <textarea v-model=comment placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
+                            <button @click="afegir_comentari()" style="margin-left: 5px;" >
                                 <font-awesome-icon icon="floppy-disk" />
                             </button>
                         </div>
@@ -384,10 +386,10 @@
                                         </template>
 
                                         <v-card
-                                            width="400px"
+                                            width="600px"
                                         >
                                             <v-card-title>
-                                                Add watchers
+                                                Select user
                                             </v-card-title>
                                             <v-card-text>
                                                 <v-text-field placeholder="Search for users"></v-text-field>
@@ -404,9 +406,10 @@
                                         </v-card>
                                     </v-dialog>
                                     <button 
-                                        v-if="issue.assignacio.id === idUser"
+                                        v-if="issue.assignacio && issue.assignacio.id === idUser"
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="esborrar_assignacio()"
                                     >
                                         Dont assign to me
                                     </button>
@@ -414,6 +417,7 @@
                                         v-else
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="assignSelect(idUser)"
                                     >
                                         Assign to me
                                     </button>
@@ -548,6 +552,7 @@
                             type="date" 
                             id="datePickerInput" 
                             name="dataLimit"
+                            v-model="date"
                         >
                         <button @click="btnSaveDateDirect()"  style=" margin-left: 5px">
                             <font-awesome-icon icon="floppy-disk" />
@@ -559,6 +564,7 @@
                             type="text" 
                             id="inputMotiuBloqueig" 
                             name="motiuBloqueig"
+                            v-model="motiuBlock"
                         >
                         <button @click="btnSaveMotiuBloqueig"  >
                             <font-awesome-icon icon="floppy-disk" />
@@ -585,6 +591,18 @@
         },
         setup() {
 
+            //Per obtenir la url
+            let url = window.location.href;
+            //Separar la url per '/'
+            let directories = url.split("/");
+            let issueId = ref(directories[(directories.length - 1)]);
+
+            let issueTitle = ref('');
+            let issueDesc = ref('');
+            let nomTag = ref('');
+            let colorTag = ref('');
+            let attachment = ref();
+
             const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
             const TTipus = ["Bug", "Question", "Enhancement"];
             const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
@@ -596,7 +614,7 @@
             let prioritat = ref("Low");
             
             let issue = ref();
-            let idUser = ref();
+            let idUser = ref(24);
             let autoObservador = ref(false);
             let addTag = ref(true);
             let hihaComentaris = ref(true);
@@ -605,31 +623,14 @@
 
             let selectAssign = ref(false);
             let selectObs = ref(false);
-            let allUsers = ref(['user1', 'userHardCoded']);
 
-            function saveEdit() {
-                console.log("save edit");
-            }
+            let allUsers = ref([]);
+            simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
+            console.log("all Users: ", allUsers.value);
 
-            function guardarDesc() {
-                console.log("guardar descripcio");
-            }
-            function addAttachment() {
-                console.log("add attachment");
-            }
-
-            function esborrar_attachment() {
-                console.log("esborrar attachment");
-            }
-
-            function esborrar_tag_issue() {
-                console.log("esborrar tag issue");
-            }
-
-            function esborrar_assignacio() {
-                console.log("esborrar assignacio");
-                simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => issue.value = data);
-            }
+            let date = ref();
+            let motiuBlock = ref('');
+            let comment = ref('');
 
             function esborrar_observador() {
                 console.log("esborrar observador");
@@ -647,36 +648,176 @@
                 prioritat.value = item;
             }
 
-           
-
-            function deleteTimeLine() {
-                console.log("now ther arent time line");
-            }
-
-            function deleteBlock() {
-                console.log("block is delete");
-            }
-
             function obsSelected(obsSelected) {
                 console.log("new obs: ", obsSelected);
             }
 
-            function assignSelect(assignSelected) {
+            async function addAttachment() {
+                console.log("add attachment: ", attachment.value);
+                const formData = new FormData();
+                //formData.append("file", attachment.value, attachment.value[0].name);
+                formData.append("file", attachment.value);
+                await simpleFetch("issues/"+issueId.value+"attachments/", "POST", formData, "formData");
+                actualitzarInfo();
+            }
+
+            /**
+             * Esborrar un attachment
+             * @param attachment
+             * @returns {Promise<void>}
+             */
+            async function esborrar_attachment(attachment) {
+                console.log("esborrar attachment: ", attachment);
+                await simpleFetch("issues/"+issueId.value+"attachments/"+attachment.id, "DELETE", );
+                actualitzarInfo();
+            }
+
+            /**
+             * Delete tag
+             * @param nomTag
+             * @returns {Promise<void>}
+             */
+            async function esborrar_tag_issue(nomTag) {
+                console.log("esborrar tag issue: ", nomTag.nom);
+                await simpleFetch("issues/"+issueId.value+"/tags/"+nomTag.nom, "DELETE", );
+                actualitzarInfo();
+            }
+
+            /**
+             * Add tag
+             */
+            async function addTagFetch() {
+                let obj = {
+                    "nom": nomTag.value,
+                    "color": colorTag.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/tags/", "POST", obj);
+                actualitzarInfo();
+                addTag.value = true;
+            }
+
+            /**
+             * Save description
+             */
+            async function guardarDesc() {
+                console.log("guardar descripcio: ", issueDesc.value);
+                let obj = {
+                    "descripcio": issueDesc.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+                actualitzarInfo();
+            }
+
+            /**
+             * Save subject
+             */
+            async function saveEdit() {
+                let obj = {
+                    "subject": issueTitle.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+                actualitzarInfo();
+            }
+
+            /**
+             * Afagir comentari
+             */
+            async function afegir_comentari() {
+                console.log("comment added: ", comment.value);
+                let obj = {
+                    "text": comment.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/comentaris/", "POST", obj).then((data) => console.log("POST", data));
+                actualitzarInfo();
+                comment.value = '';
+            }
+            /**
+             * Assignacio seleccionada
+             * @param assignSelected
+             */
+            async function assignSelect(assignSelected) {
                 console.log("new assign: ", assignSelected);
+                selectAssign.value = false;
+                let obj = {
+                    "assignacio_id": assignSelected,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
             }
 
-            function btnSaveDateDirect() {
-                console.log("info motiu bloquetg save");
-            }
-            function btnSaveMotiuBloqueig() {
-                console.log("info motiu bloquetg save");
+            /**
+             * Esborra assignacio
+             */
+            async function esborrar_assignacio() {
+                console.log("esborrar assignacio");
+                let obj = {
+                    "assignacio_id": null,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => issue.value = data);
+                actualitzarInfo();
             }
 
+            /**
+             * elimina la restriccio de data
+             */
+            async function deleteTimeLine() {
+                let obj = {
+                    "dataLimit": null,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Delete del bloqueig
+             */
+            async function deleteBlock() {
+                let obj = {
+                    "bloquejat": false,
+                    "motiuBloqueig": ""
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Guardar la restricció de data limit
+             */
+            async function btnSaveDateDirect() {
+                showDatePickker.value = false;
+                let obj = {
+                    "dataLimit": new Date(date.value).toISOString(),
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Guardar el motiu de bloqueig
+             */
+            async function btnSaveMotiuBloqueig() {
+                let obj = {
+                    "bloquejat": true,
+                    "motiuBloqueig": motiuBlock.value
+                }
+                showBlock.value = false;
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Refresh page
+             */
             function actualitzarInfo() {
-                simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => issue.value = data);
+                simpleFetch("issues/"+issueId.value+"/", "GET", "").then((data) => issue.value = data);
             }
 
             return {
+                nomTag,
+                colorTag,
+                comment,
+                issueTitle,
+                issueDesc,
                 issue,
                 hihaComentaris,
                 addTag,
@@ -695,6 +836,9 @@
                 selectAssign,
                 selectObs, 
                 allUsers,
+                date,
+                motiuBlock,
+                attachment,
                 esborrar_observador,
                 esborrar_assignacio,
                 esborrar_tag_issue,
@@ -711,7 +855,9 @@
                 assignSelect,
                 actualitzarInfo,
                 btnSaveMotiuBloqueig,
-                btnSaveDateDirect
+                btnSaveDateDirect,
+                afegir_comentari,
+                addTagFetch,
             }
         },
         mounted() {
@@ -719,12 +865,13 @@
             let url = window.location.href;
             //Separar la url per '/'
             let directories = url.split("/");
-            //Agafar l'ultim element
-            let issueId = directories[(directories.length - 1)];
 
-
-            console.log("urlLocation: ", issueId);
-            simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => this.issue = data);
+            let issueIdUser = directories[(directories.length - 1)];
+            simpleFetch("issues/"+issueIdUser+"/", "GET", "").then((data) => {
+                this.issue = data;
+                this.issueTitle = data.subject;
+                this.issueDesc = data.descripcio;
+            });
             console.log("issueObject: ", this.issue);
         }
     }
@@ -734,7 +881,11 @@
 </script>
 
 <style scoped>
-    
+    .my-tag {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 5px;
+    }
 </style>
 
 

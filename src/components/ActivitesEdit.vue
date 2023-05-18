@@ -2,7 +2,8 @@
     <li>
         <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px; border-bottom: 0.5px solid grey;">
             <div style="display: flex; justify-content: space-between; margin-top: 10px; margin-bottom: 20px;">
-                <img src={{activity.usuari.avatar}}
+                <img
+                    :src=activity.usuari.avatar
                     width="60"
                     height="60"
                 >

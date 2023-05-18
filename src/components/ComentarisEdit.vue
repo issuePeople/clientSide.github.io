@@ -2,7 +2,8 @@
     <li>
         <div style="border-bottom: 0.5px solid grey;">
             <div style="display: flex; margin-left: 5px; margin-right: 5px; margin-top: 10px; margin-bottom: 20px;">
-                <img src="{{ comentari.autor.avatar }}"
+                <img
+                    :src=comentari.autor.avatar
                     width="60"
                     height="60"
                 >
@@ -27,9 +28,8 @@
         props: {
             comentari: Object
         },
-        setup(props) {
+        setup() {
 
-            console.log("props comentaris: ", props.comentari);
             return {
 
             }
