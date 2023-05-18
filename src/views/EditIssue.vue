@@ -8,24 +8,16 @@
                     <div class="detail-header">
                         <!-- Titol issue-->
                         <div class="detail-title-wrapper">
-                            <span classe="issue-text" style="display: inline-flex;">
                                 <div class="detail-ref">
-                                    <span class="issue-ref">#{{issue.id}}</span>
-                                    <input name="subject" style="margin-top: 3px; margin-left: 5px; font-size: 25px;" class="detail-subject" :value=issue.subject>
-                                    
+                                    <span class="issue-text" style="display: inline-flex;">
+
+                                        <span class="issue-ref">#{{issue.id}}</span>
+                                        <v-text-field v-model=issueTitle style="margin-top: 3px; margin-left: 5px; font-size: 25px; width: 300px" class="detail-subject" ></v-text-field>
+                                    </span>
                                     <button style="background: none;" @click="saveEdit()">
                                         <font-awesome-icon icon="floppy-disk" />
-                                        <font-awesome-icon icon="clock" />
-                                        <font-awesome-icon icon="lock" />
-
-                                        <font-awesome-icon icon="arrow-left" />
-                                        <font-awesome-icon icon="arrow-right" />
-                                        <font-awesome-icon icon="arrow-up" />
-                                        <font-awesome-icon icon="arrow-down" />
-
                                     </button>
                                 </div>
-                            </span>
                         </div>
                         <div class="detail-project">
                             <div class="section-name">Issue</div>
@@ -34,7 +26,7 @@
                         <!-- Data limit -->
                         <div v-if="issue.dataLimit" class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
-                                <i class="fa fa-clock-o" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
+                                <font-awesome-icon icon="clock" />
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
                                 {{issue.dataModificacio}}
@@ -43,8 +35,7 @@
                         <!-- Motiu Bloqueig-->
                         <div v-if="issue.bloquejat" class="detail-header-line block-desc-container">
                             <span class="blocked-sign" style="color: white">
-                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; margin-top: 1px;"></i>
-                                Blocked
+                                <font-awesome-icon icon="lock" />
                             </span>
                             <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
                                 {{issue.motiuBloqueig}}
@@ -52,16 +43,21 @@
                         </div>
                         <!-- Action buttons-->
                         <div class="action-buttons"></div>
-                        <div class="subheader">
-                            <div class="tags-container">
+                        <div class="subheader" >
+                            <div class="tags-container" style="display: flex; justify-content: space-between">
                             
                                 <div style="display: flex; justify-content: space-between;">        
                                     
-                                    <div v-for="tag of issue.tags" class="tag" style="background-color: {{tag.color}}; display: flex; justify-content: space-between; margin-right: 5px;">
+                                    <div
+                                        v-for="tag of issue.tags"
+                                        :key="tag"
+                                        class="tag my-tag"
+                                        :style="{'background-color': tag.color}"
+                                    >
                                         <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
-                                        <a class="icon-close"  href="{% url 'esborrar_tag_issue' id_issue=issue.id nom_tag=tag.nom %}">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </a>
+                                        <button @click="esborrar_tag_issue(tag)">
+                                            <font-awesome-icon icon="xmark" />
+                                        </button>
                                     </div>
                                     <button v-if="addTag" class="btn-filter ng-animate-disabled" @click="addTag = false">
                                         <span>Add tag</span>
@@ -69,38 +65,41 @@
                                     </button> 
 
                                     <div v-show="!addTag" style="display: flex; justify-content: space-between;">
-                                        <input id="inputAddTag" name="nom" type="text" placeholder="Enter tag" >
-                                        <input name="color" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
-                                        <button @click="addTag = true">
-                                            <!--<i class="fa fa-floppy-o" aria-hidden="true"></i>-->
-                                            G
+                                        <input v-model=nomTag type="text" placeholder="Enter tag" >
+                                        <input v-model="colorTag" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                        <button @click="addTagFetch()">
+                                            <font-awesome-icon icon="floppy-disk" />
                                         </button>
                                     </div>
                                     
                                 </div>
 
-                                
-                                <div class="created-by">
+                                <div style="display: flex; justify-content: space-between">
+                                    <div class="created-by">
                                     <span>
                                         Created by
-                                        <!-- com possar be l'string 
+                                        <span>{{ issue.creador.nom }}</span>
+
+                                        <!-- com possar be l'string
                                         <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-                                            <span>{{ issue.creador.user.first_name }}</span>
+                                            <span>{{ issue.creador.nom }}</span>
                                         </RouterLink>
                                         -->
                                     </span>
-                                    <div class="created-date">{{issue.dataModificacio}}</div>
-                                </div>
-                                <div class="user-avatar">
-                                    <a href="{% url 'usuari' issue.creador.user.id %}"></a>
-                                        <!-- com possar be l'string 
-                                    <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-                                        <img :src = issue.creador.avatar.url
-                                        width = "40px"
-                                        height = "40px"
-                                    >
-                                    </RouterLink>
-                                    -->
+                                        <div class="created-date">{{issue.dataModificacio}}</div>
+                                    </div>
+                                    <div class="user-avatar" style="margin-left: 5px">
+                                        <!-- com possar be l'string
+                                        <RouterLink to="/usuari/"{{issue.creador.user.id}}>
+
+                                        </RouterLink>
+                                        -->
+                                        <img
+                                            :src=issue.creador.avatar
+                                            width="40"
+                                            height="40"
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>    
@@ -117,12 +116,11 @@
                                 placeholder="Empty space is so boring... go on, be descriptive..." 
                                 name="descripcio" 
                                 class="description ng-pristine ng-untouched ng-valid ng-empty"
+                                v-model=issueDesc
                                 >
-                                {{issue.descripcio}}
                             </textarea>
                             <button style="max-height: 32px; background: none;" @click="guardarDesc()">
-                                G
-                                <i  class="fa fa-floppy-o" aria-hidden="true"></i>
+                                <font-awesome-icon icon="floppy-disk" />
                             </button>
                         </div>
                     </section>
@@ -131,65 +129,82 @@
                         <!-- attachment header-->
                         <div class="attachments-header">
                             <!-- num attachment -->
-                            <h3 class="attachment-title">
-                                <span class="attachments-num">{{issue.attachments.length}}</span>
-                                <span class="attachments-text">Attachments</span>
+                            <h3 class="attachment-title" style="margin-left: 5px">
+                                <span class="attachments-num" >{{issue.attachments.length}}</span>
+                                <span class="attachments-text" style="margin-left: 5px" >Attachments</span>
                             </h3>
                             
                             <!-- add attachment-->
                             <div class="options ">
                                 <div class="add-attach">
                                     <!-- input to add attach -->
-
-                                    <button id="addAttachment" style="display: flex;"
-                                        @click="addAttachment()"
+                                    <v-file-input
+                                        label="+"
+                                        @change="addAttachment()"
+                                        v-model=attachment
                                     >
-                                        ADD
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </button>
+                                        <font-awesome-icon icon="plus" />
+                                    </v-file-input>
+
                                 </div>
                             </div>
                         </div>
                         <!-- attachment content-->
                         <div class="attachment-list sortable">
                             <ul
-                                v-for="attachment of issue.attachments"
+                                v-for="(attachment, index) of issue.attachments"
+                                :key="index"
                             >
                                 <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
                                     <div style="display: flex; justify-content: space-between;">
                                         <div>
                                             <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                            <span>({{ attachment.document.size|filesizeformat }})</span>
+                                            <span>({{ attachment.document.size }})</span>
+                                            nomDocumenthardcoded now
                                         </div>
-                                        <a href="{% url 'esborrar_attachment' attachment.id %}">
-                                            <i style="margin-right: 5px;" class="fa fa-trash-o" aria-hidden="true"></i>
-                                        </a>
+                                        <button
+                                            style="margin-right: 5px"
+                                            @click="esborrar_attachment(attachment)"
+                                        >
+                                            <font-awesome-icon icon="trash" />
+                                        </button>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </section>
                     <!-- Comments Activites header -->
-                    <section class="history">
-                        <nav class="history-tabs">
+                    <section class="history" >
+                        <nav class="history-tabs" style="padding: 5px">
                             <!-- si comentaris un style o altre -->
-                           <button class="history-tab active">
+                           <button
+                                :class="hihaComentaris ? 'history-tab active' : 'history-tab'"
+                                @click="hihaComentaris = true"
+                           >
                                 Comentaris
                            </button> 
-                           <button>
-                                Activites
+                           <button
+                               :class="hihaComentaris ? 'history-tab' : 'history-tab active'"
+                               style="margin-left: 15px"
+                               @click="hihaComentaris = false"
+                           >
+                                Activities
                            </button> 
                         </nav>
                     </section>
 
                     <!-- sha de mirar pero va lo segunet-->
-                    <section class="comment" v-if="hihaComentaris">
+                    <section
+                        class="comment"
+                        v-if="hihaComentaris"
+                    >
                         <div style="display: flex; justify-content: space-between;">
-                            <textarea name="text" placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
-                            <button type="submit" name="afegir_comentari" style="background: none;">
-                                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            <textarea v-model=comment placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
+                            <button @click="afegir_comentari()" style="margin-left: 5px;" >
+                                <font-awesome-icon icon="floppy-disk" />
                             </button>
                         </div>
+
                         <div>
                             <ul>
                                 <ComentarisEdit
@@ -202,7 +217,10 @@
                         </div>
 
                     </section>
-                    <section class="activities" v-else>
+                    <section
+                        class="activities"
+                        v-else
+                    >
                         <div class="activities-wrapper">
                             <ul>
                                 <ActivitiesEdit
@@ -216,7 +234,7 @@
                     </section>
                 </div>
             </div>
-                <sidebar class="sidebar ticket-data">
+            <div class="sidebar ticket-data">
                     <section class="ticket-header">
                         <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
                             <span>Open</span>
@@ -338,48 +356,68 @@
                                         margin-right: 5px;"
                                         >
                                         <img src="{{ issue.assignacio.avatar }}"
-                                            width="60px"
-                                            height="60px"
+                                            width="60"
+                                            height="60"
                                         >
                                         <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
-                                        <a href="{% url 'esborrar_assignacio' issue.id %}">
-                                            <i class="fa fa-times" aria-hidden="true"></i>
-                                        </a>
+                                        <!-- issue.id -->
+                                        <button @click="esborrar_assignacio()">
+                                            <font-awesome-icon icon="xmark" />
+                                        </button>
                                     </div>  
                                 </div>
                                 <!-- selector d'assignacio -->
                                 
                                 <div class="ticket-users-actions">
-                                    <div>
-                                        <select id="selectAssig" name="assignat" type="submit" class="status-button" style="display: none; max-width: 170px;">
-                                            <option>+ Add assigned</option>
-                                            <!--
-                                                Possibles assignats fetch on mouonted
-                                            {% for assig in possibles_assignats %}
-                                                <option value="{{assig.user.id}}">{{assig.user.username}}</option>
-                                            {% endfor %}
-                                            -->
-                                        </select>
-                                        <button id="btnSaveAssig" type="submit" name="guardar_assignat" style="display: none;"></button>
-                                    </div>
-                                    <button id="addAssigned" class="ticket-users-actions" style="margin-right: 10px;">
-                                        + Add assigned
-                                    </button>
+
+                                    <v-dialog
+                                        v-model="selectAssign"
+                                        width="auto"
+                                    >
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                color="primary"
+                                                v-bind="props"
+                                                style="margin-right: 10px;"
+                                                class="ticket-users-actions"
+                                            >
+                                                + Add assigned
+                                            </button>
+                                        </template>
+
+                                        <v-card
+                                            width="600px"
+                                        >
+                                            <v-card-title>
+                                                Select user
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-text-field placeholder="Search for users"></v-text-field>
+                                                <SelectUsers type="assign" :users=allUsers @userSelect="assignSelect"/>
+
+                                                <v-btn
+                                                    @click="selectAssign = false"
+                                                    color="red"
+                                                    class="mt-10 ml-16"
+                                                >
+                                                    close
+                                                </v-btn>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <button 
-                                        v-if="issue.assignacio.id == idUser"
-                                        type="submit" 
-                                        name="autoassignar" 
+                                        v-if="issue.assignacio && issue.assignacio.id === idUser"
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="esborrar_assignacio()"
                                     >
                                         Dont assign to me
                                     </button>
                                     <button 
                                         v-else
-                                        type="submit" 
-                                        name="autoassignar" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="assignSelect(idUser)"
                                     >
                                         Assign to me
                                     </button>
@@ -398,43 +436,62 @@
                                 <div>
                                     <ul>
                                         <li
-                                            v-for="obs of issue.observadors"
+                                            v-for="(obs, index) of issue.observadors"
+                                            :key=index
                                         >
                                             <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                                <img src="{{ obs.avatar }}"
-                                                    width="60px"
-                                                    height="60px"
+                                                <img src={{obs.avatar}}
+                                                    width="60"
+                                                    height="60"
                                                 >
                                                 <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
-                                                <a href="{% url 'esborrar_observador' issue.id obs.user.id %}">
-                                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                                </a>
+
+                                                <button @click="esborrar_observador()">
+                                                    <font-awesome-icon icon="xmark" />
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
                                 
                                 <div class="ticket-users-actions">
-                                    <div>
-                                        <select id="selectObs" name="observador" type="submit" class="status-button" style="display: none; max-width: 170px;">
-                                            <option>+ Add watchers</option>
-                                            <!--
-                                                fetch de possibles observadors
-                                            {% for obs in possibles_observadors %}
-                                                <option value="{{obs.user.id}}">{{obs.user.username}}</option>
-                                            {% endfor %}
-                                            -->
-                                        </select>
-                                        <button id="btnSaveObs" type="submit" name="guardar_observador" style="display: none;"></button>
-                                    </div>
-                                    <button id="addObserver" style="margin-right: 10px;" class="ticket-users-actions">
-                                        + Add watchers
-                                    </button>
-                                    <!--
+
+                                    <v-dialog
+                                        v-model="selectObs"
+                                        width="auto"
+                                    >
+                                        <template v-slot:activator="{ props }">
+                                            <button
+                                                color="primary"
+                                                v-bind="props"
+                                                style="margin-right: 10px;"
+                                                class="ticket-users-actions"
+                                            >
+                                                + Add watchers
+                                            </button>
+                                        </template>
+
+                                        <v-card
+                                            width="400px"
+                                        >
+                                            <v-card-title>
+                                                Add watchers
+                                            </v-card-title>
+                                            <v-card-text>
+                                               <v-text-field placeholder="Search for users"></v-text-field>
+                                                <SelectUsers type="obs"  :users=allUsers @userSelect="obsSelected" />
+                                                <v-btn
+                                                    @click="selectObs = false"
+                                                    color="red"
+                                                    class="mt-10 ml-16"
+                                                >
+                                                    close
+                                                </v-btn>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-dialog>
                                     <button 
-                                        v-if="obs.id == idUser" 
-                                        type="submit" 
-                                        name="autoobservar" 
+                                        v-if="autoObservador" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
                                     >
@@ -442,13 +499,10 @@
                                     </button>
                                     <button
                                         v-else 
-                                        type="submit" 
-                                        name="autoobservar" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;">
                                         Watch
                                     </button>
-                                    -->
                                 </div>
                             </div>
                         </div>
@@ -463,13 +517,13 @@
                                     style="background: red;"
                                     @click="deleteTimeLine()"
                                 >
-                                    clock
+                                    <font-awesome-icon icon="clock" />
                                 </button>
                                 <button
-                                    else
+                                    v-else
                                     @click="showDatePickker = true" 
                                 >
-                                    clock
+                                    <font-awesome-icon icon="clock" />
                                 </button>
                             </div>
 
@@ -480,14 +534,14 @@
                                     style="background: red; margin-left: 5px;"
                                     @click="deleteBlock()"
                                 >
-                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                    <font-awesome-icon icon="lock"/>
                                 </button>
                                 <button
-                                    else
+                                    v-else
                                     style="margin-left: 5px;"
                                     @click="showBlock = true"
                                 >
-                                    <font-awesome-icon :icon="['far', 'lock']" />
+                                    <font-awesome-icon icon="lock"/>
                                 </button>
                             </div>
                         </div>
@@ -498,10 +552,10 @@
                             type="date" 
                             id="datePickerInput" 
                             name="dataLimit"
-                            style="display: none;"
+                            v-model="date"
                         >
-                        <button id="btnSaveDateDirect" type="submit" name="guardar_dataLimit" style="display: none;">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        <button @click="btnSaveDateDirect()"  style=" margin-left: 5px">
+                            <font-awesome-icon icon="floppy-disk" />
                         </button>
                     </div>
 
@@ -510,33 +564,44 @@
                             type="text" 
                             id="inputMotiuBloqueig" 
                             name="motiuBloqueig"
-                            style="display: none;"
+                            v-model="motiuBlock"
                         >
-                        <button id="btnSaveBloqueigDirect" type="submit" name="guardar_bloquejat" style="display: none;">
-                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                        <button @click="btnSaveMotiuBloqueig"  >
+                            <font-awesome-icon icon="floppy-disk" />
                         </button>
                     </div>
-                
-                    <button id="btnSaveMotiuBloqueig" type="submit" name="guardar_bloquejat" style="display: none;"></button>
-
-                </sidebar>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import { ref } from 'vue';
-    import {simpleFetch} from '../utils/utils';
+    import {simpleFetch} from '@/utils/utils';
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
+    import SelectUsers from '../components/SelectUsers.vue';
 
     export default {
         name: "listIssue",
         components: {
             ActivitiesEdit,
             ComentarisEdit,
+            SelectUsers,
         },
         setup() {
+
+            //Per obtenir la url
+            let url = window.location.href;
+            //Separar la url per '/'
+            let directories = url.split("/");
+            let issueId = ref(directories[(directories.length - 1)]);
+
+            let issueTitle = ref('');
+            let issueDesc = ref('');
+            let nomTag = ref('');
+            let colorTag = ref('');
+            let attachment = ref();
 
             const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
             const TTipus = ["Bug", "Question", "Enhancement"];
@@ -549,26 +614,26 @@
             let prioritat = ref("Low");
             
             let issue = ref();
-            let idUser = ref();
+            let idUser = ref(24);
+            let autoObservador = ref(false);
             let addTag = ref(true);
             let hihaComentaris = ref(true);
             let showDatePickker = ref(false);
             let showBlock = ref(false);
 
-            function saveEdit() {
-                console.log("save edit");
-            }
+            let selectAssign = ref(false);
+            let selectObs = ref(false);
 
-            function guardarDesc() {
-                console.log("guardar descripcio");
-            }
+            let allUsers = ref([]);
+            simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
+            console.log("all Users: ", allUsers.value);
 
-            function addTagAction() {
-                addTag = false;
-            }
+            let date = ref();
+            let motiuBlock = ref('');
+            let comment = ref('');
 
-            function addAttachment() {
-                console.log("add attachment");
+            function esborrar_observador() {
+                console.log("esborrar observador");
             }
 
             function setTipus(item) {
@@ -583,15 +648,176 @@
                 prioritat.value = item;
             }
 
-            function deleteTimeLine() {
-                console.log("now ther arent time line");
+            function obsSelected(obsSelected) {
+                console.log("new obs: ", obsSelected);
             }
 
-            function deleteBlock() {
-                console.log("block is delete");
+            async function addAttachment() {
+                console.log("add attachment: ", attachment.value);
+                const formData = new FormData();
+                //formData.append("file", attachment.value, attachment.value[0].name);
+                formData.append("file", attachment.value);
+                await simpleFetch("issues/"+issueId.value+"attachments/", "POST", formData, "formData");
+                actualitzarInfo();
             }
-            
+
+            /**
+             * Esborrar un attachment
+             * @param attachment
+             * @returns {Promise<void>}
+             */
+            async function esborrar_attachment(attachment) {
+                console.log("esborrar attachment: ", attachment);
+                await simpleFetch("issues/"+issueId.value+"attachments/"+attachment.id, "DELETE", );
+                actualitzarInfo();
+            }
+
+            /**
+             * Delete tag
+             * @param nomTag
+             * @returns {Promise<void>}
+             */
+            async function esborrar_tag_issue(nomTag) {
+                console.log("esborrar tag issue: ", nomTag.nom);
+                await simpleFetch("issues/"+issueId.value+"/tags/"+nomTag.nom, "DELETE", );
+                actualitzarInfo();
+            }
+
+            /**
+             * Add tag
+             */
+            async function addTagFetch() {
+                let obj = {
+                    "nom": nomTag.value,
+                    "color": colorTag.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/tags/", "POST", obj);
+                actualitzarInfo();
+                addTag.value = true;
+            }
+
+            /**
+             * Save description
+             */
+            async function guardarDesc() {
+                console.log("guardar descripcio: ", issueDesc.value);
+                let obj = {
+                    "descripcio": issueDesc.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+                actualitzarInfo();
+            }
+
+            /**
+             * Save subject
+             */
+            async function saveEdit() {
+                let obj = {
+                    "subject": issueTitle.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+                actualitzarInfo();
+            }
+
+            /**
+             * Afagir comentari
+             */
+            async function afegir_comentari() {
+                console.log("comment added: ", comment.value);
+                let obj = {
+                    "text": comment.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/comentaris/", "POST", obj).then((data) => console.log("POST", data));
+                actualitzarInfo();
+                comment.value = '';
+            }
+            /**
+             * Assignacio seleccionada
+             * @param assignSelected
+             */
+            async function assignSelect(assignSelected) {
+                console.log("new assign: ", assignSelected);
+                selectAssign.value = false;
+                let obj = {
+                    "assignacio_id": assignSelected,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Esborra assignacio
+             */
+            async function esborrar_assignacio() {
+                console.log("esborrar assignacio");
+                let obj = {
+                    "assignacio_id": null,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => issue.value = data);
+                actualitzarInfo();
+            }
+
+            /**
+             * elimina la restriccio de data
+             */
+            async function deleteTimeLine() {
+                let obj = {
+                    "dataLimit": null,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Delete del bloqueig
+             */
+            async function deleteBlock() {
+                let obj = {
+                    "bloquejat": false,
+                    "motiuBloqueig": ""
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Guardar la restricció de data limit
+             */
+            async function btnSaveDateDirect() {
+                showDatePickker.value = false;
+                let obj = {
+                    "dataLimit": new Date(date.value).toISOString(),
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Guardar el motiu de bloqueig
+             */
+            async function btnSaveMotiuBloqueig() {
+                let obj = {
+                    "bloquejat": true,
+                    "motiuBloqueig": motiuBlock.value
+                }
+                showBlock.value = false;
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Refresh page
+             */
+            function actualitzarInfo() {
+                simpleFetch("issues/"+issueId.value+"/", "GET", "").then((data) => issue.value = data);
+            }
+
             return {
+                nomTag,
+                colorTag,
+                comment,
+                issueTitle,
+                issueDesc,
                 issue,
                 hihaComentaris,
                 addTag,
@@ -606,12 +832,32 @@
                 idUser,
                 showDatePickker,
                 showBlock,
+                autoObservador,
+                selectAssign,
+                selectObs, 
+                allUsers,
+                date,
+                motiuBlock,
+                attachment,
+                esborrar_observador,
+                esborrar_assignacio,
+                esborrar_tag_issue,
+                esborrar_attachment,
+                addAttachment,
+                guardarDesc,
                 deleteBlock,
                 deleteTimeLine,
                 setTipus,
                 setPrioritat,
                 setGravetat,
-                saveEdit
+                saveEdit,
+                obsSelected,
+                assignSelect,
+                actualitzarInfo,
+                btnSaveMotiuBloqueig,
+                btnSaveDateDirect,
+                afegir_comentari,
+                addTagFetch,
             }
         },
         mounted() {
@@ -619,12 +865,13 @@
             let url = window.location.href;
             //Separar la url per '/'
             let directories = url.split("/");
-            //Agafar l'ultim element
-            let issueId = directories[(directories.length - 1)];
 
-
-            console.log("urlLocation: ", issueId);
-            simpleFetch("issues/"+issueId+"/", "GET", "").then((data) => this.issue = data);
+            let issueIdUser = directories[(directories.length - 1)];
+            simpleFetch("issues/"+issueIdUser+"/", "GET", "").then((data) => {
+                this.issue = data;
+                this.issueTitle = data.subject;
+                this.issueDesc = data.descripcio;
+            });
             console.log("issueObject: ", this.issue);
         }
     }
@@ -634,7 +881,11 @@
 </script>
 
 <style scoped>
-    
+    .my-tag {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 5px;
+    }
 </style>
 
 
