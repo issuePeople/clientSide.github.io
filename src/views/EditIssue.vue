@@ -656,8 +656,8 @@
                 console.log("add attachment: ", attachment.value);
                 const formData = new FormData();
                 //formData.append("file", attachment.value, attachment.value[0].name);
-                formData.append("file", attachment.value);
-                await simpleFetch("issues/"+issueId.value+"attachments/", "POST", formData, "formData");
+                formData.append("document", attachment.value);
+                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", formData, "formData");
                 actualitzarInfo();
             }
 
