@@ -140,12 +140,14 @@
                                     <!-- input to add attach -->
                                     <v-file-input
                                         label="+"
-                                        @change="addAttachment()"
-                                        v-model=attachment
+                                        v-model=attachmentFile
                                     >
                                         <font-awesome-icon icon="plus" />
                                     </v-file-input>
-
+                                    <v-btn
+                                        @click="addAttachment()"
+                                    >
+                                    </v-btn>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +357,7 @@
                                         margin-left: 5px; 
                                         margin-right: 5px;"
                                         >
-                                        <img src="{{ issue.assignacio.avatar }}"
+                                        <img :src=issue.assignacio.avatar
                                             width="60"
                                             height="60"
                                         >
@@ -440,7 +442,7 @@
                                             :key=index
                                         >
                                             <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                                <img src={{obs.avatar}}
+                                                <img :src=obs.avatar
                                                     width="60"
                                                     height="60"
                                                 >
@@ -601,7 +603,7 @@
             let issueDesc = ref('');
             let nomTag = ref('');
             let colorTag = ref('');
-            let attachment = ref();
+            let attachmentFile = ref();
 
             const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
             const TTipus = ["Bug", "Question", "Enhancement"];
@@ -653,11 +655,15 @@
             }
 
             async function addAttachment() {
-                console.log("add attachment: ", attachment.value);
-                const formData = new FormData();
-                //formData.append("file", attachment.value, attachment.value[0].name);
-                formData.append("document", attachment.value);
-                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", formData, "formData");
+                console.log("Attachment: ", attachmentFile.value);
+                console.log("File: ", attachmentFile.value[0]);
+
+                const fd = new FormData();
+                fd.append("document", attachmentFile.value[0]);
+                fd.append("file", attachmentFile.value[0]);
+                console.log("formdata before: ", fd);
+
+                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
             }
 
@@ -838,7 +844,7 @@
                 allUsers,
                 date,
                 motiuBlock,
-                attachment,
+                attachmentFile,
                 esborrar_observador,
                 esborrar_assignacio,
                 esborrar_tag_issue,

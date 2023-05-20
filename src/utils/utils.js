@@ -46,11 +46,11 @@ export async function simpleFetch(endPoint, method, bodyData, type) {
     }
     else if (type === "formData") {
         try {
-            console.log("formdata: ", bodyData);
+            console.log("formdata utils: ", bodyData);
             const response = await fetch(host+endPoint, {
                 method: method,
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
                     'Accept': 'application/json',
                     'Authorization': 'Token '+ token,
                 },
