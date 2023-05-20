@@ -3,9 +3,9 @@
         <section class="profile-bar">
             <div>
                 <img 
-                :src=userLogged.avatar.url
-                width="200"
-                height="200"
+                    :src=userLogged.avatar
+                    width="200"
+                    height="200"
                 >
             </div>
         </section>
@@ -28,6 +28,10 @@
             let directories = url.split("/");
             let idUser = ref(directories[(directories.length - 1)]);
 
+
+            let allUsers = ref([]);
+            let userLogged = ref([]);
+
             async function canviar_timeline() {
 
             }
@@ -43,6 +47,11 @@
             async function canviar_usuari() {
                 
             }
+
+            return {
+                userLogged,
+                allUsers
+            }
         },
         
         //hacer funciones antes de que se pinte todo
@@ -54,15 +63,12 @@
             let userId = directories[(directories.length - 1)];
             
             //Obtengo todos los usuarios para ponerlos en el apartado "Your Team"
-            let allUsers = ref([]);
-            simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
-            console.log("all Users: ", allUsers.value);
+            simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
+            console.log("all Users: ", this.allUsers);
 
             //Obtengo el usuario loggeado
-            let idUser = ref([]);
-            let userLogged = ref([]);
-            simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => userLogged.value = data);
-            console.log("Logged user: ", userLogged.value);
+            simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => this.userLogged = data);
+            console.log("Logged user: ", this.userLogged);
 
         }
     }
