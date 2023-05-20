@@ -46,11 +46,14 @@ export async function simpleFetch(endPoint, method, bodyData, type) {
     }
     else if (type === "formData") {
         try {
-            console.log("formdata utils: ", bodyData);
+            console.log("form appends: ");
+            for (let key of bodyData.entries()) {
+                console.log(key[0], " and ", key[1]);
+            }
             const response = await fetch(host+endPoint, {
                 method: method,
                 headers: {
-                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW; application/x-www-form-urlencoded",
                     'Accept': 'application/json',
                     'Authorization': 'Token '+ token,
                 },

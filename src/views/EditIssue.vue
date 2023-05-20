@@ -661,7 +661,8 @@
                 const fd = new FormData();
                 fd.append("document", attachmentFile.value[0]);
                 fd.append("file", attachmentFile.value[0]);
-                console.log("formdata before: ", fd);
+                fd.append("name", "angel");
+
 
                 await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
