@@ -1,5 +1,16 @@
 <template>
-      
+    <div class="profile centered" style="margin-left: 50px;">
+        <section class="profile-bar">
+            <div>
+                <img 
+                :src=userLogged.avatar.url
+                width="200"
+                height="200"
+                >
+            </div>
+        </section>
+    </div>
+    <p>a</p>
 </template>
 
 <script>
@@ -15,11 +26,7 @@
             let url = window.location.href;
             //Separar la url per '/'
             let directories = url.split("/");
-            let userId = ref(directories[(directories.length - 1)]);
-
-            let allUsers = ref([]);
-            simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
-            console.log("all Users: ", allUsers.value);
+            let idUser = ref(directories[(directories.length - 1)]);
 
             async function canviar_timeline() {
 
@@ -35,10 +42,6 @@
 
             async function canviar_usuari() {
                 
-            }
-
-            return {
-                allUsers,
             }
         },
         
@@ -58,7 +61,8 @@
             //Obtengo el usuario loggeado
             let idUser = ref([]);
             let userLogged = ref([]);
-            simpleFetch("usuaris/"+idUser.value+"/", "GET", "").then((data) => userLogged.value = data);
+            simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => userLogged.value = data);
+            console.log("Logged user: ", userLogged.value);
 
         }
     }
