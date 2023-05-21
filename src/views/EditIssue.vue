@@ -408,7 +408,7 @@
                                     <button 
                                         v-if="issue.assignacio && issue.assignacio.id === idUser"
                                         class="ticket-users-actions" 
-                                        style="margin-left: 5px;"
+                                        style="maassignSelectautorgin-left: 5px;"
                                         @click="esborrar_assignacio()"
                                     >
                                         Dont assign to me
@@ -417,7 +417,7 @@
                                         v-else
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
-                                        @click="assignSelect(idUser)"
+                                        @click="autoSelect(idUser)"
                                     >
                                         Assign to me
                                     </button>
@@ -736,14 +736,25 @@
              * @param assignSelected
              */
             async function assignSelect(assignSelected) {
-                console.log("new assign: ", assignSelected);
+                console.log("new assign: ", assignSelected.id);
                 selectAssign.value = false;
                 let obj = {
-                    "assignacio_id": assignSelected,
+                    "assignacio_id": assignSelected.id,
                 }
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
                 actualitzarInfo();
             }
+
+            async function autoSelect(id) {
+                console.log("auto select: ", id);
+                selectAssign.value = false;
+                let obj = {
+                    "assignacio_id": id,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
 
             /**
              * Esborra assignacio
