@@ -342,16 +342,16 @@
                     case "Bug":
                         return 'B';
                     case "Question":
-                        return 'Q';
+                        return 'P';
                     case "Enhancement":
-                        return 'E';    
+                        return 'M';    
                     default:
                         return 'B';
                 }
             }
 
             function getGravetat() {
-                switch (tipus.value) {
+                switch (gravetat.value) {
                     case "Wishlist":
                         return 'D';
                     case "Minor":
@@ -368,7 +368,7 @@
             }
 
             function getPrioritat() {
-                switch (tipus.value) {
+                switch (prioritat.value) {
                     case "High":
                         return 'A';
                     case "Normal":

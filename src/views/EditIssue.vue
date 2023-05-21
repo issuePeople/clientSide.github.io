@@ -242,13 +242,29 @@
                             <span>Open</span>
                         </span>
                         <!-- estat-->
-                        <v-select
-                            class="ml-3"
-                            label="Select"
-                            density="compact"
-                            :items=TEstats
-                            v-model=estat
-                        ></v-select>
+                        <div style="background-color: whitesmoke; display: flex; justify-content: space-between;">
+                            <v-menu>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        v-bind="props"
+                                        variant="text"
+                                    >
+                                    {{estat}}
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                    v-for="(item, index) in TEstats"
+                                        :key="index"
+                                        :value="index"
+                                    >
+                                        <v-list-item-title @click="setEstat(item)">{{ item }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                            <font-awesome-icon icon="arrow-down" style="margin-top: 8px;" />
+                        </div>
+                        
                         
                         <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
 
@@ -647,16 +663,110 @@
                 console.log("esborrar observador");
             }
 
+            function setEstat(item) {
+                estat.value = item;
+                let newEstat;
+                switch (estat.value) {
+                    case "new":
+                        newEstat = 'N';
+                        break;
+                    case "In progress":
+                        newEstat = 'D';
+                        break;
+                    case "Ready for test":
+                        newEstat = 'T';
+                        break;
+                    case "Closed":
+                        newEstat = 'C';
+                        break;
+                    case "Needs info":
+                        newEstat = 'I';
+                        break;
+                    case "Rejected":
+                        newEstat = 'R';
+                        break;
+                    case "Postponed":
+                        newEstat = 'P';
+                        break;                    
+                    default:
+                        newEstat = 'B';
+                }
+                let obj = {
+                    "estat": newEstat,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+            }
+
             function setTipus(item) {
                 tipus.value = item;
+                let newTipus;
+                switch (tipus.value) {
+                    case "Bug":
+                        newTipus = 'B';
+                        break;
+                    case "Question":
+                        newTipus = 'P';
+                        break;
+                    case "Enhancement":
+                        newTipus = 'M';
+                        break;    
+                    default:
+                        newTipus = 'B';
+                }
+                let obj = {
+                    "tipus": newTipus,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }   
 
             function setGravetat(item) {
                 gravetat.value = item;
+                let newGravetat;
+                switch (gravetat.value) {
+                    case "Wishlist":
+                        newGravetat = 'D';
+                        break;
+                    case "Minor":
+                        newGravetat = 'M';
+                        break;
+                    case "Normal":
+                        newGravetat = 'N';
+                        break;
+                    case "Important":
+                        newGravetat = 'I';
+                        break;
+                    case "Critical": 
+                        newGravetat = 'C';
+                        break;            
+                    default:
+                        newGravetat = 'D';
+                }
+                let obj = {
+                    "gravetat": newGravetat,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }
 
             function setPrioritat(item) {
                 prioritat.value = item;
+                let newPrioirity;
+                switch (prioritat.value) {
+                    case "High":
+                        newPrioirity = 'A';
+                        break;
+                    case "Normal":
+                        newPrioirity = 'M';
+                        break;
+                    case "Low":
+                        newPrioirity = 'B';
+                        break;    
+                    default:
+                        newPrioirity = 'A';
+                }
+                let obj = {
+                    "prioritat": newPrioirity,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }
 
             function obsSelected(obsSelected) {
@@ -880,6 +990,7 @@
                 guardarDesc,
                 deleteBlock,
                 deleteTimeLine,
+                setEstat,
                 setTipus,
                 setPrioritat,
                 setGravetat,
