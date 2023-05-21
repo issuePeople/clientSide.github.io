@@ -546,6 +546,13 @@
                                     <font-awesome-icon icon="lock"/>
                                 </button>
                             </div>
+                            <div style="margin-left: 5px;">
+                                <button
+                                    @click="deleteIssue()"
+                                >
+                                    <font-awesome-icon icon="trash"/>
+                                </button>
+                            </div>
                         </div>
                     </section>
                     
@@ -583,6 +590,7 @@
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
     import SelectUsers from '../components/SelectUsers.vue';
+    import { useRouter } from 'vue-router';
 
     export default {
         name: "listIssue",
@@ -592,6 +600,7 @@
             SelectUsers,
         },
         setup() {
+            const router = useRouter();
 
             //Per obtenir la url
             let url = window.location.href;
@@ -666,6 +675,12 @@
 
                 await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
+            }
+
+            async function deleteIssue() {
+                console.log("issue deleted");
+                await simpleFetch("issues/"+issueId.value, "DELETE", );
+                router.push('/');
             }
 
             /**
@@ -876,6 +891,7 @@
                 btnSaveDateDirect,
                 afegir_comentari,
                 addTagFetch,
+                deleteIssue,
             }
         },
         mounted() {
