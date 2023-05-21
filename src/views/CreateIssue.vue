@@ -33,7 +33,7 @@
                                 
 
                                 <!-- assign ?--> 
-                                <div v-if="assignat == null">
+                                <div v-if="assignat == null"  style="border: 1px solid black; border-radius:  10px;">
                                     <v-dialog
                                         v-model="selectAssign"
                                         width="auto"
@@ -42,8 +42,7 @@
                                             <v-btn
                                                 v-bind="props"
                                                 variant="text"
-                                                style="margin-right: 10px;"
-                                                class="ticket-users-actions"
+                                                class="ticket-users-actions ml-0"
                                             >
                                                 Assign
                                             </v-btn>
@@ -86,22 +85,28 @@
                                         justify-content: space-between; 
                                         margin-left: 5px; 
                                         margin-right: 5px;
+                                        background-color: whitesmoke;
+                                        padding: 5px;
+                                        min-width: 200px;
                                     "
                                 >
-                                    <img src=assignatPerfil.avatar
-                                        width="60"
-                                        height="60"
+                                    <img 
+                                        :src = assignatPerfil.avatar
+                                        width = "60"
+                                        height = "60"
                                     >
-                                    <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                    <a href="/usuaris/{{ assignatPerfil.id }}" style=" margin-top: 20px;">{{ assignatPerfil.nom }}</a>
                                     <!-- issue.id -->
-                                    <v-btn
+                                    <button
                                         @click="esborrar_assignacio()"
+                                        variant="flat"
+                                        color="whitesmoke"
                                     >
                                         <font-awesome-icon icon="xmark" />
-                                    </v-btn>
+                                    </button>
                                 </div>
                                 
-                                <div class="ticket-data-container">
+                                <div class="ticket-data-container" style="margin-top: 10px;">
                                     <!-- Type-->
                                     <div style="display: flex; justify-content: space-between; margin-left: 10px;">
                                         <label>
@@ -265,6 +270,7 @@
     import { ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
     import SelectUsers from '../components/SelectUsers.vue';
+    import { useRouter } from 'vue-router';
 
     export default {
         name: "CreateIssue",
@@ -272,6 +278,7 @@
             SelectUsers
         },
         setup() {
+            const router = useRouter();
 
             let titleIssue = ref("");
             let description = ref("");
@@ -381,7 +388,6 @@
             }
 
             function assignSelect(assignSelected) {
-                console.log("assign select: ", assignSelected);
                 assignat.value = assignSelected.id;
                 assignatPerfil.value = assignSelected;
                 selectAssign.value = false;
@@ -415,9 +421,9 @@
                     "motiuBloqueig": motiuBlock.value
                 }
                 console.log("result obj: ", obj);
-                //await simpleFetch("issues/", "POST", obj).then((data) => console.log("post response: ", data));
+                await simpleFetch("issues/", "POST", obj).then((data) => console.log("post response: ", data));
                 //redirect 
-                //router.push('/');
+                router.push('/');
                 console.log("issue create");
             }
 
