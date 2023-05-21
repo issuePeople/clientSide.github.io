@@ -11,9 +11,9 @@
             >
                 <div style="display: flex; flex-direction: row; ">
                     <img
-                         src = user.avatar
-                         width="60"
-                         height="60"
+                      :src= user.avatar
+                      width="60"
+                      height="60"
                     >
                     <div style="margin-top: 15px; margin-left: 5px">{{ user.nom }}</div>
                 </div>
@@ -31,7 +31,7 @@
             >
                 <div style="display: flex; flex-direction: row; ">
                     <img
-                            src="{{ user.avatar }}"
+                            :src=user.avatar
                             width="60"
                             height="60"
                     >
