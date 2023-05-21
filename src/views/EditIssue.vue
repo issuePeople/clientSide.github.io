@@ -424,7 +424,7 @@
                                         </v-card>
                                     </v-dialog>
                                     <button 
-                                        v-if="issue.assignacio && issue.assignacio.id === idUser"
+                                        v-if="issue.assignacio && issue.assignacio.id == idUser"
                                         class="ticket-users-actions" 
                                         style="maassignSelectautorgin-left: 5px;"
                                         @click="esborrar_assignacio()"
@@ -930,6 +930,7 @@
              * @param assignSelected
              */
             async function assignSelect(assignSelected) {
+                console.log("new assign: ", assignSelected);
                 console.log("new assign: ", assignSelected.id);
                 selectAssign.value = false;
                 let obj = {
@@ -939,6 +940,10 @@
                 actualitzarInfo();
             }
 
+            /**
+             * auto select
+             * @param {*} id 
+             */
             async function autoSelect(id) {
                 console.log("auto select: ", id);
                 selectAssign.value = false;
@@ -1080,6 +1085,13 @@
                 this.issue = data;
                 this.issueTitle = data.subject;
                 this.issueDesc = data.descripcio;
+                this.showBlock = data.bloquejat;
+                if (data.dataLimit != null) {
+                    this.showDatePickker = true;
+                }
+                else {
+                    this.showDatePickker = false;
+                }
             });
             console.log("issueObject: ", this.issue);
         }

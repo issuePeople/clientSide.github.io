@@ -27,7 +27,7 @@
                     v-for="user of users"
                     :key="user"
                     style="margin-top: 10px"
-                    @click="$emit('userSelect', user.id)"
+                    @click="$emit('userSelect', user)"
             >
                 <div style="display: flex; flex-direction: row; ">
                     <img
