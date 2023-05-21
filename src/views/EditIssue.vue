@@ -464,7 +464,7 @@
                                                 >
                                                 <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
 
-                                                <button @click="esborrar_observador()">
+                                                <button @click="esborrar_observador(obs.id)">
                                                     <font-awesome-icon icon="xmark" />
                                                 </button>
                                             </div>
@@ -512,13 +512,16 @@
                                         v-if="autoObservador" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="unWatchIssue()"
                                     >
                                         Unwatch
                                     </button>
                                     <button
                                         v-else 
                                         class="ticket-users-actions" 
-                                        style="margin-left: 5px;">
+                                        style="margin-left: 5px;"
+                                        @click="selfWatch()"
+                                    >
                                         Watch
                                     </button>
                                 </div>
@@ -601,7 +604,7 @@
 </template>
 
 <script>
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import {simpleFetch} from '@/utils/utils';
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
@@ -642,7 +645,6 @@
             
             let issue = ref();
             let idUser = ref(24);
-            let autoObservador = ref(false);
             let addTag = ref(true);
             let hihaComentaris = ref(true);
             let showDatePickker = ref(false);
@@ -659,10 +661,74 @@
             let motiuBlock = ref('');
             let comment = ref('');
 
-            function esborrar_observador() {
-                console.log("esborrar observador");
+            const autoObservador = computed(() => {
+                let isAutoObserver = false;
+                for (let obs of issue.value.observadors) {
+                    if (obs.id == idUser.value) isAutoObserver = true;
+                }
+
+                return isAutoObserver;
+            });
+
+            async function addAttachment() {
+                console.log("Attachment: ", attachmentFile.value);
+                console.log("File: ", attachmentFile.value[0]);
+
+                const fd = new FormData();
+                fd.append("document", attachmentFile.value[0]);
+                fd.append("file", attachmentFile.value[0]);
+                fd.append("name", "angel");
+
+
+                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
+                actualitzarInfo();
             }
 
+            /**
+             * Selg obs
+             */
+             async function selfWatch() {
+                let obj = {
+                    "observador": idUser.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/observadors/", "POST", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Possar observador de l'issue
+             * @param {*} obsSelected 
+             */
+             async function obsSelected(obsSelected) {
+                console.log("new obs: ", obsSelected.id);
+                let obj = {
+                    "observador": obsSelected.id
+                }
+                await simpleFetch("issues/"+issueId.value+"/observadors/", "POST", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * unwatch
+             */
+             async function unWatchIssue() {
+                await simpleFetch("issues/"+issueId.value+"/observadors/"+idUser.value, "DELETE", ).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Esborrar un observador
+             * @param {*} id 
+             */
+            async function esborrar_observador(id) {
+                await simpleFetch("issues/"+issueId.value+"/observadors/"+id, "DELETE", ).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * set Estat
+             * @param {*} item 
+             */
             function setEstat(item) {
                 estat.value = item;
                 let newEstat;
@@ -697,6 +763,10 @@
                 simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }
 
+            /**
+             * Set tipus
+             * @param {*} item 
+             */
             function setTipus(item) {
                 tipus.value = item;
                 let newTipus;
@@ -717,8 +787,12 @@
                     "tipus": newTipus,
                 }
                 simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
-            }   
+            } 
 
+            /**
+             * Set gravetat
+             * @param {*} item 
+             */
             function setGravetat(item) {
                 gravetat.value = item;
                 let newGravetat;
@@ -747,6 +821,9 @@
                 simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }
 
+            /**
+             * set prioritat
+             */
             function setPrioritat(item) {
                 prioritat.value = item;
                 let newPrioirity;
@@ -769,24 +846,9 @@
                 simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
             }
 
-            function obsSelected(obsSelected) {
-                console.log("new obs: ", obsSelected);
-            }
-
-            async function addAttachment() {
-                console.log("Attachment: ", attachmentFile.value);
-                console.log("File: ", attachmentFile.value[0]);
-
-                const fd = new FormData();
-                fd.append("document", attachmentFile.value[0]);
-                fd.append("file", attachmentFile.value[0]);
-                fd.append("name", "angel");
-
-
-                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
-                actualitzarInfo();
-            }
-
+            /**
+             * Delete issue
+             */
             async function deleteIssue() {
                 console.log("issue deleted");
                 await simpleFetch("issues/"+issueId.value, "DELETE", );
@@ -886,7 +948,6 @@
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
                 actualitzarInfo();
             }
-
 
             /**
              * Esborra assignacio
@@ -1003,6 +1064,9 @@
                 afegir_comentari,
                 addTagFetch,
                 deleteIssue,
+                unWatchIssue,
+                autoSelect,
+                selfWatch,
             }
         },
         mounted() {
