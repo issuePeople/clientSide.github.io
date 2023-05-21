@@ -64,6 +64,7 @@
                 
                     <p style="color: darkgrey;">______________________________________________________________________________</p>
                     <div>
+                        <!-- Timeline
                         <section class="timeline">
                             <div class="issue-page" style="width: 100%; ">
                                 <table class="issues-table" style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
@@ -76,7 +77,7 @@
                                                     height="32"
                                                     style="border-radius: 50%; margin-right: 5px;"
                                                 >
-                                                <div style="display: inline-block;">
+                                                <div  style="display: inline-block;">
                                                     <a>{{log.usuari.user}}</a>
                                                     <span v-if="log.tipus === 'Creada'" style="display: inline;">ha creat l'</span>
                                                     <span v-else-if="log.tipus === 'Nou attachment'" style="display: inline;">ha afegit el fitxer 
@@ -111,9 +112,50 @@
                                             <p style="color:darkgrey">__________________________________________________________________________________________</p>
                                         </td>
                                     </tr>
+                                    
+                                      
                                 </table>
                             </div>
-                        </section>    
+                        </section>
+                        -->
+                        <!-- Watched -->
+                        <section class="watched">
+                            <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                                <tr v-for="observat in userLogged.observats">
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                        <div v-if="observat.assignacio" style="display: flex; align-items: center;">
+                                        <img 
+                                                    :src="observat.assignacio.avatar"
+                                                    width="32"
+                                                    height="32"
+                                                    style="border-radius: 50%; margin-right: 5px;"
+                                        >
+                                        </div>
+                                        <!--
+                                        <div v-else>
+                                            <img 
+                                                :src="{{ NO_AVATAR_URL}}"
+                                                width:="48" 
+                                                height:="48" 
+                                                style="border-radius: 50%; margin-right: 5px;"
+                                            >
+                                        </div>
+                                        -->
+                                        <span>{{observat.assignacio.username}}&nbsp;</span>
+                                        <a href="{% url 'editar_issue'  observat.id %}">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
+                                        </div>
+                                        
+                                    <p style="color:darkgrey">______________________________________________________________________________</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
+                        <!-- Token 
+                            <section class="token">
+                                <p>{{userLogged.token}}</p>
+                            </section> 
+                            -->
                     </div>
                 </div>
         </div>
@@ -140,6 +182,7 @@
 
             //Per obtenir la url
             let url = window.location.href;
+            console.log("Url: ",url);
             //Separar la url per '/'
             let directories = url.split("/");
             let idUser = ref(directories[(directories.length - 1)]);
