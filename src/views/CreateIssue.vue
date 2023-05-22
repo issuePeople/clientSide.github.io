@@ -92,7 +92,7 @@
                                         width="60"
                                         height="60"
                                     >
-                                    <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                    <a :href="/usuaris/+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
                                     <!-- issue.id -->
                                     <v-btn
                                         @click="esborrar_assignacio()"
