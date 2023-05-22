@@ -124,26 +124,26 @@
                                 <tr v-for="observat in userLogged.observats">
                                     <td>
                                         <div style="display: flex; align-items: center;">
-                                        <div v-if="observat.assignacio" style="display: flex; align-items: center;">
-                                        <img 
+                                            <div v-if="observat.assignacio" style="display: flex; align-items: center;">
+                                                <img 
                                                     :src="observat.assignacio.avatar"
                                                     width="32"
                                                     height="32"
                                                     style="border-radius: 50%; margin-right: 5px;"
-                                        >
-                                        </div>
-                                        <!--
-                                        <div v-else>
-                                            <img 
-                                                :src="{{ NO_AVATAR_URL}}"
-                                                width:="48" 
-                                                height:="48" 
-                                                style="border-radius: 50%; margin-right: 5px;"
-                                            >
-                                        </div>
-                                        -->
-                                        <span>{{observat.assignacio.username}}&nbsp;</span>
-                                        <a href="{% url 'editar_issue'  observat.id %}">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
+                                                >
+                                            </div>
+                                            <!--
+                                            <div v-else>
+                                                <img 
+                                                    :src="{{ NO_AVATAR_URL}}"
+                                                    width:="48" 
+                                                    height:="48" 
+                                                    style="border-radius: 50%; margin-right: 5px;"
+                                                >
+                                            </div>
+                                            -->
+                                            <span>{{observat.assignacio.username}}&nbsp;</span>
+                                            <a :href="'/edit/'+observat.id">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
                                         </div>
                                         
                                     <p style="color:darkgrey">______________________________________________________________________________</p>
