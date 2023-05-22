@@ -53,8 +53,6 @@ export async function simpleFetch(endPoint, method, bodyData, type) {
             const response = await fetch(host+endPoint, {
                 method: method,
                 headers: {
-                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW; application/x-www-form-urlencoded",
-                    'Accept': 'application/json',
                     'Authorization': 'Token '+ token,
                 },
                 body: bodyData,

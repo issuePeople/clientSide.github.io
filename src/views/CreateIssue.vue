@@ -95,7 +95,7 @@
                                         width = "60"
                                         height = "60"
                                     >
-                                    <a href="/usuaris/{{ assignatPerfil.id }}" style=" margin-top: 20px;">{{ assignatPerfil.nom }}</a>
+                                    <a :href="/usuaris/+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
                                     <!-- issue.id -->
                                     <button
                                         @click="esborrar_assignacio()"

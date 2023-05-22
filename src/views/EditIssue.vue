@@ -141,13 +141,10 @@
                                     <v-file-input
                                         label="+"
                                         v-model=attachmentFile
+                                        @change="addAttachment()"
                                     >
                                         <font-awesome-icon icon="plus" />
                                     </v-file-input>
-                                    <v-btn
-                                        @click="addAttachment()"
-                                    >
-                                    </v-btn>
                                 </div>
                             </div>
                         </div>
@@ -160,9 +157,7 @@
                                 <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
                                     <div style="display: flex; justify-content: space-between;">
                                         <div>
-                                            <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                            <span>({{ attachment.document.size }})</span>
-                                            nomDocumenthardcoded now
+                                            <a :href=attachment.document>{{ attachmentName(attachment.document) }}</a>
                                         </div>
                                         <button
                                             style="margin-right: 5px"
@@ -377,7 +372,7 @@
                                             width="60"
                                             height="60"
                                         >
-                                        <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                        <a :href="/usuari/+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
                                         <!-- issue.id -->
                                         <button @click="esborrar_assignacio()">
                                             <font-awesome-icon icon="xmark" />
@@ -462,7 +457,7 @@
                                                     width="60"
                                                     height="60"
                                                 >
-                                                <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
+                                                <a :href="/usuari/+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
 
                                                 <button @click="esborrar_observador(obs.id)">
                                                     <font-awesome-icon icon="xmark" />
@@ -677,11 +672,15 @@
                 const fd = new FormData();
                 fd.append("document", attachmentFile.value[0]);
                 fd.append("file", attachmentFile.value[0]);
-                fd.append("name", "angel");
-
 
                 await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
+            }
+
+            function attachmentName(url) {
+                const parts = url.split('/');
+                const lastPart = parts[parts.length - 1];
+                return lastPart;
             }
 
             /**
@@ -862,7 +861,7 @@
              */
             async function esborrar_attachment(attachment) {
                 console.log("esborrar attachment: ", attachment);
-                await simpleFetch("issues/"+issueId.value+"attachments/"+attachment.id, "DELETE", );
+                await simpleFetch("issues/"+issueId.value+"/attachments/"+attachment.id, "DELETE", );
                 actualitzarInfo();
             }
 
@@ -1072,6 +1071,7 @@
                 unWatchIssue,
                 autoSelect,
                 selfWatch,
+                attachmentName,
             }
         },
         mounted() {
