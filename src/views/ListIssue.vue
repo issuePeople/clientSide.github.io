@@ -36,12 +36,14 @@
 
 <script>
     import exempleComponent from '../components/exempleComponent.vue';
+    import bulkComponent from '../components/BulkComponent.vue';
     import {simpleFetch} from '../utils/utils';
 
 
     export default {
         components: {
-            exempleComponent
+            exempleComponent,
+            bulkComponent
         },
         name: "listIssue",
         /*
