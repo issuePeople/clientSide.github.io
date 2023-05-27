@@ -21,7 +21,14 @@
             <button id="btnSelectImg" type="text" variant="secondary" class="btn-small button-full js-change-avatar">
                 Canviar foto
             </button>
-            <input id="avatarImg" style="display: none;" type="file" name="avatar">
+            <!-- <input id="avatarImg" style="display: none;" type="file" name="avatar"> -->
+            <v-file-input
+                label="Canviar foto"
+                v-model=attachmentFile
+                @change="addAttachment()"
+            >
+                <font-awesome-icon icon="plus" />
+            </v-file-input>
         </div>
         <button type="submit" id="btnSaveAvatar" style="display: none;" name="guardar_avatar" class="btn-small button-full js-change-avatar">    </button>
         <button type="submit" name="guardar_avatar_defecte" class="botonMenu">
@@ -104,8 +111,12 @@
         fd.append("document", attachmentFile.value[0]);
         fd.append("file", attachmentFile.value[0]);
 
-        await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
+        await simpleFetch("usuari/1", "POST", fd, "formData");
         actualitzarInfo();
+      }
+
+      function actualitzarInfo() {
+        simpleFetch("usuari/1", "GET", "").then((data) => usuari.value = data);
       }
 
       return {
