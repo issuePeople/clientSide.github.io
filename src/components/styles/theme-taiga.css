@@ -1266,16 +1266,6 @@ tg-svg {
     display: none !important
 }
 
-@font-face {
-    font-family: Ubuntu-Regular;
-    src: url(../fonts/Ubuntu-Regular.ttf) format("truetype")
-}
-
-@font-face {
-    font-family: Ubuntu-Medium;
-    src: url(../fonts/Ubuntu-Medium.ttf) format("truetype")
-}
-
 h1, h2, h3, h4, h5, h6 {
     color: #2e3440;
     font-weight: 400;
