@@ -140,12 +140,11 @@
                                     <!-- input to add attach -->
                                     <v-file-input
                                         label="+"
+                                        v-model=attachmentFile
                                         @change="addAttachment()"
-                                        v-model=attachment
                                     >
                                         <font-awesome-icon icon="plus" />
                                     </v-file-input>
-
                                 </div>
                             </div>
                         </div>
@@ -158,9 +157,7 @@
                                 <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
                                     <div style="display: flex; justify-content: space-between;">
                                         <div>
-                                            <a href="{{ attachment.document.url }}">{{ attachment.document.name }}</a>
-                                            <span>({{ attachment.document.size }})</span>
-                                            nomDocumenthardcoded now
+                                            <a :href=attachment.document>{{ attachmentName(attachment.document) }}</a>
                                         </div>
                                         <button
                                             style="margin-right: 5px"
@@ -240,13 +237,29 @@
                             <span>Open</span>
                         </span>
                         <!-- estat-->
-                        <v-select
-                            class="ml-3"
-                            label="Select"
-                            density="compact"
-                            :items=TEstats
-                            v-model=estat
-                        ></v-select>
+                        <div style="background-color: whitesmoke; display: flex; justify-content: space-between;">
+                            <v-menu>
+                                <template v-slot:activator="{ props }">
+                                    <v-btn
+                                        v-bind="props"
+                                        variant="text"
+                                    >
+                                    {{estat}}
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item
+                                    v-for="(item, index) in TEstats"
+                                        :key="index"
+                                        :value="index"
+                                    >
+                                        <v-list-item-title @click="setEstat(item)">{{ item }}</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                            <font-awesome-icon icon="arrow-down" style="margin-top: 8px;" />
+                        </div>
+                        
                         
                         <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
 
@@ -355,11 +368,11 @@
                                         margin-left: 5px; 
                                         margin-right: 5px;"
                                         >
-                                        <img src="{{ issue.assignacio.avatar }}"
+                                        <img :src=issue.assignacio.avatar
                                             width="60"
                                             height="60"
                                         >
-                                        <a href="/usuaris/{{ issue.assignacio.id }}" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                        <a :href="/usuari/+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
                                         <!-- issue.id -->
                                         <button @click="esborrar_assignacio()">
                                             <font-awesome-icon icon="xmark" />
@@ -406,9 +419,9 @@
                                         </v-card>
                                     </v-dialog>
                                     <button 
-                                        v-if="issue.assignacio && issue.assignacio.id === idUser"
+                                        v-if="issue.assignacio && issue.assignacio.id == idUser"
                                         class="ticket-users-actions" 
-                                        style="margin-left: 5px;"
+                                        style="maassignSelectautorgin-left: 5px;"
                                         @click="esborrar_assignacio()"
                                     >
                                         Dont assign to me
@@ -417,7 +430,7 @@
                                         v-else
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
-                                        @click="assignSelect(idUser)"
+                                        @click="autoSelect(idUser)"
                                     >
                                         Assign to me
                                     </button>
@@ -440,13 +453,13 @@
                                             :key=index
                                         >
                                             <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                                <img src={{obs.avatar}}
+                                                <img :src=obs.avatar
                                                     width="60"
                                                     height="60"
                                                 >
-                                                <a href="/usuaris/{{ obs.id }}" style=" margin-top: 20px;">{{ obs.nom }}</a>
+                                                <a :href="/usuari/+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
 
-                                                <button @click="esborrar_observador()">
+                                                <button @click="esborrar_observador(obs.id)">
                                                     <font-awesome-icon icon="xmark" />
                                                 </button>
                                             </div>
@@ -494,13 +507,16 @@
                                         v-if="autoObservador" 
                                         class="ticket-users-actions" 
                                         style="margin-left: 5px;"
+                                        @click="unWatchIssue()"
                                     >
                                         Unwatch
                                     </button>
                                     <button
                                         v-else 
                                         class="ticket-users-actions" 
-                                        style="margin-left: 5px;">
+                                        style="margin-left: 5px;"
+                                        @click="selfWatch()"
+                                    >
                                         Watch
                                     </button>
                                 </div>
@@ -544,6 +560,13 @@
                                     <font-awesome-icon icon="lock"/>
                                 </button>
                             </div>
+                            <div style="margin-left: 5px;">
+                                <button
+                                    @click="deleteIssue()"
+                                >
+                                    <font-awesome-icon icon="trash"/>
+                                </button>
+                            </div>
                         </div>
                     </section>
                     
@@ -576,11 +599,12 @@
 </template>
 
 <script>
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import {simpleFetch} from '@/utils/utils';
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
     import SelectUsers from '../components/SelectUsers.vue';
+    import { useRouter } from 'vue-router';
 
     export default {
         name: "listIssue",
@@ -590,6 +614,7 @@
             SelectUsers,
         },
         setup() {
+            const router = useRouter();
 
             //Per obtenir la url
             let url = window.location.href;
@@ -601,7 +626,7 @@
             let issueDesc = ref('');
             let nomTag = ref('');
             let colorTag = ref('');
-            let attachment = ref();
+            let attachmentFile = ref();
 
             const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
             const TTipus = ["Bug", "Question", "Enhancement"];
@@ -615,7 +640,6 @@
             
             let issue = ref();
             let idUser = ref(24);
-            let autoObservador = ref(false);
             let addTag = ref(true);
             let hihaComentaris = ref(true);
             let showDatePickker = ref(false);
@@ -632,33 +656,202 @@
             let motiuBlock = ref('');
             let comment = ref('');
 
-            function esborrar_observador() {
-                console.log("esborrar observador");
-            }
+            const autoObservador = computed(() => {
+                let isAutoObserver = false;
+                for (let obs of issue.value.observadors) {
+                    if (obs.id == idUser.value) isAutoObserver = true;
+                }
 
-            function setTipus(item) {
-                tipus.value = item;
-            }   
-
-            function setGravetat(item) {
-                gravetat.value = item;
-            }
-
-            function setPrioritat(item) {
-                prioritat.value = item;
-            }
-
-            function obsSelected(obsSelected) {
-                console.log("new obs: ", obsSelected);
-            }
+                return isAutoObserver;
+            });
 
             async function addAttachment() {
-                console.log("add attachment: ", attachment.value);
-                const formData = new FormData();
-                //formData.append("file", attachment.value, attachment.value[0].name);
-                formData.append("document", attachment.value);
-                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", formData, "formData");
+                console.log("Attachment: ", attachmentFile.value);
+                console.log("File: ", attachmentFile.value[0]);
+
+                const fd = new FormData();
+                fd.append("document", attachmentFile.value[0]);
+                fd.append("file", attachmentFile.value[0]);
+
+                await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
+            }
+
+            function attachmentName(url) {
+                const parts = url.split('/');
+                const lastPart = parts[parts.length - 1];
+                return lastPart;
+            }
+
+            /**
+             * Selg obs
+             */
+             async function selfWatch() {
+                let obj = {
+                    "observador": idUser.value
+                }
+                await simpleFetch("issues/"+issueId.value+"/observadors/", "POST", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Possar observador de l'issue
+             * @param {*} obsSelected 
+             */
+             async function obsSelected(obsSelected) {
+                console.log("new obs: ", obsSelected.id);
+                let obj = {
+                    "observador": obsSelected.id
+                }
+                await simpleFetch("issues/"+issueId.value+"/observadors/", "POST", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * unwatch
+             */
+             async function unWatchIssue() {
+                await simpleFetch("issues/"+issueId.value+"/observadors/"+idUser.value, "DELETE", ).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * Esborrar un observador
+             * @param {*} id 
+             */
+            async function esborrar_observador(id) {
+                await simpleFetch("issues/"+issueId.value+"/observadors/"+id, "DELETE", ).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * set Estat
+             * @param {*} item 
+             */
+            function setEstat(item) {
+                estat.value = item;
+                let newEstat;
+                switch (estat.value) {
+                    case "new":
+                        newEstat = 'N';
+                        break;
+                    case "In progress":
+                        newEstat = 'D';
+                        break;
+                    case "Ready for test":
+                        newEstat = 'T';
+                        break;
+                    case "Closed":
+                        newEstat = 'C';
+                        break;
+                    case "Needs info":
+                        newEstat = 'I';
+                        break;
+                    case "Rejected":
+                        newEstat = 'R';
+                        break;
+                    case "Postponed":
+                        newEstat = 'P';
+                        break;                    
+                    default:
+                        newEstat = 'B';
+                }
+                let obj = {
+                    "estat": newEstat,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+            }
+
+            /**
+             * Set tipus
+             * @param {*} item 
+             */
+            function setTipus(item) {
+                tipus.value = item;
+                let newTipus;
+                switch (tipus.value) {
+                    case "Bug":
+                        newTipus = 'B';
+                        break;
+                    case "Question":
+                        newTipus = 'P';
+                        break;
+                    case "Enhancement":
+                        newTipus = 'M';
+                        break;    
+                    default:
+                        newTipus = 'B';
+                }
+                let obj = {
+                    "tipus": newTipus,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+            } 
+
+            /**
+             * Set gravetat
+             * @param {*} item 
+             */
+            function setGravetat(item) {
+                gravetat.value = item;
+                let newGravetat;
+                switch (gravetat.value) {
+                    case "Wishlist":
+                        newGravetat = 'D';
+                        break;
+                    case "Minor":
+                        newGravetat = 'M';
+                        break;
+                    case "Normal":
+                        newGravetat = 'N';
+                        break;
+                    case "Important":
+                        newGravetat = 'I';
+                        break;
+                    case "Critical": 
+                        newGravetat = 'C';
+                        break;            
+                    default:
+                        newGravetat = 'D';
+                }
+                let obj = {
+                    "gravetat": newGravetat,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+            }
+
+            /**
+             * set prioritat
+             */
+            function setPrioritat(item) {
+                prioritat.value = item;
+                let newPrioirity;
+                switch (prioritat.value) {
+                    case "High":
+                        newPrioirity = 'A';
+                        break;
+                    case "Normal":
+                        newPrioirity = 'M';
+                        break;
+                    case "Low":
+                        newPrioirity = 'B';
+                        break;    
+                    default:
+                        newPrioirity = 'A';
+                }
+                let obj = {
+                    "prioritat": newPrioirity,
+                }
+                simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
+            }
+
+            /**
+             * Delete issue
+             */
+            async function deleteIssue() {
+                console.log("issue deleted");
+                await simpleFetch("issues/"+issueId.value, "DELETE", );
+                router.push('/');
             }
 
             /**
@@ -668,7 +861,7 @@
              */
             async function esborrar_attachment(attachment) {
                 console.log("esborrar attachment: ", attachment);
-                await simpleFetch("issues/"+issueId.value+"attachments/"+attachment.id, "DELETE", );
+                await simpleFetch("issues/"+issueId.value+"/attachments/"+attachment.id, "DELETE", );
                 actualitzarInfo();
             }
 
@@ -737,9 +930,24 @@
              */
             async function assignSelect(assignSelected) {
                 console.log("new assign: ", assignSelected);
+                console.log("new assign: ", assignSelected.id);
                 selectAssign.value = false;
                 let obj = {
-                    "assignacio_id": assignSelected,
+                    "assignacio_id": assignSelected.id,
+                }
+                await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
+                actualitzarInfo();
+            }
+
+            /**
+             * auto select
+             * @param {*} id 
+             */
+            async function autoSelect(id) {
+                console.log("auto select: ", id);
+                selectAssign.value = false;
+                let obj = {
+                    "assignacio_id": id,
                 }
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
                 actualitzarInfo();
@@ -838,7 +1046,7 @@
                 allUsers,
                 date,
                 motiuBlock,
-                attachment,
+                attachmentFile,
                 esborrar_observador,
                 esborrar_assignacio,
                 esborrar_tag_issue,
@@ -847,6 +1055,7 @@
                 guardarDesc,
                 deleteBlock,
                 deleteTimeLine,
+                setEstat,
                 setTipus,
                 setPrioritat,
                 setGravetat,
@@ -858,6 +1067,11 @@
                 btnSaveDateDirect,
                 afegir_comentari,
                 addTagFetch,
+                deleteIssue,
+                unWatchIssue,
+                autoSelect,
+                selfWatch,
+                attachmentName,
             }
         },
         mounted() {
@@ -871,6 +1085,13 @@
                 this.issue = data;
                 this.issueTitle = data.subject;
                 this.issueDesc = data.descripcio;
+                this.showBlock = data.bloquejat;
+                if (data.dataLimit != null) {
+                    this.showDatePickker = true;
+                }
+                else {
+                    this.showDatePickker = false;
+                }
             });
             console.log("issueObject: ", this.issue);
         }

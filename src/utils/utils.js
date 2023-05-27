@@ -46,12 +46,13 @@ export async function simpleFetch(endPoint, method, bodyData, type) {
     }
     else if (type === "formData") {
         try {
-            console.log("formdata: ", bodyData);
+            console.log("form appends: ");
+            for (let key of bodyData.entries()) {
+                console.log(key[0], " and ", key[1]);
+            }
             const response = await fetch(host+endPoint, {
                 method: method,
                 headers: {
-                    "Content-Type": "application/json",
-                    'Accept': 'application/json',
                     'Authorization': 'Token '+ token,
                 },
                 body: bodyData,
