@@ -307,7 +307,7 @@
                     
                     </div>
                     <div class="issue-page" style="width: 100%;">
-                        <div class="issues-table" style="width: 100%; border-spacing: 0 15px;">
+                        <div class="issues-table basic-table" style="width: 100%; border-spacing: 0 15px;">
                             <div class="row title">
                                 <div class="level-field">
                                     <div style="display:flex; flex-direction: row;">
@@ -331,6 +331,26 @@
                                         <div class="mobile" style="padding-top: 6px;">
                                             <span class="first-letter">Prioritat</span>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="subject">
+                                    <div style="display:flex; flex-direction: row;">
+                                        <span class="wide" style="padding-top: 6px;">Issue</span>
+                                    </div>
+                                </div>
+                                <div class="issue-field">
+                                    <div style="display:flex; flex-direction: row;">
+                                        <span class="wide" style="padding-top: 6px;">Estat</span>
+                                    </div>
+                                </div>
+                                <div class="modified-field">
+                                    <div style="display:flex; flex-direction: row;">
+                                        <span class="wide" style="padding-top: 6px;">Modificat</span>
+                                    </div>
+                                </div>
+                                <div class="assigned-field">
+                                    <div style="display:flex; flex-direction: row;">
+                                        <span class="wide" style="padding-top: 6px;">Assignat a</span>
                                     </div>
                                 </div>
 
@@ -371,6 +391,7 @@
     import issueComp from '../components/issueComp.vue';
     import { ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
+    import { RouterLink, RouterView } from 'vue-router'
 
     export default {
         components: {
