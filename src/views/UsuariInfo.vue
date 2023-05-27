@@ -41,29 +41,74 @@
                             <td>
                                 <h1>&nbsp;</h1>
                             </td>
-                            <td>
-                                <h1><font-awesome-icon icon="lock"></font-awesome-icon></h1>
-                            </td>
-                            <td>
-                                <h1>&nbsp;Timeline&nbsp;</h1>
-                            </td>
-                            <td>
-                                <h1>&nbsp;<font-awesome-icon icon="lock"></font-awesome-icon></h1>
-                            </td>
-                            <td>
-                                <h1>&nbsp;Watched&nbsp;</h1>
-                            </td>
-                            <td>
-                                <h1><font-awesome-icon icon="lock"></font-awesome-icon></h1>
-                            </td>
-                            <td>
-                                <h1>&nbsp;Token&nbsp;</h1>
-                            </td>
+                            <a :href="'/usuari/1/?mostrar=timeline'">
+                                <td>
+                                    <h1><font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                </td>
+                                <td>
+                                    <h1>&nbsp;Timeline&nbsp; &nbsp;</h1>
+                                </td>
+                            </a>
+                            <a :href="'/usuari/1/?mostrar=watched'">
+                                <td>
+                                    <h1>&nbsp;<font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                </td>
+                                <td>
+                                    <h1>&nbsp;Watched&nbsp; &nbsp;</h1>
+                                </td>
+                            </a>
+                            <a :href="'/usuari/1/?mostrar=token'">
+                                <td>
+                                    <h1><font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                </td>
+                                <td>
+                                    <h1>&nbsp;Token&nbsp;</h1>
+                                </td>
+                            </a>
                         </tr>
                     </table>
                 
                     <p style="color: darkgrey;">______________________________________________________________________________</p>
                     <div>
+                        
+                        <!-- Watched -->
+                        <section class="watched">
+                            <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
+                                <tr v-for="observat in userLogged.observats">
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <div v-if="observat.assignacio" style="display: flex; align-items: center;">
+                                                <img 
+                                                    :src="observat.assignacio.avatar"
+                                                    width="32"
+                                                    height="32"
+                                                    style="border-radius: 50%; margin-right: 5px;"
+                                                >
+                                            </div>
+                                            <!--
+                                            <div v-else>
+                                                <img 
+                                                    :src="{{ NO_AVATAR_URL}}"
+                                                    width:="48" 
+                                                    height:="48" 
+                                                    style="border-radius: 50%; margin-right: 5px;"
+                                                >
+                                            </div>
+                                            -->
+                                            <span>{{observat.assignacio.username}}&nbsp;</span>
+                                            <a :href="'/edit/'+observat.id">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
+                                        </div>
+                                        
+                                    <p style="color:darkgrey">______________________________________________________________________________</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </section>
+                        <!-- Token 
+                            <section class="token">
+                                <p>{{userLogged.token}}</p>
+                            </section> 
+                            -->
                         <!-- Timeline
                         <section class="timeline">
                             <div class="issue-page" style="width: 100%; ">
@@ -118,55 +163,21 @@
                             </div>
                         </section>
                         -->
-                        <!-- Watched -->
-                        <section class="watched">
-                            <table class="issues-table" style="width: 100%;border-collapse:separate; border-spacing: 0 10px;" >
-                                <tr v-for="observat in userLogged.observats">
-                                    <td>
-                                        <div style="display: flex; align-items: center;">
-                                        <div v-if="observat.assignacio" style="display: flex; align-items: center;">
-                                        <img 
-                                                    :src="observat.assignacio.avatar"
-                                                    width="32"
-                                                    height="32"
-                                                    style="border-radius: 50%; margin-right: 5px;"
-                                        >
-                                        </div>
-                                        <!--
-                                        <div v-else>
-                                            <img 
-                                                :src="{{ NO_AVATAR_URL}}"
-                                                width:="48" 
-                                                height:="48" 
-                                                style="border-radius: 50%; margin-right: 5px;"
-                                            >
-                                        </div>
-                                        -->
-                                        <span>{{observat.assignacio.username}}&nbsp;</span>
-                                        <a href="{% url 'editar_issue'  observat.id %}">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
-                                        </div>
-                                        
-                                    <p style="color:darkgrey">______________________________________________________________________________</p>
-                                    </td>
-                                </tr>
-                            </table>
-                        </section>
-                        <!-- Token 
-                            <section class="token">
-                                <p>{{userLogged.token}}</p>
-                            </section> 
-                            -->
                     </div>
                 </div>
         </div>
         <div class="timeline-wrapper" style="margin-left: 30px; width: 150px;">
             <h1 style="white-space: nowrap;">Your team</h1>
-            <img v-for="usuari in allUsers"
-                :src="usuari.avatar"
-                width="32"
-                height="32"
-                style="border-radius: 50%; margin-right: 5px;"
-            >
+            <div >
+                <a v-for="usuari in allUsers" :href="'/usuari/'+usuari.id">
+                    <img 
+                        :src="usuari.avatar"
+                        width="32"
+                        height="32"
+                        style="border-radius: 50%; margin-right: 5px;"
+                    >
+                </a>
+            </div>
         </div>
     </div>
 </template>
@@ -225,7 +236,7 @@
             simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
             console.log("all Users: ", this.allUsers);
 
-            //Obtengo el usuario loggeado
+            //Obtengo el usuario en cuestion
             simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => this.userLogged = data);
             console.log("Logged user: ", this.userLogged);
         }
