@@ -67,12 +67,28 @@
             async function addIssues() {
                 newIssues = text.value.split("\n");
                 console.log("Text", text.value);
+                text.value = "";
                 console.log("New issues");
                 for (let i = 0; i < newIssues.length; i++) {
                   console.log(newIssues[i]);
-                }                
-                await simpleFetch("issues/bulk", "POST", newIssues.value);
-                selectAssign=false;
+                }       
+                
+                let issuesArray = newIssues.map((issue) => {
+                    return {
+                    subject: issue
+                    };
+                });
+                
+                let obj = {
+                    issues: issuesArray
+                }
+                await simpleFetch("issues/bulk/", "POST", obj);
+                restart();
+            }
+
+            async function restart() {
+                text.value = "";
+                newIssues.value = "";
             }
 
         return {
