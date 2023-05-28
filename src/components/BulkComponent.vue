@@ -18,7 +18,7 @@
         <a class="close" @click="selectAssign=false" style="position: absolute; top: 0; right: 0;">
             X
         </a>
-        <form class="ng-pristine ng-invalid ng-invalid-required" method="post" style="display: block">
+        <div class="ng-pristine ng-invalid ng-invalid-required" style="display: block">
             <h2 class="title" style="display: flex; justify-content: center; align-items: center;">
                 Afegir nou bulk
             </h2>
@@ -26,16 +26,11 @@
                 type="text" name="subjects" style="display: block"></textarea>
                 <br>
             <div class="lb-action-wrapper" style="position: absolute; right: 0;">
-                <button @click="addIssues" variant="primary" type="submit" title="Save" class="btn-big">
+                <button @click="addIssues" variant="primary" title="Save" class="btn-big">
                     Guardar
                 </button>
             </div>
-        </form>
-        <!--
-        <button @click="addIssues">
-            as
-        </button>
-        --> 
+        </div>
     </div>
     
 </v-dialog>
@@ -45,6 +40,8 @@
   
   <script>
      import {ref} from 'vue';
+    import {simpleFetch} from '@/utils/utils';
+
     export default {
         name: "listIssue",
         
@@ -65,15 +62,23 @@
 
             let text = ref("");
             let selectAssign = ref(false);
+            let newIssues = ref("");
 
             async function addIssues() {
+                newIssues = text.value.split("\n");
                 console.log("Text", text.value);
-
-                //await simpleFetch("issues/bulk", "POST", newIssues);
+                console.log("New issues");
+                for (let i = 0; i < newIssues.length; i++) {
+                  console.log(newIssues[i]);
+                }                
+                await simpleFetch("issues/bulk", "POST", newIssues.value);
+                selectAssign=false;
             }
+
         return {
             text,
             selectAssign,
+            newIssues,
             addIssues
         }
         }
