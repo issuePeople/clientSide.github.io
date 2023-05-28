@@ -159,12 +159,51 @@
                                         <div>
                                             <a :href=attachment.document>{{ attachmentName(attachment.document) }}</a>
                                         </div>
-                                        <button
-                                            style="margin-right: 5px"
-                                            @click="esborrar_attachment(attachment)"
+
+                                        <v-dialog
+                                            v-model="dialogTrashAttachment"
+                                            width="auto"
                                         >
-                                            <font-awesome-icon icon="trash" />
-                                        </button>
+                                            <template v-slot:activator="{ props }">
+                                                <button
+                                                    v-bind="props"
+                                                >
+                                                    <font-awesome-icon icon="trash"/>
+                                                </button>
+                                            </template>
+
+                                            <v-card
+                                                width="600px"
+                                                class="pa-5"
+                                            >
+                                                <div style="margin-left: auto; margin-right: auto; font-size: 30px;">
+                                                    Delete attachment...
+                                                </div>
+                                                <div style="margin-left: auto; margin-right: auto; font-size: 20px;">
+                                                    <p>
+                                                        Are you sure you want to delete?
+                                                    </p>
+                                                    <p style="margin-left: auto; margin-right: auto;">
+                                                        the attachment {{ attachmentName(attachment.document) }}
+                                                    </p>
+                                                    <div style="margin-left: auto; margin-right: auto">
+                                                        <v-btn
+                                                            @click="dialogTrashAttachment = false"
+                                                            variant="text"
+                                                        >
+                                                            Cancel
+                                                        </v-btn>
+                                                        <v-btn
+                                                            @click="esborrar_attachment(attachment)"
+                                                            color="red"
+                                                            class="ml-15"
+                                                        >
+                                                            Delete
+                                                        </v-btn>
+                                                    </div>
+                                                </div>
+                                            </v-card>
+                                        </v-dialog>
                                     </div>
                                 </li>
                             </ul>
@@ -561,11 +600,51 @@
                                 </button>
                             </div>
                             <div style="margin-left: 5px;">
-                                <button
-                                    @click="deleteIssue()"
+                                <v-dialog
+                                    v-model="dialogTrash"
+                                    width="auto"
                                 >
-                                    <font-awesome-icon icon="trash"/>
-                                </button>
+                                    <template v-slot:activator="{ props }">
+                                        <button
+                                            v-bind="props"
+                                        >
+                                            <font-awesome-icon icon="trash"/>
+                                        </button>
+                                    </template>
+
+                                    <v-card
+                                        width="600px"
+                                        class="pa-5"
+                                    >
+                                        <div style="margin-left: auto; margin-right: auto; font-size: 30px;">
+                                            Delete issue
+                                        </div>
+                                        <div style="margin-left: auto; margin-right: auto; font-size: 20px;">
+                                            <p>
+                                                Are you sure you want to delete?
+                                            </p>
+                                            <p style="margin-left: auto; margin-right: auto;">
+                                                {{ issueTitle }}
+                                            </p>
+                                            <div style="margin-left: auto; margin-right: auto">
+                                                <v-btn
+                                                    @click="dialogTrash = false"
+                                                    variant="text"
+                                                >
+                                                    Cancel
+                                                </v-btn>
+                                                <v-btn
+                                                    @click="deleteIssue()"
+                                                    color="red"
+                                                    class="ml-15"
+                                                >
+                                                    Delete
+                                                </v-btn>
+                                            </div>
+                                        </div>
+                                    </v-card>
+                                </v-dialog>
+                                
                             </div>
                         </div>
                     </section>
@@ -656,6 +735,9 @@
             let motiuBlock = ref('');
             let comment = ref('');
 
+            let dialogTrash = ref(false);
+            let dialogTrashAttachment = ref(false);
+
             const autoObservador = computed(() => {
                 let isAutoObserver = false;
                 for (let obs of issue.value.observadors) {
@@ -666,15 +748,12 @@
             });
 
             async function addAttachment() {
-                console.log("Attachment: ", attachmentFile.value);
-                console.log("File: ", attachmentFile.value[0]);
-
                 const fd = new FormData();
                 fd.append("document", attachmentFile.value[0]);
-                fd.append("file", attachmentFile.value[0]);
 
                 await simpleFetch("issues/"+issueId.value+"/attachments/", "POST", fd, "formData");
                 actualitzarInfo();
+                attachmentFile.value = null;
             }
 
             function attachmentName(url) {
@@ -887,18 +966,17 @@
                 await simpleFetch("issues/"+issueId.value+"/tags/", "POST", obj);
                 actualitzarInfo();
                 addTag.value = true;
+                nomTag.value = '';
             }
 
             /**
              * Save description
              */
             async function guardarDesc() {
-                console.log("guardar descripcio: ", issueDesc.value);
                 let obj = {
                     "descripcio": issueDesc.value
                 }
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
-                actualitzarInfo();
             }
 
             /**
@@ -909,7 +987,6 @@
                     "subject": issueTitle.value
                 }
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
-                actualitzarInfo();
             }
 
             /**
@@ -929,8 +1006,6 @@
              * @param assignSelected
              */
             async function assignSelect(assignSelected) {
-                console.log("new assign: ", assignSelected);
-                console.log("new assign: ", assignSelected.id);
                 selectAssign.value = false;
                 let obj = {
                     "assignacio_id": assignSelected.id,
@@ -944,7 +1019,6 @@
              * @param {*} id 
              */
             async function autoSelect(id) {
-                console.log("auto select: ", id);
                 selectAssign.value = false;
                 let obj = {
                     "assignacio_id": id,
@@ -957,7 +1031,6 @@
              * Esborra assignacio
              */
             async function esborrar_assignacio() {
-                console.log("esborrar assignacio");
                 let obj = {
                     "assignacio_id": null,
                 }
@@ -1011,6 +1084,7 @@
                 showBlock.value = false;
                 await simpleFetch("issues/"+issueId.value+"/", "PUT", obj).then((data) => console.log("PUT", data));
                 actualitzarInfo();
+                motiuBlock.value = '';
             }
 
             /**
@@ -1047,6 +1121,8 @@
                 date,
                 motiuBlock,
                 attachmentFile,
+                dialogTrash,
+                dialogTrashAttachment,
                 esborrar_observador,
                 esborrar_assignacio,
                 esborrar_tag_issue,
