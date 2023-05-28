@@ -26,25 +26,28 @@
             
             <td @clik="namefun()" class="subject" >
                 <span classe="issue-text" style="display: inline-flex;">
-                     <RouterLink to="/edit/">
+                     <RouterLink :to='/edit/+id'>
                         <span class="issue-ref">#{{id}}</span>
                     <span class="issue-subject">{{ subject }}</span>
                     </RouterLink>
 
                     
                     <div v-show=bloquejat class="blocked">
-                        <i class="fa fa-lock" aria-hidden="true" style="color:red;padding-right: 5px;"></i>
+                         <font-awesome-icon icon="lock" color="red"/>
+
+
+
                     </div>
-                       <!-- Dataaaaa
-                        {% if issue.dataLimit %}
-                        <div class="due-date">
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                        </div>
-                        {%endif%}-->
+
+                       <!-- Dataaaaa-->
+                    <div v-if="dataLimit != null" class="due-date">
+                        <font-awesome-icon icon="clock" />
+                    </div>
+
                         
-                        <div v-for="tag in tags" :key="tag.nom" class="cjt_tags">
+                    <div v-for="tag in tags" :key="tag.nom" class="cjt_tags">
                             <span  v-bind:style='{backgroundColor: tag.color}' class="tag" style="padding-right: 5px; ">{{tag.nom}}</span>
-                        </div>
+                    </div>
                     
                 </span>
             </td>
@@ -61,12 +64,14 @@
                 <span>12/10/2056</span>                          
             </td>
             <td class="assigned-field" >
-                 <span class="issue-assignedto">Assigned</span>
-                <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" >
+                 <div class="issue-assignedto">
 
-                    <option v-for="usu in usuaris"  :selected="usu.username == assignat" v-bind:selected="usu.username == assignat" :value="usu"  class="issue-status-bind">{{usu.nom}} {{assignat}}</option>
+                <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" @change="handleChange2">
+                    <option v-if="assignat == 'UnAssigned'"  :value="assignat" :selected="assignat" class="issue-status-bind">No Assignat</option>
+                    <option v-for="usu in usuaris"  :selected="assignat != 'UnAssigned' && usu.username == assignat"  :value="usu.id"  class="issue-status-bind">{{usu.nom}}</option>
                     <!--Falta icono fletxeta-->
                 </select>
+                 </div>
             </td>
         </div>
 
@@ -96,13 +101,13 @@
                 prioritat: String,
                 dataLimit: Date,
                 assignacio: Object,
+                usuaris: Array(Object),
             },
             //setup(props) {
             
             setup() {
                 let tags = ref();
                 let limit = ref();
-                let usuaris = ref();
                 let assignat = ref()
 
 
@@ -113,16 +118,16 @@
                      limit,
                      tags,
                     TEstats,
-                    usuaris,
                     assignat,
-                    handleChange
+                    handleChange,
+                    handleChange2,
                      
                 }
 
                 function handleChange(e){
                     var id = e.target.value
                     var value
-                    if(id == "Nova") value = "N"
+                    if(id === "Nova") value = "N"
                     else if(id == "En curs") value = "D"
                     else if(id == "Llesta per testejar") value = "T"
                     else if(id == "Tancada") value ="C"
@@ -132,6 +137,13 @@
                     let endpoint = "issues/"+this.id+"/"
                     simpleFetch(endpoint,"PUT",{estat: value})
                 }
+                function handleChange2(e){
+                    var id = e.target.value
+                    if(id !== 'UnAssigned') {
+                        let endpoint = "issues/" + this.id + "/"
+                        simpleFetch(endpoint, "PUT", {assignacio_id:id})
+                    }
+                }
 
 
 
@@ -139,8 +151,6 @@
             mounted(){
 
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
-                simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
-
                 if( this.assignacio == null){
                     this.assignat = "UnAssigned"
                 }

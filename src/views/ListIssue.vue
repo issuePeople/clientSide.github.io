@@ -209,7 +209,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li>Assignat
+                                    <li>
                                         <button v-show="!assignat" class="filters-cat-single" id="categoria_filtre_assignat" name = "obre" @click="showfil(6)">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
@@ -227,49 +227,39 @@
                                             </div>
                                         </button>
                                         <div v-show="assignat" class="filter-list" style="display:none" name="tanca" id="filtre_assignat">
-                                            <div>
-                                                <v-list-item v-for="usuari in usuaris" :key="usuari.id" >
+                                            <div v-for="usuari in usuaris" :key="usuari.id">
                                                     <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%">
-                                                        <span class="name">{usuari.username}</span>
+                                                        <span class="name">{{usuari.username}}</span>
                                                     </button>
-                                                </v-list-item>
-
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!--<li>Tags
-                                        <button class="filters-cat-single" id="categoria_filtre_rol" name = "obre"onclick="filtre_tipus('filtre_rol')">
-                                            <span>Tags</span>
-                                            <div class="ng-animate-disabled">
-                                                <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>
-                                            </div>
-                                        </button>
-                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_rol_selected" onclick="filtre_tipus('filtre_rol')" style="display:none">
-                                            <span>Tags</span>
-                                            <div class="ng-animate-disabled">
-                                                <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>
-                                            </div>
-                                        </button>
-                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_rol">
-                                            <div>
-                                                {%for issue in issues%}
-                                                {%for tag in issue.tags.all%}
-                                                {%if request.GET.tags is null or tag.nom not in request.GET.tags%}
-                                                <button class="single-filter single-filter-type-general" style="background-color: {{tag.color}};">
-                                                    <div onclick="modif_url('tags','{{tag.nom}}','1')" class="name">{{tag.nom}}</div>
-
-                                                </button>
-                                                {%endif%}
-                                                {%endfor%}
-                                                {%endfor%}
                                             </div>
                                         </div>
                                     </li>
                                     <li>
+                                        <button v-show="!tags_show" class="filters-cat-single" id="categoria_filtre_rol" name = "obre" @click="showfil(7)">
+                                            <span>Tags</span>
+                                            <div class="ng-animate-disabled">
+                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
+                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                                </svg>-->
+                                            </div>
+                                        </button>
+                                        <button v-show="tags_show" class="filters-cat-single selected" name="tanca" id="categoria_filtre_rol_selected" @click="showfil(7)" style="display:none">
+                                            <span>Tags</span>
+                                            <div class="ng-animate-disabled">
+                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                                </svg>-->
+                                            </div>
+                                        </button>
+                                        <div v-show="tags_show" class="filter-list" style="display:none" name="tanca" id="filtre_rol" @click="showfil(7)">
+                                            <div v-for="tag in tags" :key="tag.nom">
+                                                <button class="single-filter single-filter-type-general"  :style="{'background-color': tag.color}">
+                                                    <span class="name">{{tag.nom}}</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!--<li>
                                         <button class="filters-cat-single" id="categoria_filtre_creat" name = "obre"onclick="filtre_tipus('filtre_creat')">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
@@ -356,7 +346,7 @@
 
                             </div>
                             <div>
-                                <v-list  :key=componentKey style=" ;" >
+                                <v-list  :key=componentKey  >
                                     <v-list-item v-for="issue in issues" :key="issue.id" >
                                         <issueComp
                                             :id=issue.id
@@ -366,7 +356,9 @@
                                             :gravetat=issue.gravetat
                                             :prioritat=issue.prioritat
                                             :estat=issue.estat
+                                            :dataLimit=issue.dataLimit
                                             :assignacio=issue.assignacio
+                                            :usuaris = usuaris
                                         ></issueComp>
                                     </v-list-item>
                                 </v-list>
@@ -411,6 +403,7 @@
             let falseBoolean = false;
             let trueBoolean = true;
             let issues = ref();
+            let tags = ref();
             let usuaris = ref();
             let showFiltres = ref(false);
             let tipus = ref(false)
@@ -418,6 +411,7 @@
             let prioritat= ref(false)
             let estat= ref(false)
             let assignat=ref(false)
+            let tags_show=ref(false)
             let query_parameters=ref([]);
             let componentKey = ref(0);
 
@@ -441,8 +435,10 @@
                     estat.value = !estat.value;
                 }
                 else if(param === 6){
-                    console.log(usuaris[0].id)
                     assignat.value = !assignat.value;
+                }
+                else if(param === 7){
+                    tags_show.value = !tags_show.value
                 }
             }
             function filtra(tipus,valor){
@@ -510,6 +506,7 @@
 
 
                 }
+
                 //filtra(query_parameters)
 
             }
@@ -521,6 +518,7 @@
 
                 issues,
                 usuaris,
+                tags,
                 query_parameters,
                 showFiltres,
                 tipus,
@@ -532,6 +530,8 @@
                 showfil,
                 modif_url,
                 componentKey,
+                tags_show
+
 
 
             }
@@ -540,6 +540,7 @@
             console.log(window.location.href)
             simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
+            simpleFetch("tags/","GET","").then((data) => this.tags = data);
 
 
 
