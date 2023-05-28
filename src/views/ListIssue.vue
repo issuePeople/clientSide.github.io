@@ -92,7 +92,7 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)" @click="modif_url('tipus','M',1)">
                                                     <span class="name">Millora</span>
                                                 </button>
-                                                
+
                                             </div>
                                         </div>
                                     </li>
@@ -161,7 +161,7 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64); width:100%">
                                                     <span class="name">Alta</span>
                                                 </button>
-                                                                                               
+
                                             </div>
                                         </div>
                                     </li>
@@ -205,7 +205,7 @@
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%">
                                                     <span class="name">Proposada</span>
                                                 </button>
-                                                
+
                                             </div>
                                         </div>
                                     </li>
@@ -231,7 +231,7 @@
                                                 <v-list-item v-for="usuari in usuaris" :key="usuari.id" >
                                                     <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%">
                                                         <span class="name">{usuari.username}</span>
-                                                    </button> 
+                                                    </button>
                                                 </v-list-item>
 
                                             </div>
@@ -261,7 +261,7 @@
                                                 {%if request.GET.tags is null or tag.nom not in request.GET.tags%}
                                                 <button class="single-filter single-filter-type-general" style="background-color: {{tag.color}};">
                                                     <div onclick="modif_url('tags','{{tag.nom}}','1')" class="name">{{tag.nom}}</div>
-                                                    
+
                                                 </button>
                                                 {%endif%}
                                                 {%endfor%}
@@ -293,7 +293,7 @@
                                                 {%if request.GET.creat is null or id not in request.GET.creat%}
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
                                                     <div onclick="modif_url('creat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
-                                                    
+
                                                 </button>
                                                 {%endif%}
                                                 {%endwith%}
@@ -304,7 +304,7 @@
                                 </ul>
                             </div>
                         </div>
-                    
+
                     </div>
                     <div class="issue-page" style="width: 100%;">
                         <div class="issues-table basic-table" style="width: 100%; border-spacing: 0 15px;">
@@ -380,9 +380,9 @@
 </div>
 
 
-        
+
         </div>
-    
+
 
 </template>
 
@@ -395,7 +395,7 @@
 
     export default {
         components: {
-            
+
             issueComp,
         },
         name: "listIssue",
@@ -543,7 +543,7 @@
 
 
 
-           
+
         }
     }
 

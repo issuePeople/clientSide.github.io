@@ -50,32 +50,23 @@
             </td>
         
             <td class="issue-field" >
-
-                <btn class="status-button" > {{ estat }}</btn>
-                <select v-model="selected">
-                    <option></option>
-
+                <div class="status-button">
+                <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" @change="handleChange">
+                    <option v-for="E in TEstats" :selected="E == estat" :value="E" v-bind:selected="E == estat" class="issue-status-bind">{{E}} </option>
+                    <!--Falta icono fletxeta-->
                 </select>
-                <!--<v-dialog v-model=dialogEstat width="500">
-                    <v-card-title>Estat</v-card-title>
-                    <v-card-text>
-                        <v-select>
-
-                        </v-select>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="formulari()">Closeee</v-btn>
-                    </v-card-actions>
-
-                </v-dialog>-->
-
-
+                </div>
             </td>
             <td class="modified-field" >
                 <span>12/10/2056</span>                          
             </td>
             <td class="assigned-field" >
                  <span class="issue-assignedto">Assigned</span>
+                <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" >
+
+                    <option v-for="usu in usuaris"  :selected="usu.username == assignat" v-bind:selected="usu.username == assignat" :value="usu"  class="issue-status-bind">{{usu.nom}} {{assignat}}</option>
+                    <!--Falta icono fletxeta-->
+                </select>
             </td>
         </div>
 
@@ -104,34 +95,59 @@
                 dataCreacio: Date,
                 prioritat: String,
                 dataLimit: Date,
+                assignacio: Object,
             },
             //setup(props) {
             
             setup() {
                 let tags = ref();
                 let limit = ref();
-                let dialogEstat = ref(false);
+                let usuaris = ref();
+                let assignat = ref()
+
+
+                const TEstats = ["Nova", "En curs", "Llesta per testejar", "Tancada", "Necessita informació", "Rebutjada", "Ajornada"];
                 
 
                 return {
                      limit,
                      tags,
-                    formulari,
-                    dialogEstat
+                    TEstats,
+                    usuaris,
+                    assignat,
+                    handleChange
                      
                 }
 
-                function formulari() {
-                    console.log(2222222222222222222222222222222222222)
-                    dialogEstat.value = !dialogEstat.value;
-
+                function handleChange(e){
+                    var id = e.target.value
+                    var value
+                    if(id == "Nova") value = "N"
+                    else if(id == "En curs") value = "D"
+                    else if(id == "Llesta per testejar") value = "T"
+                    else if(id == "Tancada") value ="C"
+                    else if(id == "Necessita informació") value ="I"
+                    else if(id == "Rebutjada") value = "R"
+                    else value ="P"
+                    let endpoint = "issues/"+this.id+"/"
+                    simpleFetch(endpoint,"PUT",{estat: value})
                 }
 
 
 
             },
             mounted(){
+
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
+                simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
+
+                if( this.assignacio == null){
+                    this.assignat = "UnAssigned"
+                }
+                else{
+                    this.assignat = this.assignacio.username
+                }
+
 
 
             },

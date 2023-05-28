@@ -4,7 +4,7 @@ export function setToken(value) {
     token = value;
 }
 
-export async function simpleFetch(endPoint, method, bodyData) {
+export async function simpleFetch(endPoint, method, bodyData, type) {
     console.log("tokenValue: ", token);
     console.log("endPoint: ", endPoint);
 
@@ -27,6 +27,42 @@ export async function simpleFetch(endPoint, method, bodyData) {
         } catch (error) {
             console.error('Error en el fetch, resposta derror:', error);
         }
+        console.log("data: ", data);
+        return data;
+    }
+    else if (method === "DELETE") {
+        try {
+            const response = await fetch(host+endPoint, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Accept': 'application/json',
+                    'Authorization': 'Token '+ token,
+                },
+            });
+        } catch (error) {
+            console.error('Error en el fetch, resposta derror:', error);
+        }
+    }
+    else if (type === "formData") {
+        try {
+            console.log("form appends: ");
+            for (let key of bodyData.entries()) {
+                console.log(key[0], " and ", key[1]);
+            }
+            const response = await fetch(host+endPoint, {
+                method: method,
+                headers: {
+                    'Authorization': 'Token '+ token,
+                },
+                body: bodyData,
+            });
+            data = await response.json();
+        } catch (error) {
+            console.error('Error en el fetch, resposta derror:', error);
+        }
+        console.log("data: ", data);
+        return data;
     }
     else {
         try {
@@ -43,8 +79,9 @@ export async function simpleFetch(endPoint, method, bodyData) {
         } catch (error) {
             console.error('Error en el fetch, resposta derror:', error);
         }
+        console.log("data: ", data);
+        return data;
     }
 
-    console.log("data: ", data);
-    return data;    
+
 }
