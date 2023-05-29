@@ -18,13 +18,13 @@
                         <div class="taskboard-actions">
                             <div class="issue-table-options-start" >
                                 <button class="btn-filter" @click="showfil(1)">
-                                    <i class="fa fa-sliders" aria-hidden="true"></i>
+                                    <font-awesome-icon icon="sliders"></font-awesome-icon>
                                     <span class="text" style="margin: 5px;">Filtres</span>
                                 </button>
                                 <div style="display: flex; flex-direction: row; padding-left: 10px">
                                     <input id="busca" type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
-                                    <button type="submit">
-                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    <button type="submit" style="margin-left: 7px">
+                                        <font-awesome-icon icon="search"></font-awesome-icon>
                                     </button>
                                 </div>
                                 <div style="display:flex; flex-direction:row; padding-left:10px">
@@ -68,22 +68,18 @@
                                         <button v-show="!tipus" class="filters-cat-single"  id="categoria_filtre_tipus" name = "obre" style="display: flex" @click="showfil(2)">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
-                                               <!-- <svg class="icon icon-arrow-right" style="fill: ">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                               <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button v-show="tipus" class="filters-cat-single selected" name="tanca" id="categoria_filtre_tipus_selected" style="display: none" @click="showfil(2)">
                                             <span>Tipus</span>
                                             <div class="ng-animate-disabled">
-                                               <!-- <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div class="filter-list" v-show="tipus" style="display:none"  name="tanca"  id="filtre_tipus" >
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="filtra('tipus','Bug')">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('tipus','B',1)">
                                                     <span class="name">Bug</span>
                                                 </button>
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)" @click="modif_url('tipus','P',1)">
@@ -100,17 +96,13 @@
                                         <button  v-show="!gravetat" class="filters-cat-single" id="categoria_filtre_gravetat" name = "obre" @click="showfil(3)">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button  v-show="gravetat" class="filters-cat-single selected" name="tanca" id="categoria_filtre_gravetat_selected"  @click="showfil(3)" style="display:none">
                                             <span>Gravetat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div  v-show="gravetat" class="filter-list" style="display:none" name="tanca" id="filtre_gravetat">
@@ -137,31 +129,26 @@
                                         <button v-show="!prioritat" class="filters-cat-single" id="categoria_filtre_prioritat" name = "obre" @click="showfil(4)">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button v-show="prioritat" class="filters-cat-single selected" name="tanca" id="categoria_filtre_prioritat_selected" @click="showfil(4)"  style="display:none">
                                             <span>Prioritat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div v-show="prioritat" class="filter-list" style="display:none" name="tanca" id="filtre_prioritat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('prioritat','B',1)">
                                                     <span class="name">Baixa</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('prioritat','M',1)">
                                                     <span class="name">Mitja</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64); width:100%" @click="modif_url('prioritat','A',1)">
                                                     <span class="name">Alta</span>
                                                 </button>
-
                                             </div>
                                         </div>
                                     </li>
@@ -169,40 +156,36 @@
                                         <button v-show="!estat" class="filters-cat-single" id="categoria_filtre_estat" name = "obre" @click="showfil(5)">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button v-show="estat" class="filters-cat-single selected" name="tanca" id="categoria_filtre_estat_selected" @click="showfil(5)" style="display:none">
                                             <span>Estat</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div  v-show="estat" class="filter-list" style="display:none" name="tanca" id="filtre_estat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color:  rgb(112, 114, 143); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color:  rgb(112, 114, 143); width:100%" @click="modif_url('estat','N',1)">
                                                     <span class="name">Nova</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228); width:100%" @click="modif_url('estat','D',1)">
                                                     <span class="name">En Curs</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('estat','T',1)">
                                                     <span class="name">Llesta per testejar</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('estat','C',1)">
                                                     <span class="name">Tancada</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('estat','I',1)">
                                                     <span class="name">Necessita informació</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188); width:100%" @click="modif_url('estat','R',1)">
                                                     <span class="name">Rebutjada</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('estat','P',1)">
                                                     <span class="name">Proposada</span>
                                                 </button>
 
@@ -213,22 +196,18 @@
                                         <button v-show="!assignat" class="filters-cat-single" id="categoria_filtre_assignat" name = "obre" @click="showfil(6)">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button v-show="assignat" class="filters-cat-single selected" name="tanca" id="categoria_filtre_assignat_selected" @click="showfil(6)" style="display:none">
                                             <span>Assignat a</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div v-show="assignat" class="filter-list" style="display:none" name="tanca" id="filtre_assignat">
                                             <div v-for="usuari in usuaris" :key="usuari.id">
-                                                    <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%">
+                                                    <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('assignacio__user__id',usuari.id,1)">
                                                         <span class="name">{{usuari.username}}</span>
                                                     </button>
                                             </div>
@@ -238,59 +217,45 @@
                                         <button v-show="!tags_show" class="filters-cat-single" id="categoria_filtre_rol" name = "obre" @click="showfil(7)">
                                             <span>Tags</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <button v-show="tags_show" class="filters-cat-single selected" name="tanca" id="categoria_filtre_rol_selected" @click="showfil(7)" style="display:none">
                                             <span>Tags</span>
                                             <div class="ng-animate-disabled">
-                                                <!--<svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>-->
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
                                         <div v-show="tags_show" class="filter-list" style="display:none" name="tanca" id="filtre_rol" @click="showfil(7)">
                                             <div v-for="tag in tags" :key="tag.nom">
-                                                <button class="single-filter single-filter-type-general"  :style="{'background-color': tag.color}">
+                                                <button v-show="tag.num_issues != 0" class="single-filter single-filter-type-tag"  :style="{'background-color': tag.color}" @click="modif_url('tags__nom',tag.nom,1)">
                                                     <span class="name">{{tag.nom}}</span>
+                                                    <span class="number">{{tag.num_issues}}</span>
                                                 </button>
                                             </div>
                                         </div>
                                     </li>
-                                    <!--<li>
-                                        <button class="filters-cat-single" id="categoria_filtre_creat" name = "obre"onclick="filtre_tipus('filtre_creat')">
+                                    <li>
+                                        <button v-show="!creats" class="filters-cat-single" id="categoria_filtre_creat" name = "obre" @click="showfil(8)">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
-                                                <svg class="icon icon-arrow-right" style="fill: cred">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </svg>
+                                                <font-awesome-icon icon="angle-right"></font-awesome-icon>
                                             </div>
                                         </button>
-                                        <button class="filters-cat-single selected" name="tanca"id="categoria_filtre_creat_selected" onclick="filtre_tipus('filtre_creat')" style="display:none">
+                                        <button v-show="creats" class="filters-cat-single selected" name="tanca" id="categoria_filtre_creat_selected" @click="showfil(8)" style="display:none">
                                             <span>Creat per</span>
                                             <div class="ng-animate-disabled">
-                                                <svg class="icon icon-arrow-down" style="fill: cred">
-                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                                </svg>
+                                                <font-awesome-icon icon="angle-down"></font-awesome-icon>
                                             </div>
                                         </button>
-                                        <div class="filter-list" style="display:none" name="tanca"id="filtre_creat">
-                                            <div>
-                                                {%for usuari in usuaris%}
-                                                {%with usuari.user.id|stringformat:"s" as id%}
-                                                {%if request.GET.creat is null or id not in request.GET.creat%}
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);">
-                                                    <div onclick="modif_url('creat','{{usuari.user.id}}','1')" class="name">{{usuari.user.username}}</div>
-
+                                        <div v-show="creats" class="filter-list" style="display:none" name="tanca" id="filtre_creat" @click="showfil(8)">
+                                            <div v-for="usuari in usuaris" :key="usuari.id">
+                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);" @click="modif_url('creador__user__id',usuari.id,1)">
+                                                    <span  class="name">{{usuari.username}}</span>
                                                 </button>
-                                                {%endif%}
-                                                {%endwith%}
-                                                {%endfor%}
                                             </div>
                                         </div>
-                                    </li>-->
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -403,6 +368,7 @@
             let falseBoolean = false;
             let trueBoolean = true;
             let issues = ref();
+            let issues_filtrat =ref();
             let tags = ref();
             let usuaris = ref();
             let showFiltres = ref(false);
@@ -412,6 +378,7 @@
             let estat= ref(false)
             let assignat=ref(false)
             let tags_show=ref(false)
+            let creats=ref(false)
             let query_parameters=ref([]);
             let componentKey = ref(0);
 
@@ -440,15 +407,17 @@
                 else if(param === 7){
                     tags_show.value = !tags_show.value
                 }
+                else if(param === 8){
+                    creats.value= !creats.value
+                }
             }
-            function filtra(tipus,valor){
-                console.log("aaaaaaaaaaaaaaaa")
-                console.log(issues.value)
-                console.log(issues.value.filter(tipus.value === "Bug"))
-                issues.value = issues.value.filter(issue => issue.tipus.value === "Bug")
-                console.log(issues.value)
-                //simpleFetch('issues/'+endpoint,"GET","").then((data)=>this.issues = data);
-                //componentKey.value += 1;
+
+
+            function filtra(query){
+                let endpoint = "issues/?"+ query
+                console.log(endpoint)
+                simpleFetch(endpoint,"GET","").then((data)=>this.issues = data);
+                console.log(issues)
             }
 
 
@@ -459,7 +428,7 @@
                 var trobat = false;
                 console.log(query_parameters,"aaaaaaaaaaa")
                 if(!query_parameters.length){
-                    query_parameters ="?"+param+"="+value
+                    query_parameters =param+"__in="+value
                 }
                 else{
                     var query=query_parameters.split('&');
@@ -507,7 +476,7 @@
 
                 }
 
-                //filtra(query_parameters)
+                filtra(query_parameters)
 
             }
 
@@ -530,7 +499,10 @@
                 showfil,
                 modif_url,
                 componentKey,
-                tags_show
+                tags_show,
+                creats,
+
+
 
 
 
@@ -541,6 +513,7 @@
             simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
             simpleFetch("tags/","GET","").then((data) => this.tags = data);
+
 
 
 

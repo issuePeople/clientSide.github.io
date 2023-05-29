@@ -57,7 +57,9 @@
                 <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" @change="handleChange">
                     <option v-for="E in TEstats" :selected="E == estat" :value="E" v-bind:selected="E == estat" class="issue-status-bind">{{E}} </option>
                     <!--Falta icono fletxeta-->
+
                 </select>
+
                 </div>
             </td>
             <td class="modified-field" >
