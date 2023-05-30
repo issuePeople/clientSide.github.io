@@ -42,11 +42,9 @@
                             <div class="new-issue">
                                 <button class="btn-small">
                                     <span class="icon icon-add" style="font-size: large;padding-right: 5px;">+</span>
-                                    <a> New Issue</a>
+                                    <a href="#/create"> New Issue</a>
                                 </button>
-                                <button class="btn-icon">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </button>
+                                <BulkComponent></BulkComponent>
                             </div>
                         </div>
                     </header>
@@ -379,6 +377,7 @@
 
 <script>
     //import exempleComponent from '../components/exempleComponent.vue';
+    import BulkComponent from '../components/BulkComponent.vue'
     import issueComp from '../components/issueComp.vue';
     import { ref } from 'vue';
     import {simpleFetch} from '../utils/utils';
@@ -386,7 +385,7 @@
 
     export default {
         components: {
-
+            BulkComponent,
             issueComp,
         },
         name: "listIssue",
@@ -452,7 +451,6 @@
             }
 
             function existeix(param,value) {
-                console.log('dddddddddddddddd',query_parameters)
                 if (!query_parameters.length) {
                     return false
                 } else {
@@ -466,9 +464,7 @@
             }
             function filtra(query){
                 let endpoint = "issues/?"+ query
-                console.log(endpoint)
                 simpleFetch(endpoint,"GET","").then((data)=>issues.value = data);
-                console.log(issues)
             }
 
 
@@ -477,7 +473,6 @@
             function modif_url(param,value,int){
 
                 var trobat = false;
-                console.log(query_parameters,"aaaaaaaaaaa")
                 if(!query_parameters.length){
                     if(int === 3){
                         query_parameters=param+"="+value
@@ -528,11 +523,7 @@
                         out.push(param+"__in="+value)
                     }
                     var result=out.join('&')
-                    console.log(result,"aaaaaaaaaaaaa")
-                    query_parameters= result
-
-
-
+                    query_parameters= resul
                 }
 
                 filtra(query_parameters)
@@ -542,8 +533,6 @@
             return {
                 falseBoolean,
                 trueBoolean,
-
-
                 issues,
                 usuaris,
                 tags,
@@ -567,7 +556,6 @@
             }
             },
             mounted() {
-            console.log(window.location.href)
             simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
             simpleFetch("tags/","GET","").then((data) => this.tags = data);
