@@ -559,11 +559,6 @@
             simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
             simpleFetch("tags/","GET","").then((data) => this.tags = data);
-
-
-
-
-
         }
     }
 

@@ -1,10 +1,22 @@
-let token = '959f71f16d42c05c267153f4ce64e822bb829df7';
-
-export function setToken(value) {
-    token = value;
+function getTokenCookie() {
+    console.log("cookies: ", document.cookie);
+    let name = "Token=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
 
 export async function simpleFetch(endPoint, method, bodyData, type) {
+    let token = getTokenCookie();
     console.log("tokenValue: ", token);
     console.log("endPoint: ", endPoint);
 

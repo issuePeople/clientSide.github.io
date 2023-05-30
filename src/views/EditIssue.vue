@@ -10,7 +10,7 @@
                         <div class="detail-title-wrapper">
                                 <div class="detail-ref">
                                     <span class="issue-text" style="display: inline-flex;">
-
+                                        
                                         <span class="issue-ref">#{{issue.id}}</span>
                                         <v-text-field v-model=issueTitle style="margin-top: 3px; margin-left: 5px; font-size: 25px; width: 300px" class="detail-subject" ></v-text-field>
                                     </span>
@@ -718,7 +718,7 @@
             let prioritat = ref("Low");
 
             let issue = ref();
-            let idUser = ref(24);
+            let idUser = ref(getidCookie());
             let addTag = ref(true);
             let hihaComentaris = ref(true);
             let showDatePickker = ref(false);
@@ -746,6 +746,24 @@
 
                 return isAutoObserver;
             });
+
+            
+            
+            function getidCookie() {
+                let name = "id=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+                }
+                return "";
+            }
 
             async function addAttachment() {
                 const fd = new FormData();

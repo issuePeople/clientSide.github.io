@@ -7,9 +7,9 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import './components/styles/theme-taiga.css';
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFloppyDisk, faClock, faLock, faArrowRight, faArrowDown, faArrowLeft, faArrowUp, faPlus, faXmark, faTrash,faSearch,faSortUp,faSortDown,faSliders,faAngleDown,faAngleRight} from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faClock, faLock, faArrowRight, faArrowDown, faArrowLeft, faArrowUp, faPlus, faXmark, faTrash,faSearch,faSortUp,faSortDown,faSliders,faAngleDown,faAngleRight,faAlignJustify,faEye, faTag  } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faFloppyDisk, faClock, faLock, faArrowRight, faArrowDown, faArrowLeft, faArrowUp, faPlus, faXmark, faTrash,faSearch,faSortUp,faSortDown,faSliders,faAngleDown,faAngleRight);
+library.add(faFloppyDisk, faClock, faLock, faArrowRight, faArrowDown, faArrowLeft, faArrowUp, faPlus, faXmark, faTrash,faSearch,faSortUp,faSortDown,faSliders,faAngleDown,faAngleRight,faAlignJustify,faEye, faTag );
 
 
 const vuetify = createVuetify({
