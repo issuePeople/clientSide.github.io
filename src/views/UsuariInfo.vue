@@ -55,7 +55,7 @@
                                 <h1>&nbsp;</h1>
                             </td>
                             <td>
-                                <h1 @click="mostrar='timeline'" style="cursor: default;"><font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                <h1 @click="mostrar='timeline'" style="cursor: default;"><font-awesome-icon icon="align-justify"></font-awesome-icon></h1>
                             </td>
                             <td>
                                 <a v-if="mostrar === 'timeline'" @click="mostrar='timeline'" style="cursor: default;">
@@ -67,7 +67,7 @@
                             </td>
                             <td>
                                 <a @click="mostrar='watched'" style="cursor: default;">
-                                <h1>&nbsp;<font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                <h1>&nbsp;<font-awesome-icon icon="eye"></font-awesome-icon></h1>
                                 </a>
                             </td>
                             <td>
@@ -80,7 +80,7 @@
                             </td>
                             <td v-if="userLogged.token">
                                 <a @click="mostrar='token'" style="cursor: default;">
-                                    <h1><font-awesome-icon icon="lock"></font-awesome-icon></h1>
+                                    <h1><font-awesome-icon icon="tag"></font-awesome-icon></h1>
                                 </a>
                             </td>
                             <td v-if="userLogged.token">
