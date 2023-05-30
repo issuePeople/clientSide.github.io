@@ -22,6 +22,7 @@
                 Canviar foto
             </button>
             <!-- <input id="avatarImg" style="display: none;" type="file" name="avatar"> -->
+            <!--
             <v-file-input
                 label="Canviar foto"
                 v-model=attachmentFile
@@ -29,6 +30,7 @@
             >
                 <font-awesome-icon icon="plus" />
             </v-file-input>
+            -->
         </div>
         <button type="submit" id="btnSaveAvatar" style="display: none;" name="guardar_avatar" class="btn-small button-full js-change-avatar">    </button>
         <button type="submit" name="guardar_avatar_defecte" class="botonMenu">
@@ -39,23 +41,23 @@
       <div class="project-details-form-data"> 
         <fieldset>
             <label for="username">Username</label>
-            <input type="text" name="username" :value="userLogged.username">
+            <input  type="text" name="username" v-model="username" :placeholder="userLogged.username">
         </fieldset>
         <fieldset>
             <label for="email">Email</label>
-            <input type="text" name="email" :value="userLogged.email">
+            <input type="text" name="email" v-model="email" :placeholder="userLogged.email">
         </fieldset>
         <fieldset>
             <label for="first_name">Nom</label>
-            <input type="text" name="first_name" :value="userLogged.nom">
+            <input  type="text" name="first_name" v-model="nom" :placeholder="userLogged.nom">
         </fieldset>
         <fieldset>
             <label for="bio">Bio</label>  
-            <textarea v-if="userLogged.bio" name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;" :value="userLogged.bio"></textarea>
-            <textarea v-else name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
+            <textarea v-if="userLogged.bio" v-model="bio" name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" :placeholder="userLogged.bio" style="width: 500px; height: 227px;"></textarea>
+            <textarea v-else name="bio" v-model="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
           </fieldset>
         <fieldset class="submit">
-            <button name="guardar_info" variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
+            <button @click="saveChanges" name="guardar_info" variant="primary" title="Save" class="btn-small" style="margin-left: 400px;">
                 Guardar
             </button>
         </fieldset>
@@ -101,26 +103,41 @@
       
       let userLogged = ref([]);            
       let allUsers = ref([]);
+      
+      let username = ref(userLogged.username);
+      let email = ref(userLogged.email);
+      let nom = ref(userLogged.nom);
+      let bio = ref(userLogged.bio);      
 
-
-      async function addAttachment() {
+      /*
+      async function addAvatar() {
         console.log("Attachment: ", attachmentFile.value);
         console.log("File: ", attachmentFile.value[0]);
 
         const fd = new FormData();
-        fd.append("document", attachmentFile.value[0]);
-        fd.append("file", attachmentFile.value[0]);
+        fd.append("avatar", attachmentFile.value[0]);
 
-        await simpleFetch("usuari/1", "POST", fd, "formData");
+        await simpleFetch("usuari/1", "PUT", fd, "formData");
+        actualitzarInfo();
+      }*/
+
+      async function saveChanges() {
+        await simpleFetch("usuaris/1", "PUT", username, email, nom, bio);
         actualitzarInfo();
       }
 
       function actualitzarInfo() {
-        simpleFetch("usuari/1", "GET", "").then((data) => usuari.value = data);
+        simpleFetch("usuaris/1", "GET", "").then((data) => userLogged.value = data);
       }
 
       return {
-        userLogged
+        userLogged,
+        allUsers,
+        username,
+        email,
+        nom,
+        bio,
+        saveChanges
       }
     },
 
@@ -130,7 +147,7 @@
       //Separar la url per '/'
       let directories = url.split("/");
       let userId = directories[(directories.length - 1)];
-      
+
       //Obtengo el usuario loggeado
       simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => this.userLogged = data);
       console.log("Logged user: ", this.userLogged);
