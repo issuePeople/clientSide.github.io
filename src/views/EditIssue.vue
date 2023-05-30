@@ -45,8 +45,8 @@
                         <div class="action-buttons"></div>
                         <div class="subheader" >
                             <div class="tags-container" style="display: flex; justify-content: space-between">
-                            
-                                <div style="display: flex; justify-content: space-between;">        
+
+                                <div style="display: flex; justify-content: space-between;">
                                     
                                     <div
                                         v-for="tag of issue.tags"
@@ -62,7 +62,7 @@
                                     <button v-if="addTag" class="btn-filter ng-animate-disabled" @click="addTag = false">
                                         <span>Add tag</span>
                                         <span style="font-size: 20px;">+</span>
-                                    </button> 
+                                    </button>
 
                                     <div v-show="!addTag" style="display: flex; justify-content: space-between;">
                                         <input v-model=nomTag type="text" placeholder="Enter tag" >
@@ -71,7 +71,7 @@
                                             <font-awesome-icon icon="floppy-disk" />
                                         </button>
                                     </div>
-                                    
+
                                 </div>
 
                                 <div style="display: flex; justify-content: space-between">
@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>    
+                        </div>
 
                     </div>
                 </div>
@@ -111,10 +111,10 @@
                     <!-- Descripcio  issue-->
                     <section class="duty-content" style="justify-content: flex-start;">
                         <div style="display: flex; justify-content: space-between;">
-                            <textarea 
+                            <textarea
                                 v-if="issue.descripcio"
-                                placeholder="Empty space is so boring... go on, be descriptive..." 
-                                name="descripcio" 
+                                placeholder="Empty space is so boring... go on, be descriptive..."
+                                name="descripcio"
                                 class="description ng-pristine ng-untouched ng-valid ng-empty"
                                 v-model=issueDesc
                                 >
@@ -133,7 +133,7 @@
                                 <span class="attachments-num" >{{issue.attachments.length}}</span>
                                 <span class="attachments-text" style="margin-left: 5px" >Attachments</span>
                             </h3>
-                            
+
                             <!-- add attachment-->
                             <div class="options ">
                                 <div class="add-attach">
@@ -218,14 +218,14 @@
                                 @click="hihaComentaris = true"
                            >
                                 Comentaris
-                           </button> 
+                           </button>
                            <button
                                :class="hihaComentaris ? 'history-tab' : 'history-tab active'"
                                style="margin-left: 15px"
                                @click="hihaComentaris = false"
                            >
                                 Activities
-                           </button> 
+                           </button>
                         </nav>
                     </section>
 
@@ -298,8 +298,8 @@
                             </v-menu>
                             <font-awesome-icon icon="arrow-down" style="margin-top: 8px;" />
                         </div>
-                        
-                        
+
+
                         <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
 
                     </section>
@@ -330,7 +330,7 @@
                                     </v-list>
                                 </v-menu>
                             </div>
-                            
+
                             <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
 
                             <!-- Severity-->
@@ -360,9 +360,9 @@
                             </div>
 
                             <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
-                            
+
                             <!-- Priority-->
-                            
+
                             <div style="display: flex; justify-content: space-between;">
                                 <label>
                                     priority
@@ -400,11 +400,11 @@
                             <div class="ticket-user-list-content">
                                 <div class="ticket-user-list"></div>
                                 <div>
-                                    <div 
+                                    <div
                                         v-if="issue.assignacio"
-                                        style="display: flex; 
-                                        justify-content: space-between; 
-                                        margin-left: 5px; 
+                                        style="display: flex;
+                                        justify-content: space-between;
+                                        margin-left: 5px;
                                         margin-right: 5px;"
                                         >
                                         <img :src=issue.assignacio.avatar
@@ -416,10 +416,10 @@
                                         <button @click="esborrar_assignacio()">
                                             <font-awesome-icon icon="xmark" />
                                         </button>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <!-- selector d'assignacio -->
-                                
+
                                 <div class="ticket-users-actions">
 
                                     <v-dialog
@@ -457,17 +457,17 @@
                                             </v-card-text>
                                         </v-card>
                                     </v-dialog>
-                                    <button 
+                                    <button
                                         v-if="issue.assignacio && issue.assignacio.id == idUser"
-                                        class="ticket-users-actions" 
+                                        class="ticket-users-actions"
                                         style="maassignSelectautorgin-left: 5px;"
                                         @click="esborrar_assignacio()"
                                     >
                                         Dont assign to me
                                     </button>
-                                    <button 
+                                    <button
                                         v-else
-                                        class="ticket-users-actions" 
+                                        class="ticket-users-actions"
                                         style="margin-left: 5px;"
                                         @click="autoSelect(idUser)"
                                     >
@@ -505,7 +505,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                
+
                                 <div class="ticket-users-actions">
 
                                     <v-dialog
@@ -542,17 +542,17 @@
                                             </v-card-text>
                                         </v-card>
                                     </v-dialog>
-                                    <button 
-                                        v-if="autoObservador" 
-                                        class="ticket-users-actions" 
+                                    <button
+                                        v-if="autoObservador"
+                                        class="ticket-users-actions"
                                         style="margin-left: 5px;"
                                         @click="unWatchIssue()"
                                     >
                                         Unwatch
                                     </button>
                                     <button
-                                        v-else 
-                                        class="ticket-users-actions" 
+                                        v-else
+                                        class="ticket-users-actions"
                                         style="margin-left: 5px;"
                                         @click="selfWatch()"
                                     >
@@ -576,7 +576,7 @@
                                 </button>
                                 <button
                                     v-else
-                                    @click="showDatePickker = true" 
+                                    @click="showDatePickker = true"
                                 >
                                     <font-awesome-icon icon="clock" />
                                 </button>
@@ -644,15 +644,15 @@
                                         </div>
                                     </v-card>
                                 </v-dialog>
-                                
+
                             </div>
                         </div>
                     </section>
-                    
+
                     <div style="display: flex; justify-content: space-between;" v-show="showDatePickker">
-                        <input 
-                            type="date" 
-                            id="datePickerInput" 
+                        <input
+                            type="date"
+                            id="datePickerInput"
                             name="dataLimit"
                             v-model="date"
                         >
@@ -662,9 +662,9 @@
                     </div>
 
                     <div style="display: flex; justify-content: space-between;" v-show="showBlock">
-                        <input 
-                            type="text" 
-                            id="inputMotiuBloqueig" 
+                        <input
+                            type="text"
+                            id="inputMotiuBloqueig"
                             name="motiuBloqueig"
                             v-model="motiuBlock"
                         >
@@ -716,7 +716,7 @@
             let tipus = ref("Bug");
             let gravetat = ref("Wishlist");
             let prioritat = ref("Low");
-            
+
             let issue = ref();
             let idUser = ref(24);
             let addTag = ref(true);
@@ -775,7 +775,7 @@
 
             /**
              * Possar observador de l'issue
-             * @param {*} obsSelected 
+             * @param {*} obsSelected
              */
              async function obsSelected(obsSelected) {
                 console.log("new obs: ", obsSelected.id);
@@ -796,7 +796,7 @@
 
             /**
              * Esborrar un observador
-             * @param {*} id 
+             * @param {*} id
              */
             async function esborrar_observador(id) {
                 await simpleFetch("issues/"+issueId.value+"/observadors/"+id, "DELETE", ).then((data) => console.log("PUT", data));
@@ -805,7 +805,7 @@
 
             /**
              * set Estat
-             * @param {*} item 
+             * @param {*} item
              */
             function setEstat(item) {
                 estat.value = item;
@@ -831,7 +831,7 @@
                         break;
                     case "Postponed":
                         newEstat = 'P';
-                        break;                    
+                        break;
                     default:
                         newEstat = 'B';
                 }
@@ -843,7 +843,7 @@
 
             /**
              * Set tipus
-             * @param {*} item 
+             * @param {*} item
              */
             function setTipus(item) {
                 tipus.value = item;
@@ -857,7 +857,7 @@
                         break;
                     case "Enhancement":
                         newTipus = 'M';
-                        break;    
+                        break;
                     default:
                         newTipus = 'B';
                 }
@@ -865,11 +865,11 @@
                     "tipus": newTipus,
                 }
                 simpleFetch("issues/"+issueId.value+"/", "PUT", obj);
-            } 
+            }
 
             /**
              * Set gravetat
-             * @param {*} item 
+             * @param {*} item
              */
             function setGravetat(item) {
                 gravetat.value = item;
@@ -887,9 +887,9 @@
                     case "Important":
                         newGravetat = 'I';
                         break;
-                    case "Critical": 
+                    case "Critical":
                         newGravetat = 'C';
-                        break;            
+                        break;
                     default:
                         newGravetat = 'D';
                 }
@@ -914,7 +914,7 @@
                         break;
                     case "Low":
                         newPrioirity = 'B';
-                        break;    
+                        break;
                     default:
                         newPrioirity = 'A';
                 }
@@ -1016,7 +1016,7 @@
 
             /**
              * auto select
-             * @param {*} id 
+             * @param {*} id
              */
             async function autoSelect(id) {
                 selectAssign.value = false;
@@ -1107,16 +1107,16 @@
                 TTipus,
                 TGravetat,
                 TPrioritat,
-                estat, 
-                tipus, 
-                gravetat, 
+                estat,
+                tipus,
+                gravetat,
                 prioritat,
                 idUser,
                 showDatePickker,
                 showBlock,
                 autoObservador,
                 selectAssign,
-                selectObs, 
+                selectObs,
                 allUsers,
                 date,
                 motiuBlock,
