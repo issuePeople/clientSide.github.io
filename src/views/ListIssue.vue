@@ -59,6 +59,14 @@
                                     <div class="filters-applied">
                                         <div class="filters-included">
                                             <div class="filters-title">Filtrat per:</div>
+                                            <div class="filters-wrapper">
+                                                <div class="single-applied-filter" :v-if="existeix('tipus__in','B')">
+                                                    <div class="name" >Bug</div>
+                                                    <button class="remove-filter">X</button>
+                                                </div>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -270,6 +278,14 @@
                                         <div class="mobile" style="padding-top:6px;">
                                             <span class="first-letter">Tipus</span>
                                         </div>
+
+                                            <button class="arrow-up" @click="modif_url('ordering','tipus',3)">
+                                                <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                            </button>
+                                            <button class="arrow-up" @click="modif_url('ordering','-tipus',3)">
+                                                <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                            </button>
+
                                     </div>
                                 </div>
                                 <div class="level-field">
@@ -278,6 +294,12 @@
                                         <div class="mobile" style="padding-top:6px;">
                                             <span class="first-letter">Gravetat</span>
                                         </div>
+                                        <button class="arrow-up" @click="modif_url('ordering','gravetat',3)">
+                                            <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                        </button>
+                                        <button class="arrow-up" @click="modif_url('ordering','-gravetat',3)">
+                                            <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="level-field">
@@ -286,6 +308,12 @@
                                         <div class="mobile" style="padding-top: 6px;">
                                             <span class="first-letter">Prioritat</span>
                                         </div>
+                                        <button class="arrow-up" @click="modif_url('ordering','prioritat',3)">
+                                            <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                        </button>
+                                        <button class="arrow-up" @click="modif_url('ordering','-prioritat',3)">
+                                            <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="subject">
@@ -297,6 +325,12 @@
                                     <div style="display:flex; flex-direction: row;">
                                         <span class="wide" style="padding-top: 6px;">Estat</span>
                                     </div>
+                                    <button class="arrow-up" @click="modif_url('ordering','estat',3)">
+                                        <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                    </button>
+                                    <button class="arrow-up" @click="modif_url('ordering','-estat',3)">
+                                        <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                    </button>
                                 </div>
                                 <div class="modified-field">
                                     <div style="display:flex; flex-direction: row;">
@@ -382,6 +416,11 @@
             let query_parameters=ref([]);
             let componentKey = ref(0);
 
+            const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
+            const TTipus = ["Bug", "Question", "Enhancement"];
+            const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
+            const TPrioritat = ["Low", "Normal", "High"];
+
 
 
 
@@ -412,11 +451,23 @@
                 }
             }
 
-
+            function existeix(param,value) {
+                console.log('dddddddddddddddd',query_parameters)
+                if (!query_parameters.length) {
+                    return false
+                } else {
+                    let query = query_parameters.split('&')
+                    for (var i = 0; query.length > i; ++i) {
+                        if (query[i].search(param) !== -1 && query[i].search(value)) {
+                            return true
+                        }
+                    }
+                }
+            }
             function filtra(query){
                 let endpoint = "issues/?"+ query
                 console.log(endpoint)
-                simpleFetch(endpoint,"GET","").then((data)=>this.issues = data);
+                simpleFetch(endpoint,"GET","").then((data)=>issues.value = data);
                 console.log(issues)
             }
 
@@ -428,42 +479,50 @@
                 var trobat = false;
                 console.log(query_parameters,"aaaaaaaaaaa")
                 if(!query_parameters.length){
-                    query_parameters =param+"__in="+value
+                    if(int === 3){
+                        query_parameters=param+"="+value
+                    }
+                    else {
+                        query_parameters = param + "__in=" + value
+                    }
                 }
                 else{
                     var query=query_parameters.split('&');
                     var out=[];
                     for(var i = 0; query.length >i ; ++i){
-                        if(query[i].search(param) !== -1){
-                            trobat=true;
-                            var filtre = query[i].split('=');
-                            var parametres = filtre[1].split(',');
-                            if(int == 1){
-                                parametres.push(value);
-                                var params = parametres.toString();
-                                out.push(param+"__in="+params);
-
-                            }
-                            else if(int ==3){
+                        if(query[i].search(param) !== -1 && int === 3){
+                            trobat = true
                                 out.push(param+"="+value)
-                            }
-                            else{
-                                if(parametres.length != 1){
-                                    var params =[]
-                                    for(var j =0; parametres.length >j;++j){
-                                        if(parametres[j] !== value){
-                                            params.push(parametres[j])
-                                        }
-                                    }
-                                    params = params.toString();
-                                    out.push(param+"__in="+params)
+                        }
+                        else {
+                            if (query[i].search(param + "__in") !== -1) {
+                                trobat = true;
+                                var filtre = query[i].split('=');
+                                var parametres = filtre[1].split(',');
+                                if (int == 1) {
+                                    parametres.push(value);
+                                    var params = parametres.toString();
+                                    out.push(param + "__in=" + params);
 
+                                } else {
+                                    if (parametres.length != 1) {
+                                        var params = []
+                                        for (var j = 0; parametres.length > j; ++j) {
+                                            if (parametres[j] !== value) {
+                                                params.push(parametres[j])
+                                            }
+                                        }
+                                        params = params.toString();
+                                        out.push(param + "__in=" + params)
+
+                                    }
                                 }
                             }
+                            else{
+                                out.push(query[i]);
+                            }
                         }
-                        else{
-                            out.push(query[i]);
-                        }
+
                     }
                     if(trobat === false){
                         out.push(param+"__in="+value)
@@ -501,14 +560,13 @@
                 componentKey,
                 tags_show,
                 creats,
-
-
-
+                TEstats,
+                existeix
 
 
             }
             },
-        mounted() {
+            mounted() {
             console.log(window.location.href)
             simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
