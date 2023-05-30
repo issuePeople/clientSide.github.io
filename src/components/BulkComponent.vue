@@ -66,7 +66,7 @@
 
             async function addIssues() {
                 newIssues = text.value.split("\n");
-                newIssues = newIssues.filter((issue) => issue !== "");
+                newIssues = newIssues.filter((issue) => issue !== "");  
                 console.log("Text", text.value);
                 text.value = "";
                 console.log("New issues");
