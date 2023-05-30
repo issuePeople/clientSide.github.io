@@ -54,7 +54,7 @@
         
             <td class="issue-field" >
                 <div class="status-button">
-                <select  class="issue-status" style="margin-top: 5px; border:none; outline:none;background: none;" @change="handleChange">
+                <select  class="issue-status" style="margin-top: 5px; border: none; outline: none; background: none;" @change="handleChange">
                     <option v-for="E in TEstats" :selected="E == estat" :value="E" v-bind:selected="E == estat" class="issue-status-bind">{{E}} </option>
                     <!--Falta icono fletxeta-->
 
@@ -85,7 +85,7 @@
   import { simpleFetch } from '../utils/utils'
   import { RouterLink, RouterView } from 'vue-router'
   import {id} from "vuetify/locale";
-        export default (await import('vue')).defineComponent({
+        export default {
             name: "IssueComp",
             
             /*components: {
@@ -164,7 +164,7 @@
 
             },
 
-    })
+    }
     
     
     //code here
