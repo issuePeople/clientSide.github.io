@@ -1,26 +1,31 @@
-# frontEnd issuePeople
+# IssuePeople: clientSide
 
-This template should help get you started developing with Vue 3 in Vite.
+Repositori amb el cclient side del projecte d'ASW (tercera entrega).
 
-## Recommended IDE Setup
+## Membres de l'equip
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Nora Caballero de Llanos
 
-## Customize configuration
+Pau Duran Manzano
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Àngel Prat Vilà
 
-## install node.js if is possible version LTS
-https://nodejs.org/en
+Sol Torralba Calero
 
-## Project Setup
 
-```sh
-npm install
-```
+## Enllaços
 
-### Compile and Hot-Reload for Development
+- Taiga: https://tree.taiga.io/project/angelprat-asw
+- Desplegament a GitHub pages: https://issuepeople.github.io/#/
 
-```sh
-npm run dev
-```
+
+## Execució i ús en local
+
+### Primera posada en marxa
+- Clonar el repositori amb la comanda git clone
+- Entrar dins la carpeta del projecte
+- Instal·lar els requeriments: npm install
+- Executar: npm run dev
+
+### Per executar
+- npm run dev
