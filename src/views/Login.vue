@@ -1,8 +1,10 @@
 <template>
     <div style="background-color: cadetblue; padding: 25%; display: flex; justify-content: center; align-items: center; height: 100%;">
-        <div style=" border-radius: 20px;  background-color: grey; height: 400px; width: 400px;">
-            <h1 style="margin-left: 100px; color: whitesmoke;">Possibles usuaris</h1>
-            <v-col>
+        <v-card style=" border-radius: 20px;  height: 400px; width: 400px;">
+            <v-card-title>
+                Possibles usuaris
+            </v-card-title>
+            <div style="margin-left: 50px; margin-top: 130px;">
                 <v-menu>
                     <template v-slot:activator="{ props }">
                         <v-btn
@@ -25,11 +27,12 @@
                 </v-menu>
                 <v-btn
                     @click="setCookiUser()"
+                    color="green"
                 >
                     Login
                 </v-btn>
-            </v-col>
-        </div>
+            </div>
+        </v-card>
     </div>
 </template>
 
@@ -41,10 +44,10 @@
         name: "Login",
         setup() {
             const router = useRouter();
-            let users = [{name: "pau", id: 1, token: "959f71f16d42c05c267153f4ce64e822bb829df7"}, 
-                {name: "joan", id: 6, token: "32e702b8607776cd2e2a22806148b0f10acac910"}, 
-                {name: "pere", id: 3, token:"32e702b8607776cd2e2a22806148b0f10acac910" }, 
-                {name: "maria", id: 4, token:"32e702b8607776cd2e2a22806148b0f10acac910" }
+            let users = [{name: "Pau", id: 1, token: "959f71f16d42c05c267153f4ce64e822bb829df7"}, 
+                {name: "Nora", id: 28, token: "c93626790ee837a869e62a4bdae48ad7752d6074"}, 
+                {name: "Angel", id: 30, token:"ea8b2887d7d9e586bdda20ec4688fb1fea6699a6" }, 
+                {name: "Sol", id: 31, token:"32e702b8607776cd2e2a22806148b0f10acac910" }
             ];
 
             let userName = ref(users[0]);

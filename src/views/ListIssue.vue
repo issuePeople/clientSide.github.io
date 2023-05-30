@@ -1,10 +1,5 @@
 <template>
-
     <div>
-        <RouterLink to="/edit/1">
-            <img source="logo" width="40" height="40" />
-        </RouterLink>
-
 <div style="margin-left: 0px;">
     <div class="master" style>
         <div class = "wrapper issues lightbox-generic-form">
