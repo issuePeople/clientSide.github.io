@@ -34,9 +34,6 @@
                     
                     <div v-show=bloquejat class="blocked">
                          <font-awesome-icon icon="lock" color="red"/>
-
-
-
                     </div>
 
                        <!-- Dataaaaa-->
@@ -45,7 +42,7 @@
                     </div>
 
                         
-                    <div v-for="tag in tags" :key="tag.nom" class="cjt_tags">
+                    <div v-show="toggle" v-for="tag in tags" :key="tag.nom" class="cjt_tags">
                             <span  v-bind:style='{backgroundColor: tag.color}' class="tag" style="padding-right: 5px; ">{{tag.nom}}</span>
                     </div>
                     
@@ -63,7 +60,7 @@
                 </div>
             </td>
             <td class="modified-field" >
-                <span>12/10/2056</span>                          
+                <span>{{data}}</span>
             </td>
             <td class="assigned-field" >
                  <div class="issue-assignedto">
@@ -101,9 +98,11 @@
                 bloquejat: Boolean,
                 dataCreacio: Date,
                 prioritat: String,
-                dataLimit: Date,
+                dataLimit: String,
+                data:String,
                 assignacio: Object,
                 usuaris: Array(Object),
+                toggle: Boolean,
             },
             //setup(props) {
             

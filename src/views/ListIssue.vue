@@ -29,11 +29,11 @@
                                 </div>
                                 <div style="display:flex; flex-direction:row; padding-left:10px">
                                     <div  style="padding-right:10px">
-                                        <div  id="tag_on">
-                                            <i class="fa fa-toggle-on" aria-hidden="true" style="color:#008aa8"></i>
+                                        <div v-show="toggle"  id="tag_on" @click="showfil(9)">
+                                            <font-awesome-icon icon="toggle-on" size="lg"></font-awesome-icon>
                                         </div>
-                                        <div  id="tag_off" style="display:none">
-                                            <i class="fa fa-toggle-off" aria-hidden="true"></i>
+                                        <div v-show="!toggle" id="tag_off" style="display:none" @click="showfil(9)">
+                                            <font-awesome-icon icon="toggle-off" size="lg"></font-awesome-icon>
                                         </div>
                                     </div>
                                     <span>Tags</span>
@@ -60,10 +60,13 @@
                                         <div class="filters-included">
                                             <div class="filters-title">Filtrat per:</div>
                                             <div class="filters-wrapper">
-                                                <div class="single-applied-filter" :v-if="existeix('tipus__in','B')">
-                                                    <div class="name" >Bug</div>
-                                                    <button class="remove-filter">X</button>
+                                                <div v-for="a in arrayFilter()" :key=a.value>
+                                                    <div  class="single-applied-filter"> <!--v-if="existeix('tipus__in',T.lletra)"-->
+                                                        <div class="name" >{{a.value}}</div>
+                                                        <button class="remove-filter" @click="modif_url(a.param,a.value,2)">X</button>
+                                                    </div>
                                                 </div>
+
 
                                             </div>
 
@@ -87,7 +90,7 @@
                                         </button>
                                         <div class="filter-list" v-show="tipus" style="display:none"  name="tanca"  id="filtre_tipus" >
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('tipus','B',1)">
+                                                <button  class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('tipus','B',1)">
                                                     <span class="name">Bug</span>
                                                 </button>
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)" @click="modif_url('tipus','P',1)">
@@ -194,9 +197,8 @@
                                                     <span class="name">Rebutjada</span>
                                                 </button>
                                                 <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('estat','P',1)">
-                                                    <span class="name">Proposada</span>
+                                                    <span class="name">Ajornada</span>
                                                 </button>
-
                                             </div>
                                         </div>
                                     </li>
@@ -278,13 +280,14 @@
                                         <div class="mobile" style="padding-top:6px;">
                                             <span class="first-letter">Tipus</span>
                                         </div>
-
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
                                             <button class="arrow-up" @click="modif_url('ordering','tipus',3)">
                                                 <font-awesome-icon icon="sort-up" ></font-awesome-icon>
                                             </button>
                                             <button class="arrow-up" @click="modif_url('ordering','-tipus',3)">
                                                 <font-awesome-icon icon="sort-down" ></font-awesome-icon>
                                             </button>
+                                            </div>
 
                                     </div>
                                 </div>
@@ -294,12 +297,14 @@
                                         <div class="mobile" style="padding-top:6px;">
                                             <span class="first-letter">Gravetat</span>
                                         </div>
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
                                         <button class="arrow-up" @click="modif_url('ordering','gravetat',3)">
                                             <font-awesome-icon icon="sort-up" ></font-awesome-icon>
                                         </button>
                                         <button class="arrow-up" @click="modif_url('ordering','-gravetat',3)">
                                             <font-awesome-icon icon="sort-down" ></font-awesome-icon>
                                         </button>
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="level-field">
@@ -308,38 +313,68 @@
                                         <div class="mobile" style="padding-top: 6px;">
                                             <span class="first-letter">Prioritat</span>
                                         </div>
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
                                         <button class="arrow-up" @click="modif_url('ordering','prioritat',3)">
                                             <font-awesome-icon icon="sort-up" ></font-awesome-icon>
                                         </button>
                                         <button class="arrow-up" @click="modif_url('ordering','-prioritat',3)">
                                             <font-awesome-icon icon="sort-down" ></font-awesome-icon>
                                         </button>
+                                            </div>
                                     </div>
                                 </div>
                                 <div class="subject">
                                     <div style="display:flex; flex-direction: row;">
+
                                         <span class="wide" style="padding-top: 6px;">Issue</span>
+
+                                    <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                    <button class="arrow-up" @click="modif_url('ordering','issue',3)">
+                                        <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                    </button>
+                                    <button class="arrow-up" @click="modif_url('ordering','-issue',3)">
+                                        <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                    </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="issue-field">
                                     <div style="display:flex; flex-direction: row;">
                                         <span class="wide" style="padding-top: 6px;">Estat</span>
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                            <button class="arrow-up" @click="modif_url('ordering','estat',3)">
+                                                <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                            </button>
+                                            <button class="arrow-up" @click="modif_url('ordering','-estat',3)">
+                                                <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button class="arrow-up" @click="modif_url('ordering','estat',3)">
-                                        <font-awesome-icon icon="sort-up" ></font-awesome-icon>
-                                    </button>
-                                    <button class="arrow-up" @click="modif_url('ordering','-estat',3)">
-                                        <font-awesome-icon icon="sort-down" ></font-awesome-icon>
-                                    </button>
                                 </div>
                                 <div class="modified-field">
                                     <div style="display:flex; flex-direction: row;">
                                         <span class="wide" style="padding-top: 6px;">Modificat</span>
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                            <button class="arrow-up" @click="modif_url('ordering','dataModificacio',3)">
+                                                <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                            </button>
+                                            <button class="arrow-up" @click="modif_url('ordering','-dataModificacio',3)">
+                                                <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="assigned-field">
                                     <div style="display:flex; flex-direction: row;">
                                         <span class="wide" style="padding-top: 6px;">Assignat a</span>
+                                        <div style="display:flex;flex-direction: column; padding-left: 10px; ">
+                                            <button class="arrow-up" @click="modif_url('ordering','assignacio',3)">
+                                                <font-awesome-icon icon="sort-up" ></font-awesome-icon>
+                                            </button>
+                                            <button class="arrow-up" @click="modif_url('ordering','-assignacio',3)">
+                                                <font-awesome-icon icon="sort-down" ></font-awesome-icon>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -355,9 +390,11 @@
                                             :gravetat=issue.gravetat
                                             :prioritat=issue.prioritat
                                             :estat=issue.estat
+                                            :data=(issue.dataModificacio)
                                             :dataLimit=issue.dataLimit
                                             :assignacio=issue.assignacio
                                             :usuaris = usuaris
+                                            :toggle = toggle
                                         ></issueComp>
                                     </v-list-item>
                                 </v-list>
@@ -380,7 +417,7 @@
 <script>
     //import exempleComponent from '../components/exempleComponent.vue';
     import issueComp from '../components/issueComp.vue';
-    import { ref } from 'vue';
+    import {computed, ref} from 'vue';
     import {simpleFetch} from '../utils/utils';
     import { RouterLink, RouterView } from 'vue-router'
 
@@ -413,11 +450,13 @@
             let assignat=ref(false)
             let tags_show=ref(false)
             let creats=ref(false)
-            let query_parameters=ref([]);
+            let toggle=ref(false)
+            let query_parameters=([]);
             let componentKey = ref(0);
+            let mostrar = ref([])
 
-            const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
-            const TTipus = ["Bug", "Question", "Enhancement"];
+            const TEstats = [{estat: "Nova", lletra: "N"}, "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
+            const TTipus = [{tipus:"Bug",lletra:"B"}, {tipus:"Pregunta",lletra:"P"}, {tipus:"Millora",lletra:"M"}];
             const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
             const TPrioritat = ["Low", "Normal", "High"];
 
@@ -449,21 +488,120 @@
                 else if(param === 8){
                     creats.value= !creats.value
                 }
-            }
-
-            function existeix(param,value) {
-                console.log('dddddddddddddddd',query_parameters)
-                if (!query_parameters.length) {
-                    return false
-                } else {
-                    let query = query_parameters.split('&')
-                    for (var i = 0; query.length > i; ++i) {
-                        if (query[i].search(param) !== -1 && query[i].search(value)) {
-                            return true
-                        }
-                    }
+                else if(param === 9){
+                    toggle.value = !toggle.value
                 }
             }
+
+            /*const arrayFilter = computed(() => {
+            let array=[];
+                if (query_parameters.length !== 0) {
+
+                    console.log('9090909090909090909090909090',query_parameters)
+                    var query = query_parameters.split('&')
+
+                    for (var i = 0; query.length > i; ++i) {
+                        if(query[i].search("ordering") === -1){
+                            if(query[i].search("tipus") !== -1){
+                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Bug"})
+                                if(query[i].search("P") !== -1) array.push({param:"tipus",value:"Pregunta"})
+                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Millora"})
+                            }
+                        }
+                        //if param
+
+                        //array.push();
+
+                        //if (query[i].search(param) !== -1 && query[i].search(value) !== -1) {
+                          //  array.push({value:"Bug",param:"tipus"})
+                        //}
+                    }
+                }
+                return array
+
+            });*/
+
+           function arrayFilter(){
+                let array=[];
+                if (query_parameters.length !== 0) {
+
+                    console.log('ple')
+                    var query = query_parameters.split('&')
+
+                    for (var i = 0; query.length > i; ++i) {
+                        if(query[i].search("ordering") === -1){
+                            if(query[i].search("tipus") !== -1){
+                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Bug"})
+                                if(query[i].search("P") !== -1) array.push({param:"tipus",value:"Pregunta"})
+                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Millora"})
+                            }
+                            else if(query[i].search("gravetat") !== -1){
+                                if(query[i].search("D") !== -1) array.push({param:"gravetat",value:"Desitjada"})
+                                if(query[i].search("M") !== -1) array.push({param:"gravetat",value:"Menor"})
+                                if(query[i].search("N") !== -1) array.push({param:"gravetat",value:"Menor"})
+                                if(query[i].search("I") !== -1) array.push({param:"gravetat",value:"Important"})
+                                if(query[i].search("C") !== -1) array.push({param:"gravetat",value:"Critica"})
+                            }
+                            else if(query[i].search("prioritat") !== -1){
+                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Baixa"})
+                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Mitja"})
+                                if(query[i].search("A") !== -1) array.push({param:"tipus",value:"Alta"})
+                            }
+                            else if(query[i].search("estat") !== -1){
+                                if(query[i].search("N") !== -1) array.push({param:"gravetat",value:"Nova"})
+                                if(query[i].search("D") !== -1) array.push({param:"gravetat",value:"En curs"})
+                                if(query[i].search("T") !== -1) array.push({param:"gravetat",value:"Llesta per testejar"})
+                                if(query[i].search("C") !== -1) array.push({param:"gravetat",value:"Tancada"})
+                                if(query[i].search("I") !== -1) array.push({param:"gravetat",value:"Necessita informacio"})
+                                if(query[i].search("R") !== -1) array.push({param:"gravetat",value:"Rebutjada"})
+                                if(query[i].search("P") !== -1) array.push({param:"gravetat",value:"Ajornada"})
+                            }
+                            else if(query[i].search("assignacio__user__id") !== -1){
+                                let usu = query[i].split('=');
+                                let array_usu = usu[1].split(',');
+                                for(var j = 0; j < array_usu.length; ++j){
+                                    array.push({param:"assignacio__user__id",value:array_usu[j]})
+                                }
+                            }
+                            else if(query[i].search("tags__nom") !== -1){
+                                let tagss = query[i].split('=');
+                                let array_tagss = tagss[1].split(',');
+                                for(var j = 0; j < array_tagss.length; ++j){
+                                    array.push({param:"tags__nom",value:array_tagss[j]})
+                                }
+                            }
+                            else if(query[i].search("creador__user__id") !== -1){
+                                let usu = query[i].split('=');
+                                let array_usu = usu[1].split(',');
+                                for(var j = 0; j < array_usu.length; ++j){
+                                    array.push({param:"creador__user__id",value:array_usu[j]})
+                                }
+                            }
+
+                        }
+                        //if param
+
+                        //array.push();
+
+                        //if (query[i].search(param) !== -1 && query[i].search(value) !== -1) {
+                          //  array.push({value:"Bug",param:"tipus"})
+                        //}
+                    }
+                }
+                return array;
+            }
+
+            function existeix(param,value){
+               let array = arrayFilter()
+                for(var i = 0; i < array.length;++i){
+                    if(array[i].param === param && array[i].value === value){
+                        return true
+                    }
+                }
+                return false
+            }
+
+
             function filtra(query){
                 let endpoint = "issues/?"+ query
                 console.log(endpoint)
@@ -483,12 +621,13 @@
                         query_parameters=param+"="+value
                     }
                     else {
-                        query_parameters = param + "__in=" + value
+                        query_parameters= param + "__in=" + value
                     }
                 }
                 else{
                     var query=query_parameters.split('&');
                     var out=[];
+                    var mos=[];
                     for(var i = 0; query.length >i ; ++i){
                         if(query[i].search(param) !== -1 && int === 3){
                             trobat = true
@@ -514,7 +653,6 @@
                                         }
                                         params = params.toString();
                                         out.push(param + "__in=" + params)
-
                                     }
                                 }
                             }
@@ -530,20 +668,14 @@
                     var result=out.join('&')
                     console.log(result,"aaaaaaaaaaaaa")
                     query_parameters= result
-
-
-
                 }
-
                 filtra(query_parameters)
-
             }
 
             return {
                 falseBoolean,
                 trueBoolean,
-
-
+                mostrar,
                 issues,
                 usuaris,
                 tags,
@@ -561,6 +693,9 @@
                 tags_show,
                 creats,
                 TEstats,
+                arrayFilter,
+                toggle,
+                TTipus,
                 existeix
 
 
