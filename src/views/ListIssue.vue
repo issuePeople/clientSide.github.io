@@ -64,7 +64,7 @@
                                                 <div v-for="a in arrayFilter()" :key=a.value>
                                                     <div  class="single-applied-filter"> <!--v-if="existeix('tipus__in',T.lletra)"-->
                                                         <div class="name" >{{a.value}}</div>
-                                                        <button class="remove-filter" @click="modif_url(a.param,a.id,2)">X</button>
+                                                        <button class="remove-filter" @click="modif_url(a.param,a.int,2)">X</button>
                                                     </div>
                                                 </div>
 
@@ -91,13 +91,13 @@
                                         </button>
                                         <div class="filter-list" v-show="tipus" style="display:none"  name="tanca"  id="filtre_tipus" >
                                             <div>
-                                                <button  class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('tipus','B',1)">
+                                                <button  v-show="!(existeix('tipus','B'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('tipus','B',1)">
                                                     <span class="name">Bug</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)" @click="modif_url('tipus','P',1)">
+                                                <button v-show="!(existeix('tipus','P'))" class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211)" @click="modif_url('tipus','P',1)">
                                                     <span class="name">Pregunta</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)" @click="modif_url('tipus','M',1)">
+                                                <button v-show="!(existeix('tipus','M'))" class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 206)" @click="modif_url('tipus','M',1)">
                                                     <span class="name">Millora</span>
                                                 </button>
 
@@ -119,19 +119,19 @@
                                         </button>
                                         <div  v-show="gravetat" class="filter-list" style="display:none" name="tanca" id="filtre_gravetat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(112, 114, 143); width:100%" @click="modif_url('gravetat','D',1)">
+                                                <button v-show="!(existeix('gravetat','D'))" class="single-filter single-filter-type-general" style="border-color: rgb(112, 114, 143); width:100%" @click="modif_url('gravetat','D',1)">
                                                     <span class="name">Desitjada</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228)" @click="modif_url('gravetat','M',1)">
+                                                <button v-show="!(existeix('gravetat','M'))" class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228)" @click="modif_url('gravetat','M',1)">
                                                     <span class="name">Menor</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 124)" @click="modif_url('gravetat','N',1)">
+                                                <button v-show="!(existeix('gravetat','N'))" class="single-filter single-filter-type-general" style="border-color: rgb(64, 228, 124)" @click="modif_url('gravetat','N',1)">
                                                     <span class="name">Normal</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 162, 64)" @click="modif_url('gravetat','I',1)">
+                                                <button v-show="!(existeix('gravetat','I'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 162, 64)" @click="modif_url('gravetat','I',1)">
                                                     <span class="name">Important</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80)" @click="modif_url('gravetat','C',1)">
+                                                <button v-show="!(existeix('gravetat','C'))" class="single-filter single-filter-type-general" style="border-color: rgb(211, 84, 80)" @click="modif_url('gravetat','C',1)">
                                                     <span class="name"> Critica</span>
                                                 </button>
                                             </div>
@@ -152,13 +152,13 @@
                                         </button>
                                         <div v-show="prioritat" class="filter-list" style="display:none" name="tanca" id="filtre_prioritat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('prioritat','B',1)">
+                                                <button v-show="!(existeix('prioritat','B'))" class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('prioritat','B',1)">
                                                     <span class="name">Baixa</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('prioritat','M',1)">
+                                                <button v-show="!(existeix('prioritat','M'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('prioritat','M',1)">
                                                     <span class="name">Mitja</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64); width:100%" @click="modif_url('prioritat','A',1)">
+                                                <button v-show="!(existeix('prioritat','A'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 124, 64); width:100%" @click="modif_url('prioritat','A',1)">
                                                     <span class="name">Alta</span>
                                                 </button>
                                             </div>
@@ -179,25 +179,25 @@
                                         </button>
                                         <div  v-show="estat" class="filter-list" style="display:none" name="tanca" id="filtre_estat">
                                             <div>
-                                                <button class="single-filter single-filter-type-general" style="border-color:  rgb(112, 114, 143); width:100%" @click="modif_url('estat','N',1)">
+                                                <button v-show="!(existeix('estat','N'))" class="single-filter single-filter-type-general" style="border-color:  rgb(112, 114, 143); width:100%" @click="modif_url('estat','N',1)">
                                                     <span class="name">Nova</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228); width:100%" @click="modif_url('estat','D',1)">
+                                                <button v-show="!(existeix('estat','D'))" class="single-filter single-filter-type-general" style="border-color: rgb(64, 168, 228); width:100%" @click="modif_url('estat','D',1)">
                                                     <span class="name">En Curs</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('estat','T',1)">
+                                                <button v-show="!(existeix('estat','T'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 206, 64); width:100%" @click="modif_url('estat','T',1)">
                                                     <span class="name">Llesta per testejar</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('estat','C',1)">
+                                                <button v-show="!(existeix('estat','C'))" class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64); width:100%" @click="modif_url('estat','C',1)">
                                                     <span class="name">Tancada</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('estat','I',1)">
+                                                <button v-show="!(existeix('estat','I'))" class="single-filter single-filter-type-general" style="border-color: rgb(228, 64, 87); width:100%" @click="modif_url('estat','I',1)">
                                                     <span class="name">Necessita informació</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188); width:100%" @click="modif_url('estat','R',1)">
+                                                <button v-show="!(existeix('estat','R'))" class="single-filter single-filter-type-general" style="border-color: rgb(169, 170, 188); width:100%" @click="modif_url('estat','R',1)">
                                                     <span class="name">Rebutjada</span>
                                                 </button>
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('estat','P',1)">
+                                                <button v-show="!(existeix('estat','P'))" class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('estat','P',1)">
                                                     <span class="name">Ajornada</span>
                                                 </button>
                                             </div>
@@ -218,7 +218,7 @@
                                         </button>
                                         <div v-show="assignat" class="filter-list" style="display:none" name="tanca" id="filtre_assignat">
                                             <div v-for="usuari in usuaris" :key="usuari.id">
-                                                    <button class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('assignacio__user__id',usuari.id,1)">
+                                                    <button v-show="!(existeix('assignacio__user__id',usuari.id))" class="single-filter single-filter-type-general" style="border-color: rgb(81, 120, 211); width:100%" @click="modif_url('assignacio__user__id',usuari.id,1)">
                                                         <span class="name">{{usuari.username}}</span>
                                                     </button>
                                             </div>
@@ -239,7 +239,7 @@
                                         </button>
                                         <div v-show="tags_show" class="filter-list" style="display:none" name="tanca" id="filtre_rol" @click="showfil(7)">
                                             <div v-for="tag in tags" :key="tag.nom">
-                                                <button v-show="tag.num_issues != 0" class="single-filter single-filter-type-tag"  :style="{'background-color': tag.color}" @click="modif_url('tags__nom',tag.nom,1)">
+                                                <button v-show="tag.num_issues != 0 && !(existeix('tags__nom',tag.nom))" class="single-filter single-filter-type-tag"  :style="{'background-color': tag.color}" @click="modif_url('tags__nom',tag.nom,1)">
                                                     <span class="name">{{tag.nom}}</span>
                                                     <span class="number">{{tag.num_issues}}</span>
                                                 </button>
@@ -261,7 +261,7 @@
                                         </button>
                                         <div v-show="creats" class="filter-list" style="display:none" name="tanca" id="filtre_creat" @click="showfil(8)">
                                             <div v-for="usuari in usuaris" :key="usuari.id">
-                                                <button class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);" @click="modif_url('creador__user__id',usuari.id,1)">
+                                                <button v-show="!(existeix('creador__user__id',usuari.id))" class="single-filter single-filter-type-general" style="border-color: rgb(168, 228, 64);" @click="modif_url('creador__user__id',usuari.id,1)">
                                                     <span  class="name">{{usuari.username}}</span>
                                                 </button>
                                             </div>
@@ -584,26 +584,24 @@
                             }
 
                         }
-                        //if param
-
-                        //array.push();
-
-                        //if (query[i].search(param) !== -1 && query[i].search(value) !== -1) {
-                          //  array.push({value:"Bug",param:"tipus"})
-                        //}
                     }
                 }
                 return array;
             }
 
             function existeix(param,value){
+               let trobat = false;
+               console.log("entraaaaaaaa")
                let array = arrayFilter()
                 for(var i = 0; i < array.length;++i){
-                    if(array[i].param === param && array[i].value === value){
-                        return true
+                    console.log(array[i].param,"=",param,array[i].value)
+                    if(array[i].param === param && array[i].int === value){
+                        trobat = true
                     }
                 }
-                return false
+                console.log(trobat)
+                return trobat
+
             }
 
 
@@ -618,13 +616,11 @@
             //el valor de int indica afegir filtre, borrar o ordenar
             // 1 es crear, 2 es borrar i 3 es ordenar
             function modif_url(param,value,int){
-
                console.log(param,"wwww",value)
-
                 var trobat = false;
                 console.log(query_parameters,"aaaaaaaaaaa")
                 if(!query_parameters.length){
-                    if(int === 3 || param == "search"){
+                    if(param == "ordering" || param == "search"){
                         query_parameters=param+"="+value
                     }
                     else {
@@ -634,62 +630,56 @@
                 else{
                     var query=query_parameters.split('&');
                     var out=[];
-                    var mos=[];
                     for(var i = 0; query.length >i ; ++i){
-                        if(query[i].search(param) !== -1 && (param == "ordering" || param =="search" )){
-                            trobat = true
+                        if(query[i].search(param) != -1){
+                            trobat=true;
+                            var filtre = query[i].split('=');
+                            var parametres = filtre[1].split(',');
+                            if(int == 1){
+                                parametres.push(value);
+                                var params = parametres.toString();
+                                if(param == "search" || param == "ordering"){
+                                    out.push(param+"="+params);
+                                }
+                                else{
+                                    out.push(param+"__in="+params)
+                                }
+                            }
+                            else if(int ==3){
                                 out.push(param+"="+value)
-                        }
-                        else {
-                            if (query[i].search(param + "__in") !== -1) {
-                                trobat = true;
-                                var filtre = query[i].split('=');
-                                var parametres = filtre[1].split(',');
-                                if (int == 1) {
-                                    parametres.push(value);
-                                    var params = parametres.toString();
-                                    if((param == "search"  )|| param == "ordering"){
-                                        out.push(param +"="+params)
-                                    }
-                                    else {
-                                        out.push(param + "__in=" + params);
-                                    }
-
-                                } else {
+                            }
+                            else{
+                                if(param != "search") {
                                     if (parametres.length != 1) {
+                                        console.log(parametres)
                                         var params = []
                                         for (var j = 0; parametres.length > j; ++j) {
-                                            if (parametres[j] !== value) {
+                                            console.log(parametres, "    a   ", value)
+                                            if (parametres[j] != value) {
                                                 params.push(parametres[j])
                                             }
                                         }
                                         params = params.toString();
-                                        if((param == "search" ) || param == "ordering"){
-                                            out.push(param +"="+params)
-                                        }
-                                        else {
-                                            out.push(param + "__in=" + params)
-                                        }
+                                        out.push(param + "=" + params)
+
                                     }
                                 }
                             }
-                            else{
-                                out.push(query[i]);
-                            }
                         }
-
+                        else{
+                            out.push(query[i]);
+                        }
                     }
-                    if(trobat === false){
-                        if((param == "search") || param == "ordering"){
-                            out.push(param +"="+value)
+                    if(trobat == false){
+                        if(param == "search" || param == "ordering") {
+                            out.push(param + "=" + value)
                         }
-                        else {
+                        else{
                             out.push(param + "__in=" + value)
                         }
                     }
                     var result=out.join('&')
-                    console.log(result,"aaaaaaaaaaaaa")
-                    query_parameters= result
+                    query_parameters = result
                 }
                 filtra(query_parameters)
             }
