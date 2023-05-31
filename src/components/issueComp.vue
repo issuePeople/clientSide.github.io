@@ -42,7 +42,7 @@
                     </div>
 
                         
-                    <div v-show="toggle" v-for="tag in tags" :key="tag.nom" class="cjt_tags">
+                    <div  v-for="tag in tags" :key="tag.nom" class="cjt_tags">
                             <span  v-bind:style='{backgroundColor: tag.color}' class="tag" style="padding-right: 5px; ">{{tag.nom}}</span>
                     </div>
                     

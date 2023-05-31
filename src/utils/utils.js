@@ -5,11 +5,11 @@ export function setToken(value) {
 }
 
 export async function simpleFetch(endPoint, method, bodyData, type) {
-    console.log("tokenValue: ", token);
-    console.log("endPoint: ", endPoint);
+    //console.log("tokenValue: ", token);
+    //console.log("endPoint: ", endPoint);
 
     let host = 'http://issuepeople-env.eba-bhtdckwp.us-west-2.elasticbeanstalk.com/api/';
-    console.log("url: ", host+endPoint);
+    //console.log("url: ", host+endPoint);
 
     let data;
     
@@ -27,7 +27,7 @@ export async function simpleFetch(endPoint, method, bodyData, type) {
         } catch (error) {
             console.error('Error en el fetch, resposta derror:', error);
         }
-        console.log("data: ", data);
+        //console.log("data: ", data);
         return data;
     }
     else if (method === "DELETE") {

@@ -22,8 +22,9 @@
                                     <span class="text" style="margin: 5px;">Filtres</span>
                                 </button>
                                 <div style="display: flex; flex-direction: row; padding-left: 10px">
-                                    <input id="busca" type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched">
-                                    <button type="submit" style="margin-left: 7px">
+                                    <input id="busca" type="search" placeholder="Buscar" class="ng-pristine ng-valid ng-empty ng-touched" v-model="patata">
+
+                                    <button type="submit" style="margin-left: 7px" @click="modif_url('search',patata,1)">
                                         <font-awesome-icon icon="search"></font-awesome-icon>
                                     </button>
                                 </div>
@@ -63,7 +64,7 @@
                                                 <div v-for="a in arrayFilter()" :key=a.value>
                                                     <div  class="single-applied-filter"> <!--v-if="existeix('tipus__in',T.lletra)"-->
                                                         <div class="name" >{{a.value}}</div>
-                                                        <button class="remove-filter" @click="modif_url(a.param,a.value,2)">X</button>
+                                                        <button class="remove-filter" @click="modif_url(a.param,a.id,2)">X</button>
                                                     </div>
                                                 </div>
 
@@ -531,51 +532,55 @@
                     for (var i = 0; query.length > i; ++i) {
                         if(query[i].search("ordering") === -1){
                             if(query[i].search("tipus") !== -1){
-                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Bug"})
-                                if(query[i].search("P") !== -1) array.push({param:"tipus",value:"Pregunta"})
-                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Millora"})
+                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Bug",int:"B"})
+                                if(query[i].search("P") !== -1) array.push({param:"tipus",value:"Pregunta",int:"P"})
+                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Millora",int:"M"})
                             }
                             else if(query[i].search("gravetat") !== -1){
-                                if(query[i].search("D") !== -1) array.push({param:"gravetat",value:"Desitjada"})
-                                if(query[i].search("M") !== -1) array.push({param:"gravetat",value:"Menor"})
-                                if(query[i].search("N") !== -1) array.push({param:"gravetat",value:"Menor"})
-                                if(query[i].search("I") !== -1) array.push({param:"gravetat",value:"Important"})
-                                if(query[i].search("C") !== -1) array.push({param:"gravetat",value:"Critica"})
+                                if(query[i].search("D") !== -1) array.push({param:"gravetat",value:"Desitjada",int:"D"})
+                                if(query[i].search("M") !== -1) array.push({param:"gravetat",value:"Menor",int:"M"})
+                                if(query[i].search("N") !== -1) array.push({param:"gravetat",value:"Menor",int:"N"})
+                                if(query[i].search("I") !== -1) array.push({param:"gravetat",value:"Important",int:"I"})
+                                if(query[i].search("C") !== -1) array.push({param:"gravetat",value:"Critica",int:"C"})
                             }
                             else if(query[i].search("prioritat") !== -1){
-                                if(query[i].search("B") !== -1) array.push({param:"tipus",value:"Baixa"})
-                                if(query[i].search("M") !== -1) array.push({param:"tipus",value:"Mitja"})
-                                if(query[i].search("A") !== -1) array.push({param:"tipus",value:"Alta"})
+                                if(query[i].search("B") !== -1) array.push({param:"prioritat",value:"Baixa",int:"B"})
+                                if(query[i].search("M") !== -1) array.push({param:"prioritat",value:"Mitja",int:"M"})
+                                if(query[i].search("A") !== -1) array.push({param:"prioritat",value:"Alta",int:"A"})
                             }
                             else if(query[i].search("estat") !== -1){
-                                if(query[i].search("N") !== -1) array.push({param:"gravetat",value:"Nova"})
-                                if(query[i].search("D") !== -1) array.push({param:"gravetat",value:"En curs"})
-                                if(query[i].search("T") !== -1) array.push({param:"gravetat",value:"Llesta per testejar"})
-                                if(query[i].search("C") !== -1) array.push({param:"gravetat",value:"Tancada"})
-                                if(query[i].search("I") !== -1) array.push({param:"gravetat",value:"Necessita informacio"})
-                                if(query[i].search("R") !== -1) array.push({param:"gravetat",value:"Rebutjada"})
-                                if(query[i].search("P") !== -1) array.push({param:"gravetat",value:"Ajornada"})
+                                if(query[i].search("N") !== -1) array.push({param:"estat",value:"Nova",int:"N"})
+                                if(query[i].search("D") !== -1) array.push({param:"estat",value:"En curs",int:"D"})
+                                if(query[i].search("T") !== -1) array.push({param:"estat",value:"Llesta per testejar",int:"T"})
+                                if(query[i].search("C") !== -1) array.push({param:"estat",value:"Tancada",int:"C"})
+                                if(query[i].search("I") !== -1) array.push({param:"estat",value:"Necessita informacio",int:"I"})
+                                if(query[i].search("R") !== -1) array.push({param:"estat",value:"Rebutjada",int:"R"})
+                                if(query[i].search("P") !== -1) array.push({param:"estat",value:"Ajornada",int:"P"})
                             }
                             else if(query[i].search("assignacio__user__id") !== -1){
                                 let usu = query[i].split('=');
                                 let array_usu = usu[1].split(',');
                                 for(var j = 0; j < array_usu.length; ++j){
-                                    array.push({param:"assignacio__user__id",value:array_usu[j]})
+                                    array.push({param:"assignacio__user__id",value:array_usu[j],int:array_usu[j]})
                                 }
                             }
                             else if(query[i].search("tags__nom") !== -1){
                                 let tagss = query[i].split('=');
                                 let array_tagss = tagss[1].split(',');
                                 for(var j = 0; j < array_tagss.length; ++j){
-                                    array.push({param:"tags__nom",value:array_tagss[j]})
+                                    array.push({param:"tags__nom",value:array_tagss[j],id:array_tagss[j]})
                                 }
                             }
                             else if(query[i].search("creador__user__id") !== -1){
                                 let usu = query[i].split('=');
                                 let array_usu = usu[1].split(',');
                                 for(var j = 0; j < array_usu.length; ++j){
-                                    array.push({param:"creador__user__id",value:array_usu[j]})
+                                    array.push({param:"creador__user__id",value:array_usu[j],id:array_tagss[j]})
                                 }
+                            }
+                            else if(query[i].search("search") !== -1){
+                                let value = query[i].split('=');
+                                array.push({param:"search",value:value[1],id:value[1]})
                             }
 
                         }
@@ -614,10 +619,12 @@
             // 1 es crear, 2 es borrar i 3 es ordenar
             function modif_url(param,value,int){
 
+               console.log(param,"wwww",value)
+
                 var trobat = false;
                 console.log(query_parameters,"aaaaaaaaaaa")
                 if(!query_parameters.length){
-                    if(int === 3){
+                    if(int === 3 || param == "search"){
                         query_parameters=param+"="+value
                     }
                     else {
@@ -629,7 +636,7 @@
                     var out=[];
                     var mos=[];
                     for(var i = 0; query.length >i ; ++i){
-                        if(query[i].search(param) !== -1 && int === 3){
+                        if(query[i].search(param) !== -1 && (param == "ordering" || param =="search" )){
                             trobat = true
                                 out.push(param+"="+value)
                         }
@@ -641,7 +648,12 @@
                                 if (int == 1) {
                                     parametres.push(value);
                                     var params = parametres.toString();
-                                    out.push(param + "__in=" + params);
+                                    if((param == "search"  )|| param == "ordering"){
+                                        out.push(param +"="+params)
+                                    }
+                                    else {
+                                        out.push(param + "__in=" + params);
+                                    }
 
                                 } else {
                                     if (parametres.length != 1) {
@@ -652,7 +664,12 @@
                                             }
                                         }
                                         params = params.toString();
-                                        out.push(param + "__in=" + params)
+                                        if((param == "search" ) || param == "ordering"){
+                                            out.push(param +"="+params)
+                                        }
+                                        else {
+                                            out.push(param + "__in=" + params)
+                                        }
                                     }
                                 }
                             }
@@ -663,7 +680,12 @@
 
                     }
                     if(trobat === false){
-                        out.push(param+"__in="+value)
+                        if((param == "search") || param == "ordering"){
+                            out.push(param +"="+value)
+                        }
+                        else {
+                            out.push(param + "__in=" + value)
+                        }
                     }
                     var result=out.join('&')
                     console.log(result,"aaaaaaaaaaaaa")
