@@ -149,17 +149,15 @@
             avatar,
             avatarUrl,
             setAvatarPerDefecte,
-            saveChanges
+            saveChanges,
+            getidCookie
         };
     },
     mounted() {
         //Per obtenir la url
-        let url = window.location.href;
-        //Separar la url per '/'
-        let directories = url.split("/");
-        let userId = directories[(directories.length - 1)];
+        let endpoint = "usuaris/" + this.getidCookie() + "/"; 
         //Obtengo el usuario loggeado
-        simpleFetch("usuaris/" + this.getidCookie() + "/", "GET", "").then((data) => {
+        simpleFetch(endpoint, "GET", "").then((data) => {
             this.username = data.username;
             this.email = data.email;
             this.nom = data.nom;
