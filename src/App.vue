@@ -1,17 +1,6 @@
 <template>
   <header>
-    <!--possar v-app-bar  i v-app-bar-title -->
-    <nav style="display: flex; justify-content: space-between;">
-        <RouterLink to="/list">
-          <img src="./components/icons/imatge/logo.jpeg" width="40" height="40" />
-        </RouterLink>
-
-        <!--
-        <RouterLink to="/usuari/1/edit">
-          <img src="foto_perfil" width="40" height="40" />
-        </RouterLink>
-        -->
-    </nav>
+    
   </header>
   <body>
     <RouterView />

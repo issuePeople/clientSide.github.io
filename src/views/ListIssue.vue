@@ -1,5 +1,6 @@
 <template>
 <div>
+    <NavBar></NavBar>
     <div style="margin-left: 0px;">
         <div class="master" style>
             <div class = "wrapper issues lightbox-generic-form">
@@ -404,6 +405,7 @@
 <script>
     import issueComp from '../components/issueComp.vue';
     import BulkComponent from "../components/BulkComponent.vue";
+    import NavBar from "../components/NavBar.vue";
     import { ref} from 'vue';
     import {simpleFetch} from '../utils/utils';
     import { RouterLink } from 'vue-router'
@@ -412,6 +414,7 @@
         components: {
             BulkComponent,
             issueComp,
+            NavBar,
         },
         name: "listIssue",
         setup() {
