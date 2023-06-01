@@ -280,12 +280,10 @@
             let titleIssue = ref("");
             let description = ref("");
 
-
-            let estat = ref("new");
+            let estat = ref("Nova");
             let tipus = ref("Bug");
-            let gravetat = ref("Wishlist");
-            let prioritat = ref("Low");
-
+            let gravetat = ref("Desitjada");
+            let prioritat = ref("Baixa");
 
             let assignat = ref(null);
             let avatarAssignat = ref();
@@ -298,11 +296,10 @@
             let allUsers = ref([]);
             simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
 
-
-            const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
-            const TTipus = ["Bug", "Question", "Enhancement"];
-            const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
-            const TPrioritat = ["Low", "Normal", "High"];
+            const TEstats = ["Nova", "En curs", "Llesta per testejar", "Tancada", "Necessita informació", "Rebutjada", "Proposada"];
+            const TTipus = ["Bug", "Pregunta", "Millora"];
+            const TGravetat = ["Desitjada", "Menor", "Normal", "Important", "Crítica"];
+            const TPrioritat = ["Baixa", "Normal", "Alta"];
 
             let showDatePickker = ref(false);
             let isTimeLine = ref(false);
@@ -326,20 +323,20 @@
 
             function getEstat() {
                 switch (estat.value) {
-                    case "new":
+                    case "Nova":
                         return 'N';
-                    case "In progress":
+                    case "En curs":
                         return 'D';
-                    case "Ready for test":
+                    case "Llesta per testejar":
                         return 'T';
-                    case "Closed":
+                    case "Tancada":
                         return 'C';
-                    case "Needs info":
+                    case "Necessita informació":
                         return 'I';
-                    case "Rejected":
+                    case "Rebutjada":
                         return 'R';
                     case "Postponed":
-                        return 'P';                    
+                        return 'P';
                     default:
                         return 'B';
                 }
@@ -349,10 +346,10 @@
                 switch (tipus.value) {
                     case "Bug":
                         return 'B';
-                    case "Question":
+                    case "Pregunta":
                         return 'P';
-                    case "Enhancement":
-                        return 'M';    
+                    case "Millora":
+                        return 'M';
                     default:
                         return 'B';
                 }
@@ -360,16 +357,16 @@
 
             function getGravetat() {
                 switch (gravetat.value) {
-                    case "Wishlist":
+                    case "Desitjada":
                         return 'D';
-                    case "Minor":
+                    case "Menor":
                         return 'M';
                     case "Normal":
                         return 'N';
                     case "Important":
                         return 'I';
-                    case "Critical": 
-                        return 'C';            
+                    case "Crítica":
+                        return 'C';
                     default:
                         return 'D';
                 }
@@ -377,12 +374,12 @@
 
             function getPrioritat() {
                 switch (prioritat.value) {
-                    case "High":
+                    case "Alta":
                         return 'A';
                     case "Normal":
                         return 'M';
-                    case "Low":
-                        return 'B';    
+                    case "Baixa":
+                        return 'B';
                     default:
                         return 'A';
                 }
