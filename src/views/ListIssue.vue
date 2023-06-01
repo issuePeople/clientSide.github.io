@@ -316,10 +316,10 @@
                                         <div style="display:flex; flex-direction: row;">
                                             <span class="wide" style="padding-top: 6px;">Issue</span>
                                             <div style="display:flex;flex-direction: column; padding-left: 10px; ">
-                                                <button class="arrow-up" @click="modif_url('ordering','issue',3)">
+                                                <button class="arrow-up" @click="modif_url('ordering','subject',3)">
                                                     <font-awesome-icon icon="sort-up" ></font-awesome-icon>
                                                 </button>
-                                                <button class="arrow-up" @click="modif_url('ordering','-issue',3)">
+                                                <button class="arrow-up" @click="modif_url('ordering','-subject',3)">
                                                     <font-awesome-icon icon="sort-down" ></font-awesome-icon>
                                                 </button>
                                             </div>
@@ -428,10 +428,6 @@
             let resultArrayFilter = ref([]);
             let searchInp = ref("");
 
-            const TEstats = [{estat: "Nova", lletra: "N"}, "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
-            const TTipus = [{tipus:"Bug",lletra:"B"}, {tipus:"Pregunta",lletra:"P"}, {tipus:"Millora",lletra:"M"}];
-            const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
-            const TPrioritat = ["Low", "Normal", "High"];
 
             function arrayFilter() {
                 resultArrayFilter.value = [];
@@ -510,6 +506,9 @@
 
 
             function filtra(query) {
+                if(!query.length){
+                    query = "ordering=id"
+                }
                 let endpoint = "issues/?"+ query;
                 simpleFetch(endpoint,"GET","").then((data)=>issues.value = data);
             }
@@ -597,10 +596,10 @@
                 componentKey,
                 tags_show,
                 creats,
-                TEstats,
+
                 resultArrayFilter,
                 toggle,
-                TTipus,
+
                 searchInp,
                 filtra,
                 modif_url,
@@ -608,7 +607,7 @@
             }
             },
             mounted() {
-            simpleFetch("issues/", "GET", "").then((data) => this.issues = data);
+            simpleFetch("issues/?ordering=id", "GET", "").then((data) => this.issues = data);
             simpleFetch("usuaris/", "GET", "").then((data) => this.usuaris = data);
             simpleFetch("tags/","GET","").then((data) => this.tags = data);
         }

@@ -1,7 +1,8 @@
 <template>
 
-
+    <RouterLink :to='/edit/+id'>
     <div class = "row table-main " :class="{'is-blocked' : bloquejat }">
+
         
             <td class="level-field" >
                 <div v-if="tipus === 'Bug'" class="level" style="background: rgb(228, 64, 87)"></div>
@@ -26,10 +27,10 @@
             
             <td @clik="namefun()" class="subject" >
                 <span classe="issue-text" style="display: inline-flex;">
-                     <RouterLink :to='/edit/+id'>
+
                         <span class="issue-ref">#{{id}}</span>
                     <span class="issue-subject">{{ subject }}</span>
-                    </RouterLink>
+
 
                     
                     <div v-show=bloquejat class="blocked">
@@ -72,9 +73,10 @@
                 </select>
                  </div>
             </td>
+
         </div>
 
-    
+    </RouterLink>
   </template>
   
   <script >
