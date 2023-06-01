@@ -67,7 +67,7 @@
         <div class="timeline-wrapper" style="margin-left: 30px; width: 130px;">
           <h1 style="white-space: nowrap;">Your team</h1>
           <div >
-            <a v-for="usuari in allUsers" :href="'/usuari/'+usuari.id">
+            <a v-for="usuari in allUsers" :href="'/#/usuari/'+usuari.id">
                 <img 
                     :src="usuari.avatar"
                     width="32"
@@ -108,6 +108,23 @@
         let bio = ref("");
         let avatarUrl = ref();
         let avatar = ref("");
+
+        function getidCookie() {
+            let name = "id=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
+        }
+
         async function saveChanges() {
             let fd = new FormData();
             fd.append("username", username.value);
@@ -115,8 +132,8 @@
             fd.append("nom", nom.value);
             fd.append("bio", bio.value);
             fd.append("avatar", avatar.value[0]);
-            await simpleFetch("usuaris/1", "PUT", fd, "formData");
-            await simpleFetch("usuaris/1/", "GET", "").then((data) => avatarUrl.value = data.avatar);
+            await simpleFetch("usuaris/"+getidCookie()+"/", "PUT", fd, "formData");
+            await simpleFetch("usuaris/"+getidCookie()+"/", "GET", "").then((data) => avatarUrl.value = data.avatar);
         }
         async function setAvatarPerDefecte() {
             await new Promise(resolve => setTimeout(resolve, 3000));
