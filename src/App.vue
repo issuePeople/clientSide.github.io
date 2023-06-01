@@ -1,19 +1,21 @@
 <template>
   <header>
     <!--possar v-app-bar  i v-app-bar-title -->
-    <v-card>
-      <nav style="display: flex; justify-content: space-between;">
-          <RouterLink to="/">
-            <img source="logo" width="40" height="40" />
-          </RouterLink>
+    <nav style="display: flex; justify-content: space-between;">
+        <RouterLink to="/list">
+          <img src="./components/icons/imatge/logo.jpeg" width="40" height="40" />
+        </RouterLink>
 
-          <RouterLink to="/usuari/1/edit">
-            <img source="foto_perfil" width="40" height="40" />
-          </RouterLink>
-      </nav>
-    </v-card>
+        <!--
+        <RouterLink to="/usuari/1/edit">
+          <img src="foto_perfil" width="40" height="40" />
+        </RouterLink>
+        -->
+    </nav>
   </header>
-  <RouterView />
+  <body>
+    <RouterView />
+  </body>
 </template>
 
 <script setup>

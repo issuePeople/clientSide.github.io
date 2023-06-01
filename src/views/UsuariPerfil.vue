@@ -12,26 +12,23 @@
         
         <fieldset class="image-container">
             <img 
-              :src="userLogged.avatar" 
+              :src="avatarUrl" 
               width="180"
               height="180"
             >
         </fieldset>
-        <div>
-            <button id="btnSelectImg" type="text" variant="secondary" class="btn-small button-full js-change-avatar">
-                Canviar foto
-            </button>
-            <!-- <input id="avatarImg" style="display: none;" type="file" name="avatar"> -->
+        <div class="add-attach" >
             <v-file-input
+            style="width: 180px; important!"
                 label="Canviar foto"
-                v-model=attachmentFile
-                @change="addAttachment()"
+                width="180"
+                v-model=avatar
             >
                 <font-awesome-icon icon="plus" />
             </v-file-input>
         </div>
         <button type="submit" id="btnSaveAvatar" style="display: none;" name="guardar_avatar" class="btn-small button-full js-change-avatar">    </button>
-        <button type="submit" name="guardar_avatar_defecte" class="botonMenu">
+        <button type="submit" name="guardar_avatar_defecte" class="botonMenu" @click="setAvatarPerDefecte">
             <p style="color: #1e96b1;"> &nbsp; &nbsp; Avatar per defecte</p>
         </button>
       </div>
@@ -39,23 +36,23 @@
       <div class="project-details-form-data"> 
         <fieldset>
             <label for="username">Username</label>
-            <input type="text" name="username" :value="userLogged.username">
-        </fieldset>
+            <input type="text" name="username" v-model="username">
+        </fieldset> 
         <fieldset>
             <label for="email">Email</label>
-            <input type="text" name="email" :value="userLogged.email">
+            <input type="text" name="email" v-model="email">
         </fieldset>
         <fieldset>
             <label for="first_name">Nom</label>
-            <input type="text" name="first_name" :value="userLogged.nom">
+            <input  type="text" name="first_name" v-model="nom">
         </fieldset>
         <fieldset>
             <label for="bio">Bio</label>  
-            <textarea v-if="userLogged.bio" name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;" :value="userLogged.bio"></textarea>
-            <textarea v-else name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
+            <textarea v-if="bio" v-model="bio" name="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" style="width: 500px; height: 227px;"></textarea>
+            <textarea v-else name="bio" v-model="bio" id="bio" class="ng-pristine ng-valid ng-not-empty ng-valid-maxlenght ng-touched" placeholder="Digues alguna cosa sobre tu" style="width: 500px; height: 227px;"></textarea>
           </fieldset>
         <fieldset class="submit">
-            <button name="guardar_info" variant="primary" type="submit" title="Save" class="btn-small" style="margin-left: 400px;">
+            <button @click="saveChanges" name="guardar_info" variant="primary" title="Save" class="btn-small" style="margin-left: 400px;">
                 Guardar
             </button>
         </fieldset>
@@ -99,28 +96,57 @@
       let directories = url.split("/");
       let idUser = ref(directories[(directories.length - 1)]);
       
-      let userLogged = ref([]);            
       let allUsers = ref([]);
+      
+      let username = ref("");
+      let email = ref("");
+      let nom = ref("");
+      let bio = ref("");
+      let avatarUrl = ref();
+      let avatar = ref("");
 
 
-      async function addAttachment() {
+      /*
+      async function addAvatar() {
         console.log("Attachment: ", attachmentFile.value);
         console.log("File: ", attachmentFile.value[0]);
 
         const fd = new FormData();
-        fd.append("document", attachmentFile.value[0]);
-        fd.append("file", attachmentFile.value[0]);
+        fd.append("avatar", attachmentFile.value[0]);
 
-        await simpleFetch("usuari/1", "POST", fd, "formData");
+        await simpleFetch("usuari/1", "PUT", fd, "formData");
         actualitzarInfo();
+      }*/
+
+      async function saveChanges() {
+
+        let fd = new FormData();
+        fd.append("username", username.value);
+        fd.append("email", email.value);
+        fd.append("nom", nom.value);
+        fd.append("bio", bio.value);
+        fd.append("avatar", avatar.value[0]);
+
+        await simpleFetch("usuaris/1", "PUT", fd, "formData");
+        await simpleFetch("usuaris/1/", "GET", "").then((data) => avatarUrl.value = data.avatar);
       }
 
-      function actualitzarInfo() {
-        simpleFetch("usuari/1", "GET", "").then((data) => usuari.value = data);
+      async function setAvatarPerDefecte() {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        avatarUrl.value = 'https://issuestorage.s3.amazonaws.com/media/default.png';
+        //await simpleFetch("usuaris/1/", "GET", "").then((data) => avatarUrl.value = data.avatar);
       }
 
       return {
-        userLogged
+        allUsers,
+        username,
+        email,
+        nom,
+        bio,
+        avatar,
+        avatarUrl,
+        setAvatarPerDefecte,
+        saveChanges
       }
     },
 
@@ -130,10 +156,18 @@
       //Separar la url per '/'
       let directories = url.split("/");
       let userId = directories[(directories.length - 1)];
-      
+
       //Obtengo el usuario loggeado
-      simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => this.userLogged = data);
-      console.log("Logged user: ", this.userLogged);
+      simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => {
+        console.log("dataaaa: ", data);
+        this.username=data.username;
+        this.email=data.email;
+        this.nom=data.nom;
+        this.bio=data.bio;
+        this.avatarUrl=data.avatar;
+      });
+      
+      console.log("ei");
 
       //Obtengo todos los usuarios para ponerlos en el apartado "Your Team"
       simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
