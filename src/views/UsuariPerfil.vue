@@ -91,7 +91,6 @@
       
       //Per obtenir la url
       let url = window.location.href;
-      console.log("Url: ",url);
       //Separar la url per '/'
       let directories = url.split("/");
       let idUser = ref(directories[(directories.length - 1)]);
@@ -104,19 +103,6 @@
       let bio = ref("");
       let avatarUrl = ref();
       let avatar = ref("");
-
-
-      /*
-      async function addAvatar() {
-        console.log("Attachment: ", attachmentFile.value);
-        console.log("File: ", attachmentFile.value[0]);
-
-        const fd = new FormData();
-        fd.append("avatar", attachmentFile.value[0]);
-
-        await simpleFetch("usuari/1", "PUT", fd, "formData");
-        actualitzarInfo();
-      }*/
 
       async function saveChanges() {
 
@@ -159,7 +145,6 @@
 
       //Obtengo el usuario loggeado
       simpleFetch("usuaris/"+1+"/", "GET", "").then((data) => {
-        console.log("dataaaa: ", data);
         this.username=data.username;
         this.email=data.email;
         this.nom=data.nom;
@@ -167,11 +152,8 @@
         this.avatarUrl=data.avatar;
       });
       
-      console.log("ei");
-
       //Obtengo todos los usuarios para ponerlos en el apartado "Your Team"
       simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
-      console.log("all Users: ", this.allUsers);    
     }
   }
 

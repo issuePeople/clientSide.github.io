@@ -472,11 +472,9 @@
                     "bloquejat": bloquejat.value,
                     "motiuBloqueig": motiuBlock.value
                 }
-                console.log("result obj: ", obj);
                 await simpleFetch("issues/", "POST", obj).then((data) => console.log("post response: ", data));
                 //redirect 
-                router.push('/');
-                console.log("issue create");
+                router.push('/#/list');
             }
 
             return {

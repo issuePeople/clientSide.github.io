@@ -217,7 +217,6 @@
 
             //Per obtenir la url
             let url = window.location.href;
-            console.log("Url: ",url);
             //Separar la url per '/'
             let directories = url.split("/");
             let idUser = ref(directories[(directories.length - 1)]);
@@ -243,11 +242,9 @@
             
             //Obtengo todos los usuarios para ponerlos en el apartado "Your Team"
             simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
-            console.log("all Users: ", this.allUsers);
 
             //Obtengo el usuario en cuestion
             simpleFetch("usuaris/"+userId+"/", "GET", "").then((data) => this.userLogged = data);
-            console.log("Logged user: ", this.userLogged);
         }
     }
 </script>

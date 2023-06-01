@@ -52,14 +52,7 @@
         type: String,
         users: Array,
       },
-      setup(props) {
-        console.log(props.users[0]);
-
-        /*
-        two types:
-            -   assign
-            -   obs
-        */
+      setup() {
 
         return {
   

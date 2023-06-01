@@ -729,7 +729,6 @@
 
             let allUsers = ref([]);
             simpleFetch("usuaris/", "GET", "").then((data) => allUsers.value = data);
-            console.log("all Users: ", allUsers.value);
 
             let date = ref();
             let motiuBlock = ref('');
@@ -794,7 +793,6 @@
              * @param {*} obsSelected
              */
              async function obsSelected(obsSelected) {
-                console.log("new obs: ", obsSelected.id);
                 let obj = {
                     "observador": obsSelected.id
                 }
@@ -944,7 +942,6 @@
              * Delete issue
              */
             async function deleteIssue() {
-                console.log("issue deleted");
                 await simpleFetch("issues/"+issueId.value, "DELETE", );
                 router.push('/');
             }
@@ -955,7 +952,6 @@
              * @returns {Promise<void>}
              */
             async function esborrar_attachment(attachment) {
-                console.log("esborrar attachment: ", attachment);
                 await simpleFetch("issues/"+issueId.value+"/attachments/"+attachment.id, "DELETE", );
                 actualitzarInfo();
             }
@@ -966,7 +962,6 @@
              * @returns {Promise<void>}
              */
             async function esborrar_tag_issue(nomTag) {
-                console.log("esborrar tag issue: ", nomTag.nom);
                 await simpleFetch("issues/"+issueId.value+"/tags/"+nomTag.nom, "DELETE", );
                 actualitzarInfo();
             }
@@ -1009,7 +1004,6 @@
              * Afagir comentari
              */
             async function afegir_comentari() {
-                console.log("comment added: ", comment.value);
                 let obj = {
                     "text": comment.value
                 }
@@ -1185,7 +1179,6 @@
                     this.showDatePickker = false;
                 }
             });
-            console.log("issueObject: ", this.issue);
         }
     }
 

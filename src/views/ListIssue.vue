@@ -43,7 +43,9 @@
                                     </button>
                                     </RouterLink>
 
-                                    <BulkComponent></BulkComponent>
+                                    <BulkComponent
+                                        @update_issues="updateIssues"
+                                    ></BulkComponent>
 
                                 </div>
 
@@ -510,7 +512,6 @@
                 return trobat;
             }
 
-
             function filtra(query) {
                 if(!query.length){
                     query = "ordering=id"
@@ -586,6 +587,12 @@
                 arrayFilter();
             }
 
+            function updateIssues() {
+                simpleFetch("issues/?ordering=id", "GET", "").then((data) => issues.value = data);
+                simpleFetch("usuaris/", "GET", "").then((data) => usuaris.value = data);
+                simpleFetch("tags/","GET","").then((data) => tags.value = data);
+            }
+
             return {
                 falseBoolean,
                 trueBoolean,
@@ -602,14 +609,13 @@
                 componentKey,
                 tags_show,
                 creats,
-
                 resultArrayFilter,
                 toggle,
-
                 searchInp,
                 filtra,
                 modif_url,
                 existeix,
+                updateIssues,
             }
             },
             mounted() {
