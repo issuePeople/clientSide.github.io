@@ -1,627 +1,632 @@
 <template>
-    <div v-if="issue" class="master">
-        <div class="wrapper">
-            <div class="main detail">
-                <!-- issue info container  -->
-                <div class="detail-header-container">
+    <div>
+        <NavBar></NavBar>
+        <div v-if="issue" class="master">
+            <div class="wrapper">
+                <div class="main detail">
+                    <!-- issue info container  -->
+                    <div class="detail-header-container">
 
-                    <div class="detail-header">
-                        <!-- Titol issue-->
-                        <div class="detail-title-wrapper">
-                                <div class="detail-ref">
-                                    <span class="issue-text" style="display: inline-flex;">
-                                        
-                                        <span class="issue-ref">#{{issue.id}}</span>
-                                        <v-text-field v-model=issueTitle style="margin-top: 3px; margin-left: 5px; font-size: 25px; width: 300px" class="detail-subject" ></v-text-field>
-                                    </span>
-                                    <button style="background: none;" @click="saveEdit()">
-                                        <font-awesome-icon icon="floppy-disk" />
-                                    </button>
-                                </div>
-                        </div>
-                        <div class="detail-project">
-                            <div class="section-name">Issue</div>
-                        </div>
-
-                        <!-- Data limit -->
-                        <div v-if="issue.dataLimit" class="detail-header-line block-desc-container">
-                            <span class="blocked-sign" style="color: white">
-                                <font-awesome-icon icon="clock" />
-                            </span>
-                            <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
-                                {{issue.dataModificacio}}
-                            </span>
-                        </div>
-                        <!-- Motiu Bloqueig-->
-                        <div v-if="issue.bloquejat" class="detail-header-line block-desc-container">
-                            <span class="blocked-sign" style="color: white">
-                                <font-awesome-icon icon="lock" />
-                            </span>
-                            <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
-                                {{issue.motiuBloqueig}}
-                            </span>
-                        </div>
-                        <!-- Action buttons-->
-                        <div class="action-buttons"></div>
-                        <div class="subheader" >
-                            <div class="tags-container" style="display: flex; justify-content: space-between">
-
-                                <div style="display: flex; justify-content: space-between;">
-                                    
-                                    <div
-                                        v-for="tag of issue.tags"
-                                        :key="tag"
-                                        class="tag my-tag"
-                                        :style="{'background-color': tag.color}"
-                                    >
-                                        <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
-                                        <button @click="esborrar_tag_issue(tag)">
-                                            <font-awesome-icon icon="xmark" />
-                                        </button>
-                                    </div>
-                                    <button v-if="addTag" class="btn-filter ng-animate-disabled" @click="addTag = false">
-                                        <span>Add tag</span>
-                                        <span style="font-size: 20px;">+</span>
-                                    </button>
-
-                                    <div v-show="!addTag" style="display: flex; justify-content: space-between;">
-                                        <input v-model=nomTag type="text" placeholder="Enter tag" >
-                                        <input v-model="colorTag" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
-                                        <button @click="addTagFetch()">
+                        <div class="detail-header">
+                            <!-- Titol issue-->
+                            <div class="detail-title-wrapper">
+                                    <div class="detail-ref">
+                                        <span class="issue-text" style="display: inline-flex;">
+                                            
+                                            <span class="issue-ref">#{{issue.id}}</span>
+                                            <v-text-field v-model=issueTitle style="margin-top: 3px; margin-left: 5px; font-size: 25px; width: 300px" class="detail-subject" ></v-text-field>
+                                        </span>
+                                        <button style="background: none;" @click="saveEdit()">
                                             <font-awesome-icon icon="floppy-disk" />
                                         </button>
                                     </div>
+                            </div>
+                            <div class="detail-project">
+                                <div class="section-name">Issue</div>
+                            </div>
 
-                                </div>
+                            <!-- Data limit -->
+                            <div v-if="issue.dataLimit" class="detail-header-line block-desc-container">
+                                <span class="blocked-sign" style="color: white">
+                                    <font-awesome-icon icon="clock" />
+                                </span>
+                                <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                    {{issue.dataModificacio}}
+                                </span>
+                            </div>
+                            <!-- Motiu Bloqueig-->
+                            <div v-if="issue.bloquejat" class="detail-header-line block-desc-container">
+                                <span class="blocked-sign" style="color: white">
+                                    <font-awesome-icon icon="lock" />
+                                </span>
+                                <span class="block-description" style="margin-left: 5px; color: #e5e5e5;">
+                                    {{issue.motiuBloqueig}}
+                                </span>
+                            </div>
+                            <!-- Action buttons-->
+                            <div class="action-buttons"></div>
+                            <div class="subheader" >
+                                <div class="tags-container" style="display: flex; justify-content: space-between">
 
-                                <div style="display: flex; justify-content: space-between">
-                                    <div class="created-by">
-                                    <span v-if="issue.creador != null">
-                                        Created by
-                                        <span>{{ issue.creador.nom }}</span>
-                                    </span>
-                                        <div class="created-date">{{issue.dataModificacio}}</div>
-                                    </div>
-                                    <div class="user-avatar" style="margin-left: 5px" v-if="issue.creador != null">
-                                        <img
-                                            :src=issue.creador.avatar
-                                            width="40"
-                                            height="40"
+                                    <div style="display: flex; justify-content: space-between;">
+                                        
+                                        <div
+                                            v-for="tag of issue.tags"
+                                            :key="tag"
+                                            class="tag my-tag"
+                                            :style="{'background-color': tag.color}"
                                         >
+                                            <span   style="margin-top: auto; margin-bottom: auto; margin-right: 5px; margin-left: 5px;">{{tag.nom}}</span>
+                                            <button @click="esborrar_tag_issue(tag)">
+                                                <font-awesome-icon icon="xmark" />
+                                            </button>
+                                        </div>
+                                        <button v-if="addTag" class="btn-filter ng-animate-disabled" @click="addTag = false">
+                                            <span>Add tag</span>
+                                            <span style="font-size: 20px;">+</span>
+                                        </button>
+
+                                        <div v-show="!addTag" style="display: flex; justify-content: space-between;">
+                                            <input v-model=nomTag type="text" placeholder="Enter tag" >
+                                            <input v-model="colorTag" type="color" style="margin-top: auto; margin-bottom: auto; margin-left: 5px;">
+                                            <button @click="addTagFetch()">
+                                                <font-awesome-icon icon="floppy-disk" />
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between">
+                                        <div class="created-by">
+                                        <span v-if="issue.creador != null">
+                                            Created by
+                                            <span>{{ issue.creador.nom }}</span>
+                                        </span>
+                                            <div class="created-date">{{issue.dataModificacio}}</div>
+                                        </div>
+                                        <div class="user-avatar" style="margin-left: 5px" v-if="issue.creador != null">
+                                            <img
+                                                :src=issue.creador.avatar
+                                                width="40"
+                                                height="40"
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
+                    </div>
+                    <!-- Attachments Comments Activites-->
+                    <div class="detail-content">
+                        <!-- Descripcio  issue-->
+                        <section class="duty-content" style="justify-content: flex-start;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <textarea
+                                    v-if="issue.descripcio"
+                                    placeholder="Empty space is so boring... go on, be descriptive..."
+                                    name="descripcio"
+                                    class="description ng-pristine ng-untouched ng-valid ng-empty"
+                                    v-model=issueDesc
+                                    >
+                                </textarea>
+                                <button style="max-height: 32px; background: none;" @click="guardarDesc()">
+                                    <font-awesome-icon icon="floppy-disk" />
+                                </button>
+                            </div>
+                        </section>
+                        <!-- Attachments -->
+                        <section style="margin-top: 10px;" class="attachments attachments-full">
+                            <!-- attachment header-->
+                            <div class="attachments-header">
+                                <!-- num attachment -->
+                                <h3 class="attachment-title" style="margin-left: 5px">
+                                    <span class="attachments-num" >{{issue.attachments.length}}</span>
+                                    <span class="attachments-text" style="margin-left: 5px" >Attachments</span>
+                                </h3>
+
+                                <!-- add attachment-->
+                                <div class="options ">
+                                    <div class="add-attach">
+                                        <!-- input to add attach -->
+                                        <v-file-input
+                                            label="+"
+                                            v-model=attachmentFile
+                                            @change="addAttachment()"
+                                        >
+                                            <font-awesome-icon icon="plus" />
+                                        </v-file-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- attachment content-->
+                            <div class="attachment-list sortable">
+                                <ul
+                                    v-for="(attachment, index) of issue.attachments"
+                                    :key="index"
+                                >
+                                    <RowAttachment
+                                        :attachment = attachment
+                                        :issueId = issue.id 
+                                        @update_issues="actualitzarInfo()"
+                                    ></RowAttachment>
+                                </ul>
+                            </div>
+                        </section>
+                        <!-- Comments Activites header -->
+                        <section class="history" >
+                            <nav class="history-tabs" style="padding: 5px">
+                                <!-- si comentaris un style o altre -->
+                            <button
+                                    :class="hihaComentaris ? 'history-tab active' : 'history-tab'"
+                                    @click="hihaComentaris = true"
+                            >
+                                    Comentaris
+                            </button>
+                            <button
+                                :class="hihaComentaris ? 'history-tab' : 'history-tab active'"
+                                style="margin-left: 15px"
+                                @click="hihaComentaris = false"
+                            >
+                                    Activities
+                            </button>
+                            </nav>
+                        </section>
+
+                        <!-- sha de mirar pero va lo segunet-->
+                        <section
+                            class="comment"
+                            v-if="hihaComentaris"
+                        >
+                            <div style="display: flex; justify-content: space-between;">
+                                <textarea v-model=comment placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
+                                <button @click="afegir_comentari()" style="margin-left: 5px;" >
+                                    <font-awesome-icon icon="floppy-disk" />
+                                </button>
+                            </div>
+
+                            <div>
+                                <ul>
+                                    <ComentarisEdit
+                                        v-for="(comentari, index) of issue.comentaris.reverse()"
+                                        :key="index"
+                                        :comentari="comentari"
+                                    >
+                                    </ComentarisEdit>
+                                </ul>
+                            </div>
+
+                        </section>
+                        <section
+                            class="activities"
+                            v-else
+                        >
+                            <div class="activities-wrapper">
+                                <ul>
+                                    <ActivitiesEdit
+                                        v-for="(activity, index) of issue.logs.reverse()"
+                                        :key="index"
+                                        :activity="activity"
+                                    >
+                                    </ActivitiesEdit>
+                                </ul>
+                            </div>
+                        </section>
                     </div>
                 </div>
-                <!-- Attachments Comments Activites-->
-                <div class="detail-content">
-                    <!-- Descripcio  issue-->
-                    <section class="duty-content" style="justify-content: flex-start;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <textarea
-                                v-if="issue.descripcio"
-                                placeholder="Empty space is so boring... go on, be descriptive..."
-                                name="descripcio"
-                                class="description ng-pristine ng-untouched ng-valid ng-empty"
-                                v-model=issueDesc
-                                >
-                            </textarea>
-                            <button style="max-height: 32px; background: none;" @click="guardarDesc()">
-                                <font-awesome-icon icon="floppy-disk" />
-                            </button>
-                        </div>
-                    </section>
-                    <!-- Attachments -->
-                    <section style="margin-top: 10px;" class="attachments attachments-full">
-                        <!-- attachment header-->
-                        <div class="attachments-header">
-                            <!-- num attachment -->
-                            <h3 class="attachment-title" style="margin-left: 5px">
-                                <span class="attachments-num" >{{issue.attachments.length}}</span>
-                                <span class="attachments-text" style="margin-left: 5px" >Attachments</span>
-                            </h3>
+                <div class="sidebar ticket-data">
+                        <section class="ticket-header">
+                            <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
+                                <span>Open</span>
+                            </span>
+                            <!-- estat-->
+                            <div style="background-color: whitesmoke; display: flex; justify-content: space-between;">
+                                <v-menu>
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn
+                                            v-bind="props"
+                                            variant="text"
+                                        >
+                                        {{estat}}
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                        v-for="(item, index) in TEstats"
+                                            :key="index"
+                                            :value="index"
+                                        >
+                                            <v-list-item-title @click="setEstat(item)">{{ item }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                                <font-awesome-icon icon="arrow-down" style="margin-top: 8px;" />
+                            </div>
 
-                            <!-- add attachment-->
-                            <div class="options ">
-                                <div class="add-attach">
-                                    <!-- input to add attach -->
-                                    <v-file-input
-                                        label="+"
-                                        v-model=attachmentFile
-                                        @change="addAttachment()"
-                                    >
-                                        <font-awesome-icon icon="plus" />
-                                    </v-file-input>
+
+                            <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
+
+                        </section>
+                        <section class="ticket-section ticket-data-container">
+                            <div class="ticket-data-container">
+                                <!-- Type-->
+                                <div style="display: flex; justify-content: space-between;">
+                                    <label>
+                                        type
+                                    </label>
+                                    <v-menu>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn
+                                                v-bind="props"
+                                                variant="text"
+                                            >
+                                            {{tipus}}
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                            v-for="(item, index) in TTipus"
+                                            :key="index"
+                                            :value="index"
+                                            >
+                                            <v-list-item-title @click="setTipus(item)">{{ item }}</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
                                 </div>
+
+                                <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
+
+                                <!-- Severity-->
+                                <div style="display: flex; justify-content: space-between;">
+                                    <label>
+                                        severity
+                                    </label>
+                                    <v-menu>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn
+                                                v-bind="props"
+                                                variant="text"
+                                            >
+                                            {{gravetat}}
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                            v-for="(item, index) in TGravetat"
+                                            :key="index"
+                                            :value="index"
+                                            >
+                                            <v-list-item-title @click="setGravetat(item)">{{ item }}</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </div>
+
+                                <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
+
+                                <!-- Priority-->
+
+                                <div style="display: flex; justify-content: space-between;">
+                                    <label>
+                                        priority
+                                    </label>
+                                    <v-menu>
+                                        <template v-slot:activator="{ props }">
+                                            <v-btn
+                                                variant="text"
+                                                v-bind="props"
+                                            >
+                                            {{prioritat}}
+                                            </v-btn>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item
+                                            v-for="(item, index) in TPrioritat"
+                                            :key="index"
+                                            :value="index"
+                                            >
+                                            <v-list-item-title @click="setPrioritat(item)">{{ item }}</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </div>
+                                <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
+
                             </div>
-                        </div>
-                        <!-- attachment content-->
-                        <div class="attachment-list sortable">
-                            <ul
-                                v-for="(attachment, index) of issue.attachments"
-                                :key="index"
-                            >
-                                <RowAttachment
-                                    :attachment = attachment
-                                    :issueId = issue.id 
-                                    @update_issues="actualitzarInfo()"
-                                ></RowAttachment>
-                            </ul>
-                        </div>
-                    </section>
-                    <!-- Comments Activites header -->
-                    <section class="history" >
-                        <nav class="history-tabs" style="padding: 5px">
-                            <!-- si comentaris un style o altre -->
-                           <button
-                                :class="hihaComentaris ? 'history-tab active' : 'history-tab'"
-                                @click="hihaComentaris = true"
-                           >
-                                Comentaris
-                           </button>
-                           <button
-                               :class="hihaComentaris ? 'history-tab' : 'history-tab active'"
-                               style="margin-left: 15px"
-                               @click="hihaComentaris = false"
-                           >
-                                Activities
-                           </button>
-                        </nav>
-                    </section>
-
-                    <!-- sha de mirar pero va lo segunet-->
-                    <section
-                        class="comment"
-                        v-if="hihaComentaris"
-                    >
-                        <div style="display: flex; justify-content: space-between;">
-                            <textarea v-model=comment placeholder="Type a new comment here" style="margin-top: 5px; margin-bottom: 5px;"></textarea>
-                            <button @click="afegir_comentari()" style="margin-left: 5px;" >
-                                <font-awesome-icon icon="floppy-disk" />
-                            </button>
-                        </div>
-
-                        <div>
-                            <ul>
-                                <ComentarisEdit
-                                    v-for="(comentari, index) of issue.comentaris.reverse()"
-                                    :key="index"
-                                    :comentari="comentari"
-                                >
-                                </ComentarisEdit>
-                            </ul>
-                        </div>
-
-                    </section>
-                    <section
-                        class="activities"
-                        v-else
-                    >
-                        <div class="activities-wrapper">
-                            <ul>
-                                <ActivitiesEdit
-                                    v-for="(activity, index) of issue.logs.reverse()"
-                                    :key="index"
-                                    :activity="activity"
-                                >
-                                </ActivitiesEdit>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
-            </div>
-            <div class="sidebar ticket-data">
-                    <section class="ticket-header">
-                        <span class="ticket-title ng-pristine ng-valid ng-untouched ng-not-empty">
-                            <span>Open</span>
-                        </span>
-                        <!-- estat-->
-                        <div style="background-color: whitesmoke; display: flex; justify-content: space-between;">
-                            <v-menu>
-                                <template v-slot:activator="{ props }">
-                                    <v-btn
-                                        v-bind="props"
-                                        variant="text"
-                                    >
-                                    {{estat}}
-                                    </v-btn>
-                                </template>
-                                <v-list>
-                                    <v-list-item
-                                    v-for="(item, index) in TEstats"
-                                        :key="index"
-                                        :value="index"
-                                    >
-                                        <v-list-item-title @click="setEstat(item)">{{ item }}</v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                            <font-awesome-icon icon="arrow-down" style="margin-top: 8px;" />
-                        </div>
-
-
-                        <button id="btnSaveState" type="submit" name="guardar_estat" style="display: none;"></button>
-
-                    </section>
-                    <section class="ticket-section ticket-data-container">
-                        <div class="ticket-data-container">
-                            <!-- Type-->
-                            <div style="display: flex; justify-content: space-between;">
-                                <label>
-                                    type
-                                </label>
-                                <v-menu>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            v-bind="props"
-                                            variant="text"
-                                        >
-                                        {{tipus}}
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                        v-for="(item, index) in TTipus"
-                                        :key="index"
-                                        :value="index"
-                                        >
-                                        <v-list-item-title @click="setTipus(item)">{{ item }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
+                        </section>
+                        <!-- Assigned section-->
+                        <section class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty">
+                            <div class="ticket-section-label">
+                                <span>Assigned</span>
                             </div>
+                            <div class="ticket-user-list-container">
+                                <div class="ticket-user-list-content">
+                                    <div class="ticket-user-list"></div>
+                                    <div>
+                                        <div
+                                            v-if="issue.assignacio"
+                                            style="display: flex;
+                                            justify-content: space-between;
+                                            margin-left: 5px;
+                                            margin-right: 5px;"
+                                            >
+                                            <img :src=issue.assignacio.avatar
+                                                width="60"
+                                                height="60"
+                                            >
+                                            <a :href="'/#/usuari/'+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                            <!-- issue.id -->
+                                            <button @click="esborrar_assignacio()">
+                                                <font-awesome-icon icon="xmark" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- selector d'assignacio -->
 
-                            <button id="btnSaveType" type="submit" name="guardar_tipus" style="display: none;"></button>
+                                    <div class="ticket-users-actions">
 
-                            <!-- Severity-->
-                            <div style="display: flex; justify-content: space-between;">
-                                <label>
-                                    severity
-                                </label>
-                                <v-menu>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            v-bind="props"
-                                            variant="text"
+                                        <v-dialog
+                                            v-model="selectAssign"
+                                            width="auto"
                                         >
-                                        {{gravetat}}
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                        v-for="(item, index) in TGravetat"
-                                        :key="index"
-                                        :value="index"
-                                        >
-                                        <v-list-item-title @click="setGravetat(item)">{{ item }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
-                            </div>
+                                            <template v-slot:activator="{ props }">
+                                                <button
+                                                    color="primary"
+                                                    v-bind="props"
+                                                    style="margin-right: 10px;"
+                                                    class="ticket-users-actions"
+                                                >
+                                                    + Add assigned
+                                                </button>
+                                            </template>
 
-                            <button id="btnSaveGrav" type="submit" name="guardar_gravetat" style="display: none;"></button>
+                                            <v-card
+                                                width="600px"
+                                            >
+                                                <v-card-title>
+                                                    Select user
+                                                </v-card-title>
+                                                <v-card-text>
+                                                    <v-text-field placeholder="Search for users"></v-text-field>
+                                                    <SelectUsers type="assign" :users=allUsers @userSelect="assignSelect"/>
 
-                            <!-- Priority-->
-
-                            <div style="display: flex; justify-content: space-between;">
-                                <label>
-                                    priority
-                                </label>
-                                <v-menu>
-                                    <template v-slot:activator="{ props }">
-                                        <v-btn
-                                            variant="text"
-                                            v-bind="props"
+                                                    <v-btn
+                                                        @click="selectAssign = false"
+                                                        color="red"
+                                                        class="mt-10 ml-16"
+                                                    >
+                                                        close
+                                                    </v-btn>
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-dialog>
+                                        <button
+                                            v-if="issue.assignacio && issue.assignacio.id == idUser"
+                                            class="ticket-users-actions"
+                                            style="maassignSelectautorgin-left: 5px;"
+                                            @click="esborrar_assignacio()"
                                         >
-                                        {{prioritat}}
-                                        </v-btn>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                        v-for="(item, index) in TPrioritat"
-                                        :key="index"
-                                        :value="index"
+                                            Dont assign to me
+                                        </button>
+                                        <button
+                                            v-else
+                                            class="ticket-users-actions"
+                                            style="margin-left: 5px;"
+                                            @click="autoSelect(idUser)"
                                         >
-                                        <v-list-item-title @click="setPrioritat(item)">{{ item }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
-                            </div>
-                            <button id="btnSavePrior" type="submit" name="guardar_prioritat" style="display: none;"></button>
-
-                        </div>
-                    </section>
-                    <!-- Assigned section-->
-                    <section class="ticket-section ng-pristine ng-untouched ng-valid ng-not-empty">
-                        <div class="ticket-section-label">
-                            <span>Assigned</span>
-                        </div>
-                        <div class="ticket-user-list-container">
-                            <div class="ticket-user-list-content">
-                                <div class="ticket-user-list"></div>
-                                <div>
-                                    <div
-                                        v-if="issue.assignacio"
-                                        style="display: flex;
-                                        justify-content: space-between;
-                                        margin-left: 5px;
-                                        margin-right: 5px;"
-                                        >
-                                        <img :src=issue.assignacio.avatar
-                                            width="60"
-                                            height="60"
-                                        >
-                                        <a :href="'/#/usuari/'+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
-                                        <!-- issue.id -->
-                                        <button @click="esborrar_assignacio()">
-                                            <font-awesome-icon icon="xmark" />
+                                            Assign to me
                                         </button>
                                     </div>
                                 </div>
-                                <!-- selector d'assignacio -->
+                            </div>
+                        </section>
+                        <!-- Watchers section-->
+                        <section class="ticket-section ticket-watchers">
+                            <div class="ticket-section-label">
+                                <span>Watchers</span>
+                            </div>
+                            <div class="ticket-user-list-container">
+                                <div class="ticket-user-list-content">
+                                    <div class="ticket-user-list"></div>
+                                    <div>
+                                        <ul>
+                                            <li
+                                                v-for="(obs, index) of issue.observadors"
+                                                :key=index
+                                            >
+                                                <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
+                                                    <img :src=obs.avatar
+                                                        width="60"
+                                                        height="60"
+                                                    >
+                                                    <a :href="'/#/usuari/'+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
 
-                                <div class="ticket-users-actions">
+                                                    <button @click="esborrar_observador(obs.id)">
+                                                        <font-awesome-icon icon="xmark" />
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
 
+                                    <div class="ticket-users-actions">
+
+                                        <v-dialog
+                                            v-model="selectObs"
+                                            width="auto"
+                                        >
+                                            <template v-slot:activator="{ props }">
+                                                <button
+                                                    color="primary"
+                                                    v-bind="props"
+                                                    style="margin-right: 10px;"
+                                                    class="ticket-users-actions"
+                                                >
+                                                    + Add watchers
+                                                </button>
+                                            </template>
+
+                                            <v-card
+                                                width="400px"
+                                            >
+                                                <v-card-title>
+                                                    Add watchers
+                                                </v-card-title>
+                                                <v-card-text>
+                                                <v-text-field placeholder="Search for users"></v-text-field>
+                                                    <SelectUsers type="obs"  :users=allUsers @userSelect="obsSelected" />
+                                                    <v-btn
+                                                        @click="selectObs = false"
+                                                        color="red"
+                                                        class="mt-10 ml-16"
+                                                    >
+                                                        close
+                                                    </v-btn>
+                                                </v-card-text>
+                                            </v-card>
+                                        </v-dialog>
+                                        <button
+                                            v-if="autoObservador"
+                                            class="ticket-users-actions"
+                                            style="margin-left: 5px;"
+                                            @click="unWatchIssue()"
+                                        >
+                                            Unwatch
+                                        </button>
+                                        <button
+                                            v-else
+                                            class="ticket-users-actions"
+                                            style="margin-left: 5px;"
+                                            @click="selfWatch()"
+                                        >
+                                            Watch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- setting Section-->
+                        <section class="ticket-section ticket-detail-settings">
+                            <div class="ticket-detail-settings" >
+                                <!-- Data limit -->
+                                <div>
+                                    <button
+                                        v-if="issue.dataLimit"
+                                        style="background: red;"
+                                        @click="deleteTimeLine()"
+                                    >
+                                        <font-awesome-icon icon="clock" />
+                                    </button>
+                                    <button
+                                        v-else
+                                        @click="showDatePickker = true"
+                                    >
+                                        <font-awesome-icon icon="clock" />
+                                    </button>
+                                </div>
+
+                                <!-- Bloqueig  -->
+                                <div>
+                                    <button
+                                        v-if="issue.bloquejat"
+                                        style="background: red; margin-left: 5px;"
+                                        @click="deleteBlock()"
+                                    >
+                                        <font-awesome-icon icon="lock"/>
+                                    </button>
+                                    <button
+                                        v-else
+                                        style="margin-left: 5px;"
+                                        @click="showBlock = true"
+                                    >
+                                        <font-awesome-icon icon="lock"/>
+                                    </button>
+                                </div>
+                                <div style="margin-left: 5px;">
                                     <v-dialog
-                                        v-model="selectAssign"
+                                        v-model="dialogTrash"
                                         width="auto"
                                     >
                                         <template v-slot:activator="{ props }">
                                             <button
-                                                color="primary"
                                                 v-bind="props"
-                                                style="margin-right: 10px;"
-                                                class="ticket-users-actions"
                                             >
-                                                + Add assigned
+                                                <font-awesome-icon icon="trash"/>
                                             </button>
                                         </template>
 
                                         <v-card
                                             width="600px"
+                                            class="pa-5"
                                         >
-                                            <v-card-title>
-                                                Select user
-                                            </v-card-title>
-                                            <v-card-text>
-                                                <v-text-field placeholder="Search for users"></v-text-field>
-                                                <SelectUsers type="assign" :users=allUsers @userSelect="assignSelect"/>
-
-                                                <v-btn
-                                                    @click="selectAssign = false"
-                                                    color="red"
-                                                    class="mt-10 ml-16"
-                                                >
-                                                    close
-                                                </v-btn>
-                                            </v-card-text>
+                                            <div style="margin-left: auto; margin-right: auto; font-size: 30px;">
+                                                Delete issue
+                                            </div>
+                                            <div style="margin-left: auto; margin-right: auto; font-size: 20px;">
+                                                <p>
+                                                    Are you sure you want to delete?
+                                                </p>
+                                                <p style="margin-left: auto; margin-right: auto;">
+                                                    {{ issueTitle }}
+                                                </p>
+                                                <div style="margin-left: auto; margin-right: auto">
+                                                    <v-btn
+                                                        @click="dialogTrash = false"
+                                                        variant="text"
+                                                    >
+                                                        Cancel
+                                                    </v-btn>
+                                                    <v-btn
+                                                        @click="deleteIssue()"
+                                                        color="red"
+                                                        class="ml-15"
+                                                    >
+                                                        Delete
+                                                    </v-btn>
+                                                </div>
+                                            </div>
                                         </v-card>
                                     </v-dialog>
-                                    <button
-                                        v-if="issue.assignacio && issue.assignacio.id == idUser"
-                                        class="ticket-users-actions"
-                                        style="maassignSelectautorgin-left: 5px;"
-                                        @click="esborrar_assignacio()"
-                                    >
-                                        Dont assign to me
-                                    </button>
-                                    <button
-                                        v-else
-                                        class="ticket-users-actions"
-                                        style="margin-left: 5px;"
-                                        @click="autoSelect(idUser)"
-                                    >
-                                        Assign to me
-                                    </button>
+
                                 </div>
                             </div>
+                        </section>
+
+                        <div style="display: flex; justify-content: space-between;" v-show="showDatePickker">
+                            <input
+                                type="date"
+                                id="datePickerInput"
+                                name="dataLimit"
+                                v-model="date"
+                            >
+                            <button @click="btnSaveDateDirect()"  style=" margin-left: 5px">
+                                <font-awesome-icon icon="floppy-disk" />
+                            </button>
                         </div>
-                    </section>
-                    <!-- Watchers section-->
-                    <section class="ticket-section ticket-watchers">
-                        <div class="ticket-section-label">
-                            <span>Watchers</span>
+
+                        <div style="display: flex; justify-content: space-between;" v-show="showBlock">
+                            <input
+                                type="text"
+                                id="inputMotiuBloqueig"
+                                name="motiuBloqueig"
+                                v-model="motiuBlock"
+                            >
+                            <button @click="btnSaveMotiuBloqueig"  >
+                                <font-awesome-icon icon="floppy-disk" />
+                            </button>
                         </div>
-                        <div class="ticket-user-list-container">
-                            <div class="ticket-user-list-content">
-                                <div class="ticket-user-list"></div>
-                                <div>
-                                    <ul>
-                                        <li
-                                            v-for="(obs, index) of issue.observadors"
-                                            :key=index
-                                        >
-                                            <div style="display: flex; justify-content: space-between; margin-left: 5px; margin-right: 5px; margin-top: 5px;">
-                                                <img :src=obs.avatar
-                                                    width="60"
-                                                    height="60"
-                                                >
-                                                <a :href="'/#/usuari/'+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
-
-                                                <button @click="esborrar_observador(obs.id)">
-                                                    <font-awesome-icon icon="xmark" />
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="ticket-users-actions">
-
-                                    <v-dialog
-                                        v-model="selectObs"
-                                        width="auto"
-                                    >
-                                        <template v-slot:activator="{ props }">
-                                            <button
-                                                color="primary"
-                                                v-bind="props"
-                                                style="margin-right: 10px;"
-                                                class="ticket-users-actions"
-                                            >
-                                                + Add watchers
-                                            </button>
-                                        </template>
-
-                                        <v-card
-                                            width="400px"
-                                        >
-                                            <v-card-title>
-                                                Add watchers
-                                            </v-card-title>
-                                            <v-card-text>
-                                               <v-text-field placeholder="Search for users"></v-text-field>
-                                                <SelectUsers type="obs"  :users=allUsers @userSelect="obsSelected" />
-                                                <v-btn
-                                                    @click="selectObs = false"
-                                                    color="red"
-                                                    class="mt-10 ml-16"
-                                                >
-                                                    close
-                                                </v-btn>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-dialog>
-                                    <button
-                                        v-if="autoObservador"
-                                        class="ticket-users-actions"
-                                        style="margin-left: 5px;"
-                                        @click="unWatchIssue()"
-                                    >
-                                        Unwatch
-                                    </button>
-                                    <button
-                                        v-else
-                                        class="ticket-users-actions"
-                                        style="margin-left: 5px;"
-                                        @click="selfWatch()"
-                                    >
-                                        Watch
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <!-- setting Section-->
-                    <section class="ticket-section ticket-detail-settings">
-                        <div class="ticket-detail-settings" >
-                            <!-- Data limit -->
-                            <div>
-                                <button
-                                    v-if="issue.dataLimit"
-                                    style="background: red;"
-                                    @click="deleteTimeLine()"
-                                >
-                                    <font-awesome-icon icon="clock" />
-                                </button>
-                                <button
-                                    v-else
-                                    @click="showDatePickker = true"
-                                >
-                                    <font-awesome-icon icon="clock" />
-                                </button>
-                            </div>
-
-                            <!-- Bloqueig  -->
-                            <div>
-                                <button
-                                    v-if="issue.bloquejat"
-                                    style="background: red; margin-left: 5px;"
-                                    @click="deleteBlock()"
-                                >
-                                    <font-awesome-icon icon="lock"/>
-                                </button>
-                                <button
-                                    v-else
-                                    style="margin-left: 5px;"
-                                    @click="showBlock = true"
-                                >
-                                    <font-awesome-icon icon="lock"/>
-                                </button>
-                            </div>
-                            <div style="margin-left: 5px;">
-                                <v-dialog
-                                    v-model="dialogTrash"
-                                    width="auto"
-                                >
-                                    <template v-slot:activator="{ props }">
-                                        <button
-                                            v-bind="props"
-                                        >
-                                            <font-awesome-icon icon="trash"/>
-                                        </button>
-                                    </template>
-
-                                    <v-card
-                                        width="600px"
-                                        class="pa-5"
-                                    >
-                                        <div style="margin-left: auto; margin-right: auto; font-size: 30px;">
-                                            Delete issue
-                                        </div>
-                                        <div style="margin-left: auto; margin-right: auto; font-size: 20px;">
-                                            <p>
-                                                Are you sure you want to delete?
-                                            </p>
-                                            <p style="margin-left: auto; margin-right: auto;">
-                                                {{ issueTitle }}
-                                            </p>
-                                            <div style="margin-left: auto; margin-right: auto">
-                                                <v-btn
-                                                    @click="dialogTrash = false"
-                                                    variant="text"
-                                                >
-                                                    Cancel
-                                                </v-btn>
-                                                <v-btn
-                                                    @click="deleteIssue()"
-                                                    color="red"
-                                                    class="ml-15"
-                                                >
-                                                    Delete
-                                                </v-btn>
-                                            </div>
-                                        </div>
-                                    </v-card>
-                                </v-dialog>
-
-                            </div>
-                        </div>
-                    </section>
-
-                    <div style="display: flex; justify-content: space-between;" v-show="showDatePickker">
-                        <input
-                            type="date"
-                            id="datePickerInput"
-                            name="dataLimit"
-                            v-model="date"
-                        >
-                        <button @click="btnSaveDateDirect()"  style=" margin-left: 5px">
-                            <font-awesome-icon icon="floppy-disk" />
-                        </button>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between;" v-show="showBlock">
-                        <input
-                            type="text"
-                            id="inputMotiuBloqueig"
-                            name="motiuBloqueig"
-                            v-model="motiuBlock"
-                        >
-                        <button @click="btnSaveMotiuBloqueig"  >
-                            <font-awesome-icon icon="floppy-disk" />
-                        </button>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
 </template>
 
 <script>
     import { ref, computed } from 'vue';
     import {simpleFetch} from '@/utils/utils';
+    import NavBar from '../components/NavBar.vue';
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
     import SelectUsers from '../components/SelectUsers.vue';
@@ -635,6 +640,7 @@
             ComentarisEdit,
             SelectUsers,
             RowAttachment,
+            NavBar
         },
         setup() {
             const router = useRouter();
