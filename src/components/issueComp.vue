@@ -59,7 +59,7 @@
             <td class="issue-field" >
                 <div class="status-button">
                     <p></p>
-                <select  class="issue-status" style="margin-top: 5px; border: none; outline: none; background: none;" @change="(handleChange(id))">
+                <select  class="issue-status" style="margin-top: 5px; border: none; outline: none; background: none;" @change="handleChange">
                     <option v-for="E in TEstats" :selected="E == estat" :value="E" v-bind:selected="E == estat" class="issue-status-bind">{{E}} </option>
                     <!--Falta icono fletxeta-->
 
@@ -115,48 +115,48 @@
             },
             //setup(props) {
             
-            setup() {
+            setup(props) {
+
                 let tags = ref();
-                let id_issue = ref()
                 let limit = ref();
                 let assignat = ref()
-
-
                 const TEstats = ["Nova", "En curs", "Llesta per testejar", "Tancada", "Necessita informació", "Rebutjada", "Ajornada"];
-                
 
                 return {
                      limit,
-                    id_issue,
+
                      tags,
                     TEstats,
                     assignat,
                     handleChange,
                     handleChange2,
+
                      
                 }
 
-                function handleChange(e,id){
-                    console.log(id)
-                    /*var aa = e.target.value
-                    console.log(aa)
-                    var value
+                function handleChange(e){
+
+                    let aa = e.target.value
+                    console.log()
+                    let value
                     if(aa === "Nova") value = 'N'
                     else if(aa == "En curs") value = 'D'
-                    else if(aa == "Llesta per testejar") value = "T"
+                    else if(aa == "Llesta per testejar") value = 'T'
                     else if(aa == "Tancada") value ="C"
-                    else if(aa == "Necessita informació") value ="I"
-                    else if(aa == "Rebutjada") value = "R"
-                    else if (aa =="Ajornada") value ="P"
-                    let endpoint = "issues/"+id_issue+"/"
+                    else if(aa == "Necessita informació") value ='I'
+                    else if(aa == "Rebutjada") value = 'R'
+                    else if (aa =="Ajornada") value ='P'
+                    else value="aaaaaaaa"
+
+                    let endpoint = 'issues/'+props.id+'/'
                     console.log(value)
                     console.log(endpoint)
-                    //simpleFetch(endpoint,"PUT",{estat: value})*/
+                    simpleFetch(endpoint,"PUT",{estat: value})
                 }
                 function handleChange2(e){
                     var id = e.target.value
                     if(id !== 'UnAssigned') {
-                        let endpoint = "issues/" + this.id + "/"
+                        let endpoint = "issues/" + props.id + "/"
                         simpleFetch(endpoint, "PUT", {assignacio_id:id})
                     }
                 }
@@ -165,7 +165,7 @@
 
             },
             mounted(){
-                this.id_issue=this.issue
+
 
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
                 if( this.assignacio == null){
