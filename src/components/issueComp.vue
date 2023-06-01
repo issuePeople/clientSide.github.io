@@ -1,6 +1,5 @@
 <template>
 
-    <RouterLink :to='/edit/+id'>
     <div class = "row table-main " :class="{'is-blocked' : bloquejat }">
 
         
@@ -22,10 +21,11 @@
                 <div v-else-if="prioritat === 'Mitja'" class="level" style="background: rgb(228, 206, 64)"></div>
                 <div v-else class="level" style="background:  rgb(228, 124, 64)"></div>
             </td>
-            
-            
-            
+
+
+
             <td @clik="namefun()" class="subject" >
+                <RouterLink :to='/edit/+id'>
                 <span classe="issue-text" style="display: inline-flex;">
 
                         <span class="issue-ref">#{{id}}</span>
@@ -42,17 +42,24 @@
                         <font-awesome-icon icon="clock" />
                     </div>
 
-                        
-                    <div  v-for="tag in tags" :key="tag.nom" class="cjt_tags">
-                            <span  v-bind:style='{backgroundColor: tag.color}' class="tag" style="padding-right: 5px; ">{{tag.nom}}</span>
+                    <div v-if="toggle">
+                        <div  v-for="tag in tags" :key="tag.nom" class="cjt_tags">
+                                <span  v-bind:style='{backgroundColor: tag.color}' class="tag" style="padding-right: 5px; ">{{tag.nom}}</span>
+                        </div>
                     </div>
                     
                 </span>
+                </RouterLink>
             </td>
+
+
+
+
         
             <td class="issue-field" >
                 <div class="status-button">
-                <select  class="issue-status" style="margin-top: 5px; border: none; outline: none; background: none;" @change="handleChange">
+                    <p></p>
+                <select  class="issue-status" style="margin-top: 5px; border: none; outline: none; background: none;" @change="(handleChange(id))">
                     <option v-for="E in TEstats" :selected="E == estat" :value="E" v-bind:selected="E == estat" class="issue-status-bind">{{E}} </option>
                     <!--Falta icono fletxeta-->
 
@@ -76,7 +83,7 @@
 
         </div>
 
-    </RouterLink>
+
   </template>
   
   <script >
@@ -110,6 +117,7 @@
             
             setup() {
                 let tags = ref();
+                let id_issue = ref()
                 let limit = ref();
                 let assignat = ref()
 
@@ -119,6 +127,7 @@
 
                 return {
                      limit,
+                    id_issue,
                      tags,
                     TEstats,
                     assignat,
@@ -127,18 +136,22 @@
                      
                 }
 
-                function handleChange(e){
-                    var id = e.target.value
+                function handleChange(e,id){
+                    console.log(id)
+                    /*var aa = e.target.value
+                    console.log(aa)
                     var value
-                    if(id === "Nova") value = "N"
-                    else if(id == "En curs") value = "D"
-                    else if(id == "Llesta per testejar") value = "T"
-                    else if(id == "Tancada") value ="C"
-                    else if(id == "Necessita informació") value ="I"
-                    else if(id == "Rebutjada") value = "R"
-                    else value ="P"
-                    let endpoint = "issues/"+this.id+"/"
-                    simpleFetch(endpoint,"PUT",{estat: value})
+                    if(aa === "Nova") value = 'N'
+                    else if(aa == "En curs") value = 'D'
+                    else if(aa == "Llesta per testejar") value = "T"
+                    else if(aa == "Tancada") value ="C"
+                    else if(aa == "Necessita informació") value ="I"
+                    else if(aa == "Rebutjada") value = "R"
+                    else if (aa =="Ajornada") value ="P"
+                    let endpoint = "issues/"+id_issue+"/"
+                    console.log(value)
+                    console.log(endpoint)
+                    //simpleFetch(endpoint,"PUT",{estat: value})*/
                 }
                 function handleChange2(e){
                     var id = e.target.value
@@ -152,6 +165,7 @@
 
             },
             mounted(){
+                this.id_issue=this.issue
 
                 simpleFetch("issues/"+ this.id + "/tags/", "GET", "").then((data) => this.tags = data);
                 if( this.assignacio == null){

@@ -59,7 +59,7 @@
               </button>
           </fieldset>
           <br>
-              <a href="/usuaris/logout">
+              <a href="/">
                   <p style="color: #1e96b1; margin-left: 380px;"> &nbsp; &nbsp; Tancar sessió</p>
               </a>
         </div>
