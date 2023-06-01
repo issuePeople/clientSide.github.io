@@ -474,7 +474,7 @@
                 }
                 await simpleFetch("issues/", "POST", obj).then((data) => console.log("post response: ", data));
                 //redirect 
-                router.push('/#/list');
+                router.push('/list');
             }
 
             return {
