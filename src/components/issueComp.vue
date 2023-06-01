@@ -159,6 +159,10 @@
                         let endpoint = "issues/" + props.id + "/"
                         simpleFetch(endpoint, "PUT", {assignacio_id:id})
                     }
+                    else{
+                        let endpoint = "issues/" + props.id + "/"
+                        simpleFetch(endpoint, "PUT", {assignacio_id:null})
+                    }
                 }
 
 
