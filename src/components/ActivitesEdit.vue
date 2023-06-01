@@ -9,7 +9,7 @@
                 >
                 <div style="margin-left: 10px">
                     <div style="display: flex; margin-left: 5px;">
-                        <a href="/usuaris/{{activity.usuari.id}}" style="margin-right: 5px;" class="comment-creator">{{ activity.usuari.nom }}</a>
+                        <a :href="'/#/usuari/'+activity.usuari.id" style="margin-right: 5px;" class="comment-creator">{{ activity.usuari.nom }}</a>
                         <span>{{ activity.data }}</span>
                     </div>
                         <div

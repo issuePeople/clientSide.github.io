@@ -154,58 +154,11 @@
                                 v-for="(attachment, index) of issue.attachments"
                                 :key="index"
                             >
-                                <li style="margin-top: 5px; margin-left: 5px; border-bottom: 1px solid rgb(168, 168, 168); font-size: 15px;">
-                                    <div style="display: flex; justify-content: space-between;">
-                                        <div>
-                                            <a :href=attachment.document>{{ attachmentName(attachment.document) }}</a>
-                                        </div>
-
-                                        <v-dialog
-                                            v-model="dialogTrashAttachment"
-                                            width="auto"
-                                        >
-                                            <template v-slot:activator="{ props }">
-                                                <button
-                                                    v-bind="props"
-                                                >
-                                                    <font-awesome-icon icon="trash"/>
-                                                </button>
-                                            </template>
-
-                                            <v-card
-                                                width="600px"
-                                                class="pa-5"
-                                            >
-                                                <div style="margin-left: auto; margin-right: auto; font-size: 30px;">
-                                                    Delete attachment...
-                                                </div>
-                                                <div style="margin-left: auto; margin-right: auto; font-size: 20px;">
-                                                    <p>
-                                                        Are you sure you want to delete?
-                                                    </p>
-                                                    <p style="margin-left: auto; margin-right: auto;">
-                                                        the attachment {{ attachmentName(attachment.document) }}
-                                                    </p>
-                                                    <div style="margin-left: auto; margin-right: auto">
-                                                        <v-btn
-                                                            @click="dialogTrashAttachment = false"
-                                                            variant="text"
-                                                        >
-                                                            Cancel
-                                                        </v-btn>
-                                                        <v-btn
-                                                            @click="esborrar_attachment(attachment)"
-                                                            color="red"
-                                                            class="ml-15"
-                                                        >
-                                                            Delete
-                                                        </v-btn>
-                                                    </div>
-                                                </div>
-                                            </v-card>
-                                        </v-dialog>
-                                    </div>
-                                </li>
+                                <RowAttachment
+                                    :attachment = attachment
+                                    :issueId = issue.id 
+                                    @update_issues="actualitzarInfo()"
+                                ></RowAttachment>
                             </ul>
                         </div>
                     </section>
@@ -411,7 +364,7 @@
                                             width="60"
                                             height="60"
                                         >
-                                        <a :href="/usuari/+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
+                                        <a :href="'/#/usuari/'+issue.assignacio.id" style=" margin-top: 20px;">{{ issue.assignacio.nom }}</a>
                                         <!-- issue.id -->
                                         <button @click="esborrar_assignacio()">
                                             <font-awesome-icon icon="xmark" />
@@ -496,7 +449,7 @@
                                                     width="60"
                                                     height="60"
                                                 >
-                                                <a :href="/usuari/+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
+                                                <a :href="'/#/usuari/'+obs.id" style=" margin-top: 20px;">{{ obs.nom }}</a>
 
                                                 <button @click="esborrar_observador(obs.id)">
                                                     <font-awesome-icon icon="xmark" />
@@ -683,6 +636,7 @@
     import ActivitiesEdit from '../components/ActivitesEdit.vue';
     import ComentarisEdit from '../components/ComentarisEdit.vue';
     import SelectUsers from '../components/SelectUsers.vue';
+    import RowAttachment from '../components/RowAttachment.vue';
     import { useRouter } from 'vue-router';
 
     export default {
@@ -691,6 +645,7 @@
             ActivitiesEdit,
             ComentarisEdit,
             SelectUsers,
+            RowAttachment,
         },
         setup() {
             const router = useRouter();
@@ -735,7 +690,6 @@
             let comment = ref('');
 
             let dialogTrash = ref(false);
-            let dialogTrashAttachment = ref(false);
 
             const autoObservador = computed(() => {
                 let isAutoObserver = false;
@@ -771,11 +725,7 @@
                 attachmentFile.value = null;
             }
 
-            function attachmentName(url) {
-                const parts = url.split('/');
-                const lastPart = parts[parts.length - 1];
-                return lastPart;
-            }
+            
 
             /**
              * Selg obs
@@ -943,18 +893,10 @@
              */
             async function deleteIssue() {
                 await simpleFetch("issues/"+issueId.value, "DELETE", );
-                router.push('/');
+                router.push('/list');
             }
 
-            /**
-             * Esborrar un attachment
-             * @param attachment
-             * @returns {Promise<void>}
-             */
-            async function esborrar_attachment(attachment) {
-                await simpleFetch("issues/"+issueId.value+"/attachments/"+attachment.id, "DELETE", );
-                actualitzarInfo();
-            }
+            
 
             /**
              * Delete tag
@@ -1132,11 +1074,9 @@
                 motiuBlock,
                 attachmentFile,
                 dialogTrash,
-                dialogTrashAttachment,
                 esborrar_observador,
                 esborrar_assignacio,
                 esborrar_tag_issue,
-                esborrar_attachment,
                 addAttachment,
                 guardarDesc,
                 deleteBlock,
@@ -1157,7 +1097,6 @@
                 unWatchIssue,
                 autoSelect,
                 selfWatch,
-                attachmentName,
             }
         },
         mounted() {

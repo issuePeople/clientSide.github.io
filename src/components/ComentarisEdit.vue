@@ -9,7 +9,7 @@
                 >
                 <div style="margin-left: 10px;">
                     <div style="display: flex; justify-content: space-between;">
-                        <a href="/usuaris/{{comentari.autor.id}}" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.nom }}</a>
+                        <a :href="'/#/usuari/'+comentari.autor.id" style="margin-right: 5px;" class="comment-creator">{{ comentari.autor.nom }}</a>
                         <span>{{ comentari.data }}</span>
                     </div>
                     <span>{{ comentari.text }}</span>
