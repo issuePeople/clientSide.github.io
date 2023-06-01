@@ -8,9 +8,10 @@
             color="primary"
             v-bind="props"
             style="margin-right: 10px;"
-            class="ticket-users-actions"
+            class="btn-icon"
+
         >
-            + Add assigned
+            <font-awesome-icon icon="plus"></font-awesome-icon>
         </button>
     </template>
 
@@ -41,9 +42,11 @@
   <script>
      import {ref} from 'vue';
     import {simpleFetch} from '@/utils/utils';
+     import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
     export default {
         name: "listIssue",
+        components: {FontAwesomeIcon},
         
         /*
         components: {

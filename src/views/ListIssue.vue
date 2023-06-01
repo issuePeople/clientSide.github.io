@@ -34,15 +34,19 @@
                                         <span>Tags</span>
                                     </div>
                                 </div>
+
                                 <div class="new-issue">
+                                    <RouterLink to='/create'>
                                     <button class="btn-small">
                                         <span class="icon icon-add" style="font-size: large;padding-right: 5px;">+</span>
                                         <a> New Issue</a>
                                     </button>
-                                    <button class="btn-icon">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </button>
+                                    </RouterLink>
+
+                                    <BulkComponent></BulkComponent>
+
                                 </div>
+
                             </div>
                         </header>
                     </div>
@@ -376,7 +380,7 @@
                                                 :gravetat=issue.gravetat
                                                 :prioritat=issue.prioritat
                                                 :estat=issue.estat
-                                                :data=(issue.dataModificacio)
+                                                :data=issue.dataModificacio
                                                 :dataLimit=issue.dataLimit
                                                 :assignacio=issue.assignacio
                                                 :usuaris = usuaris
@@ -397,12 +401,14 @@
 
 <script>
     import issueComp from '../components/issueComp.vue';
+    import BulkComponent from "../components/BulkComponent.vue";
     import { ref} from 'vue';
     import {simpleFetch} from '../utils/utils';
     import { RouterLink } from 'vue-router'
 
     export default {
         components: {
+            BulkComponent,
             issueComp,
         },
         name: "listIssue",

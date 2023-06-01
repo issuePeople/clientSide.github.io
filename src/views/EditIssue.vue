@@ -746,8 +746,6 @@
 
                 return isAutoObserver;
             });
-
-            
             
             function getidCookie() {
                 let name = "id=";
