@@ -76,24 +76,13 @@
 
                                 <div style="display: flex; justify-content: space-between">
                                     <div class="created-by">
-                                    <span>
+                                    <span v-if="issue.creador != null">
                                         Created by
                                         <span>{{ issue.creador.nom }}</span>
-
-                                        <!-- com possar be l'string
-                                        <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-                                            <span>{{ issue.creador.nom }}</span>
-                                        </RouterLink>
-                                        -->
                                     </span>
                                         <div class="created-date">{{issue.dataModificacio}}</div>
                                     </div>
-                                    <div class="user-avatar" style="margin-left: 5px">
-                                        <!-- com possar be l'string
-                                        <RouterLink to="/usuari/"{{issue.creador.user.id}}>
-
-                                        </RouterLink>
-                                        -->
+                                    <div class="user-avatar" style="margin-left: 5px" v-if="issue.creador != null">
                                         <img
                                             :src=issue.creador.avatar
                                             width="40"
@@ -197,7 +186,7 @@
                         <div>
                             <ul>
                                 <ComentarisEdit
-                                    v-for="(comentari, index) of issue.comentaris"
+                                    v-for="(comentari, index) of issue.comentaris.reverse()"
                                     :key="index"
                                     :comentari="comentari"
                                 >
@@ -213,7 +202,7 @@
                         <div class="activities-wrapper">
                             <ul>
                                 <ActivitiesEdit
-                                    v-for="(activity, index) of issue.logs"
+                                    v-for="(activity, index) of issue.logs.reverse()"
                                     :key="index"
                                     :activity="activity"
                                 >
@@ -662,15 +651,15 @@
             let colorTag = ref('');
             let attachmentFile = ref();
 
-            const TEstats = ["new", "In progress", "Ready for test", "Closed", "Needs info", "Rejected", "Postponed"];
-            const TTipus = ["Bug", "Question", "Enhancement"];
-            const TGravetat = ["Wishlist", "Minor", "Normal", "Important", "Critical"];
-            const TPrioritat = ["Low", "Normal", "High"];
+            const TEstats = ["Nova", "En curs", "Llesta per testejar", "Tancada", "Necessita informació", "Rebutjada", "Proposada"];
+            const TTipus = ["Bug", "Pregunta", "Millora"];
+            const TGravetat = ["Desitjada", "Menor", "Normal", "Important", "Crítica"];
+            const TPrioritat = ["Baixa", "Normal", "Alta"];
 
-            let estat = ref("new");
+            let estat = ref("Nova");
             let tipus = ref("Bug");
-            let gravetat = ref("Wishlist");
-            let prioritat = ref("Low");
+            let gravetat = ref("Desitjada");
+            let prioritat = ref("Baixa");
 
             let issue = ref();
             let idUser = ref(getidCookie());
@@ -775,22 +764,22 @@
                 estat.value = item;
                 let newEstat;
                 switch (estat.value) {
-                    case "new":
+                    case "Nova":
                         newEstat = 'N';
                         break;
-                    case "In progress":
+                    case "En curs":
                         newEstat = 'D';
                         break;
-                    case "Ready for test":
+                    case "Llesta per testejar":
                         newEstat = 'T';
                         break;
-                    case "Closed":
+                    case "Tancada":
                         newEstat = 'C';
                         break;
-                    case "Needs info":
+                    case "Necessita informació":
                         newEstat = 'I';
                         break;
-                    case "Rejected":
+                    case "Rebutjada":
                         newEstat = 'R';
                         break;
                     case "Postponed":
@@ -816,10 +805,10 @@
                     case "Bug":
                         newTipus = 'B';
                         break;
-                    case "Question":
+                    case "Pregunta":
                         newTipus = 'P';
                         break;
-                    case "Enhancement":
+                    case "Millora":
                         newTipus = 'M';
                         break;
                     default:
@@ -839,10 +828,10 @@
                 gravetat.value = item;
                 let newGravetat;
                 switch (gravetat.value) {
-                    case "Wishlist":
+                    case "Desitjada":
                         newGravetat = 'D';
                         break;
-                    case "Minor":
+                    case "Menor":
                         newGravetat = 'M';
                         break;
                     case "Normal":
@@ -851,7 +840,7 @@
                     case "Important":
                         newGravetat = 'I';
                         break;
-                    case "Critical":
+                    case "Crítica":
                         newGravetat = 'C';
                         break;
                     default:
@@ -870,13 +859,13 @@
                 prioritat.value = item;
                 let newPrioirity;
                 switch (prioritat.value) {
-                    case "High":
+                    case "Alta":
                         newPrioirity = 'A';
                         break;
                     case "Normal":
                         newPrioirity = 'M';
                         break;
-                    case "Low":
+                    case "Baixa":
                         newPrioirity = 'B';
                         break;
                     default:
@@ -1039,6 +1028,8 @@
                 motiuBlock.value = '';
             }
 
+            
+
             /**
              * Refresh page
              */
@@ -1111,6 +1102,10 @@
                 this.issueTitle = data.subject;
                 this.issueDesc = data.descripcio;
                 this.showBlock = data.bloquejat;
+                this.estat = data.estat;
+                this.tipus = data.tipus;
+                this.gravetat = data.gravetat;
+                this.prioritat = data.prioritat;
                 if (data.dataLimit != null) {
                     this.showDatePickker = true;
                 }

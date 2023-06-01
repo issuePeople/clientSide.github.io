@@ -68,8 +68,6 @@ export default {
     emits: ['update_issues'],
     setup(props, context) {
 
-        console.log("props: ", props.issueId);
-
         let dialogTrashAttachment = ref(false);
         
         function attachmentName(url) {
