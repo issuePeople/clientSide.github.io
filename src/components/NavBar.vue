@@ -5,7 +5,7 @@
         </RouterLink>
         
         <RouterLink :to="'/usuari/'+getidCookie()+'/edit'">
-          <img src="foto_perfil" width="40" height="40" />
+          <img :src=avatar width="40" height="40" />
         </RouterLink>
     </nav>
 </template>
@@ -19,6 +19,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
     name: "NavBar",
     setup() {
+
+        let avatar = ref("");
 
         function getidCookie() {
             let name = "id=";
@@ -38,8 +40,16 @@ export default {
 
         return {
             getidCookie,
+            avatar
         }
-    }
+    },
+    mounted() {
+            
+            simpleFetch("usuaris/"+this.getidCookie()+"/", "GET", "").then((data) => {
+                console.log("data: ", data);
+                this.avatar = data.avatar;
+            });
+        }
 }
   
 </script>
