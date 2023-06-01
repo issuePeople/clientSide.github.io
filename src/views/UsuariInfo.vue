@@ -120,7 +120,7 @@
                                                 >
                                             </div>
                                             <span v-if="observat.assignacio">{{observat.assignacio.username}}&nbsp;</span>
-                                            <a :href="'/edit/'+observat.id">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
+                                            <a :href="'/#/edit/'+observat.id">#{{observat.id}} {{observat.subject}}</a> &nbsp;{{observat.estat}}
                                         </div>
                                         
                                     <p style="color:darkgrey">______________________________________________________________________________</p>
@@ -131,7 +131,7 @@
                         <!-- Token -->
 
                         <section v-else-if="userLogged.token && mostrar === 'token'" class="token">
-                            <p>{{userLogged.token}}</p>
+                            <p>Token {{userLogged.token}}</p>
                         </section> 
 
                         <!-- Timeline -->
@@ -148,7 +148,7 @@
                                                     style="border-radius: 50%; margin-right: 5px;"
                                                 >
                                                 <div  style="display: inline-block;">
-                                                    <a :href="'/usuari/'+log.usuari.id">{{log.usuari.username}} &nbsp;</a>
+                                                    <a @click="updateData(usuari.id)" :href="'/#/usuari/'+log.usuari.id">{{log.usuari.username}} &nbsp;</a>
                                                     <span v-if="log.tipus === 'Creada'" style="display: inline;">ha creat l'</span>
                                                     <span v-else-if="log.tipus === 'Nou attachment'" style="display: inline;">ha afegit el fitxer 
                                                         <a v-if="log.valor_nou" style="display: inline;">{{log.valor_nou}}</a>
@@ -173,7 +173,7 @@
                                                         <span v-else style="display: inline;">No definit</span> del
                                                     </span>
                                                     <span style="display: inline;">issue&nbsp;</span>
-                                                    <span v-if="log.issue"><a :href="'/edit/'+log.issue.id">#{{log.issue.id}} {{log.issue.subject}}</a></span>
+                                                    <span v-if="log.issue"><a :href="'/#/edit/'+log.issue.id">#{{log.issue.id}} {{log.issue.subject}}</a></span>
                                                     <span v-else>esborrat</span>
                                                 </div>
                                             </div>
@@ -193,7 +193,7 @@
         <div class="timeline-wrapper" style="margin-left: 30px; width: 130px;">
             <h1 style="white-space: nowrap;">Your team</h1>
             <div >
-                <a v-for="usuari in allUsers" :href="'/usuari/'+usuari.id">
+                <a v-for="usuari in allUsers" :href="'/#/usuari/'+usuari.id" @click="updateData(usuari.id)">
                     <img 
                         :src="usuari.avatar"
                         width="32"
@@ -225,10 +225,17 @@
             let allUsers = ref([]);
             let userLogged = ref([]);
 
+            function updateData(id) {
+                //simpleFetch("usuaris/", "GET", "").then((data) => this.allUsers = data);
+
+                simpleFetch("usuaris/"+id+"/", "GET", "").then((data) => this.userLogged = data);
+            }
+
             return {
                 userLogged,
                 allUsers,
-                mostrar
+                mostrar,
+                updateData
             }
         },
         
