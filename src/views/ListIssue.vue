@@ -432,7 +432,7 @@ export default {
         let assignat = ref(false);
         let tags_show = ref(false);
         let creats = ref(false);
-        let toggle = ref(false);
+        let toggle = ref(true);
         let query_parameters = ([]);
         let componentKey = ref(0);
         let mostrar = ref([]);
@@ -602,7 +602,7 @@ export default {
         }
 
         function updateIssues() {
-            simpleFetch("issues/?ordering=id", "GET", "").then((data) => issues.value = data);
+            simpleFetch("issues/?ordering=-id", "GET", "").then((data) => issues.value = data);
             simpleFetch("usuaris/", "GET", "").then((data) => usuaris.value = data);
             simpleFetch("tags/","GET","").then((data) => tags.value = data);
         }
